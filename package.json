@@ -10,5 +10,6 @@
     "type": "git",
     "url": "git+https://github.com/yuko1101/starrail.js.git"
   },
+  "homepage": "https://github.com/yuko1101/starrail.js#readme",
   "license": "MIT"
 }

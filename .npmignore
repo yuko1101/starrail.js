@@ -1,0 +1,15 @@
+/src/
+
+node_modules/
+example/
+cache/
+.vscode/
+.github/
+.fleet/
+.devcontainer/
+img/
+docs/
+
+.eslintrc.json
+.eslintignore
+cache.zip

@@ -2,14 +2,39 @@
   "name": "starrail.js",
   "version": "0.0.0",
   "description": "A nodejs library for Star Rail.",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "directories": {
+    "example": "example",
+    "lib": "src",
+    "doc": "docs"
+  },
   "scripts": {},
-  "keywords": [],
+  "keywords": [
+    "starrail",
+    "star rail",
+    "honkai",
+    "api",
+    "mihoyo",
+    "hoyoverse"
+  ],
   "author": "yuko1101 (https://github.com/yuko1101)",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/yuko1101/starrail.js.git"
   },
   "homepage": "https://github.com/yuko1101/starrail.js#readme",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.59.1",
+    "@typescript-eslint/parser": "^5.59.1",
+    "eslint": "^8.39.0",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.0.4"
+  },
+  "dependencies": {
+    "axios": "^1.4.0",
+    "config_file.js": "^1.0.4",
+    "unzipper": "^0.10.11"
+  }
 }

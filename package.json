@@ -9,7 +9,14 @@
     "lib": "src",
     "doc": "docs"
   },
-  "scripts": {},
+  "scripts": {
+    "install": "node scripts/install.js",
+    "lint": "npx eslint . --config .eslintrc.json --ext .js,.jsx,.cjs,.mjs,.ts,.tsx --ignore-path .eslintignore",
+    "lint:fix": "npx eslint . --config .eslintrc.json --ext .js,.jsx,.cjs,.mjs,.ts,.tsx --ignore-path .eslintignore --fix",
+    "build": "node -e \"const fs = require('fs'); if (fs.existsSync('./dist')) fs.rmSync('./dist', {recursive: true});\" && npx tsc",
+    "build:debug": "node -e \"const fs = require('fs'); if (fs.existsSync('./dist')) fs.rmSync('./dist', {recursive: true});\" && npx tsc --sourceMap",
+    "prepublishOnly": "npm run build"
+  },
   "keywords": [
     "starrail",
     "star rail",
@@ -26,6 +33,7 @@
   "homepage": "https://github.com/yuko1101/starrail.js#readme",
   "license": "MIT",
   "devDependencies": {
+    "@types/unzipper": "^0.10.5",
     "@typescript-eslint/eslint-plugin": "^5.59.1",
     "@typescript-eslint/parser": "^5.59.1",
     "eslint": "^8.39.0",

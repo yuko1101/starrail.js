@@ -1,7 +1,10 @@
-import { JsonObject } from "config_file.js";
+import { JsonManager, JsonObject } from "config_file.js";
 import StarRail from "../../client/StarRail";
 import AssetsNotFoundError from "../../errors/AssetsNotFoundError";
 import TextAssets from "../assets/TextAssets";
+import CombatType, { CombatTypeId } from "../CombatType";
+import Path, { PathId } from "../Path";
+import Skill from "./skill/Skill";
 
 /**
  * @en CharacterData
@@ -17,7 +20,12 @@ class CharacterData {
     readonly fullName: TextAssets;
     /**  */
     readonly description: TextAssets;
-
+    /**  */
+    readonly combatType: CombatType;
+    /**  */
+    readonly path: Path;
+    /**  */
+    readonly skills: Skill[];
 
     readonly _data: JsonObject;
 
@@ -30,15 +38,22 @@ class CharacterData {
 
         this.client = client;
 
-        const _data: JsonObject | undefined = client.cachedAssetsManager.getStarRailCacheData("AvatarConfig.json")[this.id];
+        const _data: JsonObject | undefined = client.cachedAssetsManager.getStarRailCacheData("AvatarConfig")[this.id];
         if (!_data) throw new AssetsNotFoundError("Character", this.id);
         this._data = _data;
 
-        this.name = new TextAssets((this._data["AvatarName"] as JsonObject)["Hash"] as number, this.client);
-        this.fullName = new TextAssets((this._data["AvatarFullName"] as JsonObject)["Hash"] as number, this.client);
+        const json = new JsonManager(this._data, true);
 
-        this.description = new TextAssets((this._data["AvatarDesc"] as JsonObject)["Hash"] as number, this.client);
+        this.name = new TextAssets(json.get("AvatarName", "Hash").getAs<number>(), this.client);
+        this.fullName = new TextAssets(json.get("AvatarFullName", "Hash").getAs<number>(), this.client);
 
+        this.description = new TextAssets(json.get("AvatarDesc", "Hash").getAs<number>(), this.client);
+
+        this.combatType = new CombatType(json.getAs<CombatTypeId>("DamageType"), this.client);
+
+        this.path = new Path(json.getAs<PathId>("AvatarBaseType"), this.client);
+
+        this.skills = json.getAs<number[]>("SkillList").map(skillId => new Skill(skillId, this.client));
     }
 }
 

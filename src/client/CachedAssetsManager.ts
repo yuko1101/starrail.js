@@ -2,7 +2,7 @@ import fs from "fs";
 import path from "path";
 import { Axios } from "axios";
 import unzipper from "unzipper";
-import { ConfigFile, JsonObject, bindOptions, move } from "config_file.js";
+import { ConfigFile, JsonManager, JsonObject, bindOptions, move } from "config_file.js";
 import { fetchJSON } from "../utils/axios_utils";
 import ObjectKeysManager from "./ObjectKeysManager";
 import StarRail from "./StarRail";
@@ -31,7 +31,10 @@ export type LanguageCode = "chs" | "cht" | "de" | "en" | "es" | "fr" | "id" | "j
 // Thanks @Dimbreath
 const contentBaseUrl = "https://raw.githubusercontent.com/Dimbreath/StarRailData/master";
 const contents = [
-    "AvatarConfig",
+    "AvatarConfig", // Characters
+    "DamageType", // Combat Types
+    "AvatarBaseType", // Paths
+    "AvatarSkillConfig", // Character Skills
 ];
 
 const textMapWhiteList: number[] = [
@@ -389,8 +392,53 @@ class CachedAssetsManager {
     removeUnusedTextData(data: { [s: string]: { [s: string]: JsonObject } }, langsData: LanguageMap, showLog = true): LanguageMap {
         const required: number[] = [];
 
-        required.push(...textMapWhiteList);
+        function push(...keys: number[]) {
+            const len = keys.length;
+            for (let i = 0; i < len; i++) {
+                const key = keys[i];
+                if (!required.includes(key)) required.push(key);
+            }
+        }
 
+        push(...textMapWhiteList);
+
+        Object.values(data["AvatarConfig"]).forEach(c => {
+            const json = new JsonManager(c, true);
+            push(
+                json.get("AvatarName", "Hash").getAs<number>(),
+                json.get("AvatarFullName", "Hash").getAs<number>(),
+                json.get("AvatarDesc", "Hash").getAs<number>(),
+            );
+        });
+
+        Object.values(data["DamageType"]).forEach(d => {
+            const json = new JsonManager(d, true);
+            push(
+                json.get("DamageTypeName", "Hash").getAs<number>(),
+                json.get("DamageTypeIntro", "Hash").getAs<number>(),
+            );
+        });
+
+        Object.values(data["AvatarBaseType"]).forEach(p => {
+            const json = new JsonManager(p, true);
+            push(
+                json.get("BaseTypeText", "Hash").getAs<number>(),
+                json.get("BaseTypeDesc", "Hash").getAs<number>(),
+            );
+        });
+
+        Object.values(data["AvatarSkillConfig"]).forEach(s => {
+            Object.values(s).forEach(l => {
+                const json = new JsonManager(l, true);
+                push(
+                    json.get("SkillName", "Hash").getAs<number>(),
+                    json.get("SkillTag", "Hash").getAs<number>(),
+                    json.get("SkillTypeDesc", "Hash").getAs<number>(),
+                    json.get("SkillDesc", "Hash").getAs<number>(),
+                    json.get("SimpleSkillDesc", "Hash").getAs<number>(),
+                );
+            });
+        });
 
         const requiredStringKeys = required.filter(key => key).map(key => key.toString());
 

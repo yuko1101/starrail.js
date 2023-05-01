@@ -1,5 +1,6 @@
 import { bindOptions } from "config_file.js";
 import CachedAssetsManager, { LanguageCode } from "./CachedAssetsManager";
+import CharacterData from "../models/character/CharacterData";
 
 /** @typedef */
 export interface ClientOptions {
@@ -32,6 +33,13 @@ class StarRail {
         }, options) as unknown as ClientOptions;
 
         this.cachedAssetsManager = new CachedAssetsManager(this);
+    }
+
+    /**
+     * @param playableOnly
+     */
+    getAllCharacters(playableOnly = true): CharacterData[] {
+        return Object.values(this.cachedAssetsManager.getStarRailCacheData("AvatarConfig")).filter(c => (playableOnly && c.AdventurePlayerID === c.AvatarID) || !playableOnly).map(c => new CharacterData(c.AvatarID as number, this));
     }
 }
 

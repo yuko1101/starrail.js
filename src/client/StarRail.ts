@@ -1,6 +1,9 @@
 import { bindOptions } from "config_file.js";
 import CachedAssetsManager, { LanguageCode } from "./CachedAssetsManager";
 import CharacterData from "../models/character/CharacterData";
+import { ImageBaseUrl } from "../models/assets/ImageAssets";
+
+const defaultImageBaseUrls: ImageBaseUrl[] = [];
 
 /** @typedef */
 export interface ClientOptions {
@@ -9,6 +12,7 @@ export interface ClientOptions {
     showFetchCacheLog: boolean,
     timeout: number,
     defaultLanguage: LanguageCode,
+    imageBaseUrls: ImageBaseUrl[],
 }
 
 /**
@@ -30,6 +34,7 @@ class StarRail {
             showFetchCacheLog: true,
             timeout: 3000,
             defaultLanguage: "en",
+            imageBaseUrls: [...defaultImageBaseUrls],
         }, options) as unknown as ClientOptions;
 
         this.cachedAssetsManager = new CachedAssetsManager(this);

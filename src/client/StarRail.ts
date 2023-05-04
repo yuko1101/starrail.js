@@ -2,6 +2,7 @@ import { bindOptions } from "config_file.js";
 import CachedAssetsManager, { LanguageCode } from "./CachedAssetsManager";
 import CharacterData from "../models/character/CharacterData";
 import { ImageBaseUrl } from "../models/assets/ImageAssets";
+import LightConeData from "../models/light_cone/LightConeData";
 
 const defaultImageBaseUrls: ImageBaseUrl[] = [];
 
@@ -45,6 +46,13 @@ class StarRail {
      */
     getAllCharacters(playableOnly = true): CharacterData[] {
         return Object.values(this.cachedAssetsManager.getStarRailCacheData("AvatarConfig")).filter(c => (playableOnly && c.AdventurePlayerID === c.AvatarID) || !playableOnly).map(c => new CharacterData(c.AvatarID as number, this));
+    }
+
+    /**
+     * @param excludeTestLightCones
+     */
+    getAllLightCones(excludeTestLightCones = true): LightConeData[] {
+        return Object.values(this.cachedAssetsManager.getStarRailCacheData("EquipmentConfig")).filter(l => (excludeTestLightCones && l.AvatarBaseType) || !excludeTestLightCones).map(l => new LightConeData(l.EquipmentID as number, this));
     }
 }
 

@@ -16,7 +16,7 @@ import AssetsNotFoundError from "../errors/AssetsNotFoundError";
  * |Knight|Preservation|
  * |Priest|Abundance|
  */
-export type PathId = "Warrior" | "Rogue" | "Mage" | "Shaman" | "Warlock" | "Knight" | "Priest"; // | "Unknown";
+export type PathId = "Warrior" | "Rogue" | "Mage" | "Shaman" | "Warlock" | "Knight" | "Priest" | "Unknown";
 
 /**
  * @en Path
@@ -37,8 +37,8 @@ class Path {
      * @param id
      * @param client
      */
-    constructor(id: PathId, client: StarRail) {
-        this.id = id;
+    constructor(id: PathId | undefined, client: StarRail) {
+        this.id = id ?? "Unknown";
         this.client = client;
 
         const _data: JsonObject | undefined = client.cachedAssetsManager.getStarRailCacheData("AvatarBaseType")[this.id];

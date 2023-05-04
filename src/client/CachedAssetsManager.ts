@@ -35,6 +35,8 @@ const contents = [
     "DamageType", // Combat Types
     "AvatarBaseType", // Paths
     "AvatarSkillConfig", // Character Skills
+    "EquipmentConfig", // Light Cones
+    "EquipmentExpType", // Light Cone Exp Types
 ];
 
 const textMapWhiteList: number[] = [
@@ -436,6 +438,14 @@ class CachedAssetsManager {
                     json.get("SimpleSkillDesc", "Hash").getAs<number>(),
                 );
             });
+        });
+
+        Object.values(data["EquipmentConfig"]).forEach(l => {
+            const json = new JsonManager(l, true);
+            push(
+                json.get("EquipmentName", "Hash").getAs<number>(),
+                json.get("EquipmentDesc", "Hash").getAs<number>(),
+            );
         });
 
         const requiredStringKeys = required.filter(key => key).map(key => key.toString());

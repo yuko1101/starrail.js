@@ -32,10 +32,12 @@ export type LanguageCode = "chs" | "cht" | "de" | "en" | "es" | "fr" | "id" | "j
 const contentBaseUrl = "https://raw.githubusercontent.com/Dimbreath/StarRailData/master";
 const contents = [
     "AvatarConfig", // Characters
+    "ItemConfigAvatar", // Characters as Items
     "DamageType", // Combat Types
     "AvatarBaseType", // Paths
     "AvatarSkillConfig", // Character Skills
     "EquipmentConfig", // Light Cones
+    "ItemConfigEquipment", // Light Cones as Items
     "EquipmentExpType", // Light Cone Exp Types
 ];
 
@@ -412,6 +414,13 @@ class CachedAssetsManager {
             );
         });
 
+        Object.values(data["ItemConfigAvatar"]).forEach(c => {
+            const json = new JsonManager(c, true);
+            push(
+                json.get("ItemBGDesc", "Hash").getAs<number>(),
+            );
+        });
+
         Object.values(data["DamageType"]).forEach(d => {
             const json = new JsonManager(d, true);
             push(
@@ -446,6 +455,14 @@ class CachedAssetsManager {
             push(
                 json.get("EquipmentName", "Hash").getAs<number>(),
                 json.get("EquipmentDesc", "Hash").getAs<number>(),
+            );
+        });
+
+        Object.values(data["ItemConfigEquipment"]).forEach(l => {
+            const json = new JsonManager(l, true);
+            push(
+                json.get("ItemBGDesc", "Hash").getAs<number>(),
+                json.get("ItemDesc", "Hash").getAs<number>(),
             );
         });
 

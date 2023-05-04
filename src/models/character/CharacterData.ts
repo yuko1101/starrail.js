@@ -19,6 +19,8 @@ class CharacterData {
     /**  */
     readonly name: TextAssets;
     /**  */
+    readonly description: TextAssets;
+    /**  */
     readonly combatType: CombatType;
     /**  */
     readonly path: Path;
@@ -40,8 +42,11 @@ class CharacterData {
     readonly splashCutInFigureImage: ImageAssets;
     /**  */
     readonly splashCutInBackgroundImage: ImageAssets;
+    /**  */
+    readonly shopItemIcon: ImageAssets;
 
     readonly _data: JsonObject;
+    readonly _itemData: JsonObject;
 
     /**
      * @param id
@@ -56,9 +61,15 @@ class CharacterData {
         if (!_data) throw new AssetsNotFoundError("Character", this.id);
         this._data = _data;
 
+        const _itemData: JsonObject | undefined = client.cachedAssetsManager.getStarRailCacheData("ItemConfigAvatar")[this.id];
+        if (!_itemData) throw new AssetsNotFoundError("Character Item", this.id);
+        this._itemData = _itemData;
+
         const json = new JsonManager(this._data, true);
+        const itemJson = new JsonManager(this._itemData, true);
 
         this.name = new TextAssets(json.get("AvatarName", "Hash").getAs<number>(), this.client);
+        this.description = new TextAssets(itemJson.get("ItemBGDesc", "Hash").getAs<number>(), this.client);
 
         this.combatType = new CombatType(json.getAs<CombatTypeId>("DamageType"), this.client);
 
@@ -74,6 +85,7 @@ class CharacterData {
         this.splashImage = new ImageAssets(json.getAs<string>("AvatarCutinFrontImgPath"), this.client);
         this.splashCutInFigureImage = new ImageAssets(json.getAs<string>("AvatarCutinImgPath"), this.client);
         this.splashCutInBackgroundImage = new ImageAssets(json.getAs<string>("AvatarCutinBgImgPath"), this.client);
+        this.shopItemIcon = new ImageAssets(itemJson.getAs<string>("ItemAvatarIconPath"), this.client);
     }
 }
 

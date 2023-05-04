@@ -18,6 +18,10 @@ class LightConeData {
     /**  */
     readonly name: TextAssets;
     /**  */
+    readonly description: TextAssets;
+    /**  */
+    readonly itemDescription: TextAssets;
+    /**  */
     readonly path: Path;
     /**  */
     readonly maxAscension: number;
@@ -35,6 +39,7 @@ class LightConeData {
     readonly cardImage: ImageAssets;
 
     readonly _data: JsonObject;
+    readonly _itemData: JsonObject;
 
     constructor(id: number, client: StarRail) {
         this.id = id;
@@ -44,9 +49,16 @@ class LightConeData {
         if (!_data) throw new AssetsNotFoundError("LightCone", this.id);
         this._data = _data;
 
+        const _itemData: JsonObject | undefined = client.cachedAssetsManager.getStarRailCacheData("ItemConfigEquipment")[this.id];
+        if (!_itemData) throw new AssetsNotFoundError("LightCone Item", this.id);
+        this._itemData = _itemData;
+
         const json = new JsonManager(this._data, true);
+        const itemJson = new JsonManager(this._itemData, true);
 
         this.name = new TextAssets(json.get("EquipmentName", "Hash").getAs<number>(), this.client);
+        this.description = new TextAssets(itemJson.get("ItemBGDesc", "Hash").getAs<number>(), this.client);
+        this.itemDescription = new TextAssets(itemJson.get("ItemDesc", "Hash").getAs<number>(), this.client);
 
         this.path = new Path(json.getAs<PathId | undefined>("AvatarBaseType"), this.client);
 

@@ -18,6 +18,7 @@ class ImageAssets {
     readonly client: StarRail;
     /**  */
     readonly path: string;
+
     /**  */
     readonly imageBaseUrl: ImageBaseUrl | null;
     /**  */

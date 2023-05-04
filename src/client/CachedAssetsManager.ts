@@ -53,6 +53,7 @@ const getGitRemoteAPIUrl = (useRawStarRailData: boolean, rawDate: Date, date: Da
 class CachedAssetsManager {
     /** The client that instantiated this */
     readonly client: StarRail;
+
     /** Default path of StarRail cache data directory */
     readonly defaultCacheDirectoryPath: string;
     /** List of the names of the files this library uses */

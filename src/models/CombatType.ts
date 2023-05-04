@@ -26,6 +26,7 @@ class CombatType {
     readonly id: CombatTypeId;
     /**  */
     readonly client: StarRail;
+
     /**  */
     readonly name: TextAssets;
     /**  */

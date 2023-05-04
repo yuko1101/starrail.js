@@ -11,6 +11,7 @@ import ImageAssets from "../../assets/ImageAssets";
 class LeveledSkill {
     /**  */
     readonly client: StarRail;
+
     /**  */
     readonly level: number;
     /**  */

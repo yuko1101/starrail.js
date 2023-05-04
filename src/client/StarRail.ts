@@ -22,6 +22,7 @@ export interface ClientOptions {
 class StarRail {
     /** The options the client was instantiated with */
     readonly options: ClientOptions;
+
     /**  */
     readonly cachedAssetsManager: CachedAssetsManager;
 

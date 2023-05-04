@@ -26,6 +26,7 @@ class Path {
     readonly id: PathId;
     /**  */
     readonly client: StarRail;
+
     /**  */
     readonly name: TextAssets;
     /**  */

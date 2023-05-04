@@ -20,6 +20,7 @@ class Skill {
     readonly id: number;
     /**  */
     readonly client: StarRail;
+
     /**  */
     readonly name: TextAssets;
     /**  */

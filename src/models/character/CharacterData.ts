@@ -18,10 +18,6 @@ class CharacterData {
     /**  */
     readonly name: TextAssets;
     /**  */
-    readonly fullName: TextAssets;
-    /**  */
-    readonly description: TextAssets;
-    /**  */
     readonly combatType: CombatType;
     /**  */
     readonly path: Path;
@@ -62,9 +58,6 @@ class CharacterData {
         const json = new JsonManager(this._data, true);
 
         this.name = new TextAssets(json.get("AvatarName", "Hash").getAs<number>(), this.client);
-        this.fullName = new TextAssets(json.get("AvatarFullName", "Hash").getAs<number>(), this.client);
-
-        this.description = new TextAssets(json.get("AvatarDesc", "Hash").getAs<number>(), this.client);
 
         this.combatType = new CombatType(json.getAs<CombatTypeId>("DamageType"), this.client);
 

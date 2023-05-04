@@ -406,8 +406,6 @@ class CachedAssetsManager {
             const json = new JsonManager(c, true);
             push(
                 json.get("AvatarName", "Hash").getAs<number>(),
-                json.get("AvatarFullName", "Hash").getAs<number>(),
-                json.get("AvatarDesc", "Hash").getAs<number>(),
             );
         });
 

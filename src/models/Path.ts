@@ -46,7 +46,7 @@ class Path {
         if (!_data) throw new AssetsNotFoundError("Path", this.id);
         this._data = _data;
 
-        const json = new JsonManager(this._data, true);
+        const json = new JsonManager(this._data, true, true);
 
         this.name = new TextAssets(json.get("BaseTypeText", "Hash").getAs<number>(), this.client);
         this.description = new TextAssets(json.get("BaseTypeDesc", "Hash").getAs<number>(), this.client);

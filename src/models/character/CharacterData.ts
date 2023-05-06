@@ -65,8 +65,8 @@ class CharacterData {
         if (!_itemData) throw new AssetsNotFoundError("Character Item", this.id);
         this._itemData = _itemData;
 
-        const json = new JsonManager(this._data, true);
-        const itemJson = new JsonManager(this._itemData, true);
+        const json = new JsonManager(this._data, true, true);
+        const itemJson = new JsonManager(this._itemData, true, true);
 
         this.name = new TextAssets(json.get("AvatarName", "Hash").getAs<number>(), this.client);
         this.description = new TextAssets(itemJson.get("ItemBGDesc", "Hash").getAs<number>(), this.client);

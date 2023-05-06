@@ -50,7 +50,7 @@ class LeveledSkill {
         this._data = data;
         this.client = client;
 
-        const json = new JsonManager(this._data);
+        const json = new JsonManager(this._data, true, true);
 
         this.level = json.getAs<number>("Level");
 

@@ -408,21 +408,21 @@ class CachedAssetsManager {
         push(...textMapWhiteList);
 
         Object.values(data["AvatarConfig"]).forEach(c => {
-            const json = new JsonManager(c, true);
+            const json = new JsonManager(c, true, true);
             push(
                 json.get("AvatarName", "Hash").getAs<number>(),
             );
         });
 
         Object.values(data["ItemConfigAvatar"]).forEach(c => {
-            const json = new JsonManager(c, true);
+            const json = new JsonManager(c, true, true);
             push(
                 json.get("ItemBGDesc", "Hash").getAs<number>(),
             );
         });
 
         Object.values(data["DamageType"]).forEach(d => {
-            const json = new JsonManager(d, true);
+            const json = new JsonManager(d, true, true);
             push(
                 json.get("DamageTypeName", "Hash").getAs<number>(),
                 json.get("DamageTypeIntro", "Hash").getAs<number>(),
@@ -430,7 +430,7 @@ class CachedAssetsManager {
         });
 
         Object.values(data["AvatarBaseType"]).forEach(p => {
-            const json = new JsonManager(p, true);
+            const json = new JsonManager(p, true, true);
             push(
                 json.get("BaseTypeText", "Hash").getAs<number>(),
                 json.get("BaseTypeDesc", "Hash").getAs<number>(),
@@ -439,7 +439,7 @@ class CachedAssetsManager {
 
         Object.values(data["AvatarSkillConfig"]).forEach(s => {
             Object.values(s).forEach(l => {
-                const json = new JsonManager(l, true);
+                const json = new JsonManager(l, true, true);
                 push(
                     json.get("SkillName", "Hash").getAs<number>(),
                     json.get("SkillTag", "Hash").getAs<number>(),
@@ -451,7 +451,7 @@ class CachedAssetsManager {
         });
 
         Object.values(data["EquipmentConfig"]).forEach(l => {
-            const json = new JsonManager(l, true);
+            const json = new JsonManager(l, true, true);
             push(
                 json.get("EquipmentName", "Hash").getAs<number>(),
                 json.get("EquipmentDesc", "Hash").getAs<number>(),
@@ -459,7 +459,7 @@ class CachedAssetsManager {
         });
 
         Object.values(data["ItemConfigEquipment"]).forEach(l => {
-            const json = new JsonManager(l, true);
+            const json = new JsonManager(l, true, true);
             push(
                 json.get("ItemBGDesc", "Hash").getAs<number>(),
                 json.get("ItemDesc", "Hash").getAs<number>(),

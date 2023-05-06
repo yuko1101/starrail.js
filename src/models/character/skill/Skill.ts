@@ -54,7 +54,7 @@ class Skill {
         if (!_data) throw new AssetsNotFoundError("Skill", this.id);
         this._data = Object.values(_data) as JsonObject[];
 
-        const json = new JsonManager(this._data[0], true);
+        const json = new JsonManager(this._data[0], true, true);
 
         this.name = new TextAssets(json.get("SkillName", "Hash").getAs<number>(), this.client);
         this.tag = new TextAssets(json.get("SkillTag", "Hash").getAs<number>(), this.client);

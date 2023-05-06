@@ -1,2 +1,2 @@
 # starrail.js
-A nodejs library for Star Rail.
+A Node.js library for Star Rail.

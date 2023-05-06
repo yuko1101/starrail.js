@@ -6,20 +6,20 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: 'My Site',
-  tagline: 'Dinosaurs are cool',
-  favicon: 'img/favicon.ico',
+  title: 'StarRail.js',
+  tagline: 'A Node.js library for Star Rail',
+  favicon: 'img/fire.ico',
 
   // Set the production url of your site here
   url: 'https://your-docusaurus-test-site.com',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
-  baseUrl: '/',
+  baseUrl: process.env.npm_config_base_url ?? '/',
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
-  organizationName: 'facebook', // Usually your GitHub org/user name.
-  projectName: 'docusaurus', // Usually your repo name.
+  organizationName: 'yuko1101', // Usually your GitHub org/user name.
+  projectName: 'starrail.js', // Usually your repo name.
 
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
@@ -62,23 +62,29 @@ const config = {
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
       // Replace with your project's social card
-      image: 'img/docusaurus-social-card.jpg',
+      image: 'img/starrail-social-card.png',
       navbar: {
-        title: 'My Site',
+        title: 'StarRail.js',
         logo: {
-          alt: 'My Site Logo',
-          src: 'img/logo.svg',
+          alt: 'StarRail.js',
+          src: 'img/fire.png',
         },
         items: [
           {
-            type: 'docSidebar',
-            sidebarId: 'tutorialSidebar',
+            type: 'doc',
+            docId: 'intro',
             position: 'left',
-            label: 'Tutorial',
+            label: 'Get Started',
           },
-          {to: '/blog', label: 'Blog', position: 'left'},
           {
-            href: 'https://github.com/facebook/docusaurus',
+            type: 'doc',
+            docId: 'api/StarRail',
+            position: 'left',
+            label: 'Documentation'
+          },
+          // { to: '/examples', label: 'Examples', position: 'left' },
+          {
+            href: 'https://github.com/yuko1101/starrail.js',
             label: 'GitHub',
             position: 'right',
           },
@@ -88,46 +94,50 @@ const config = {
         style: 'dark',
         links: [
           {
-            title: 'Docs',
+            title: 'Contents',
             items: [
               {
-                label: 'Tutorial',
+                label: 'Get Started',
                 to: '/docs/intro',
               },
+              {
+                label: 'Documentation',
+                to: '/docs/api/StarRail'
+              }
             ],
           },
           {
-            title: 'Community',
+            title: 'GitHub',
             items: [
               {
-                label: 'Stack Overflow',
-                href: 'https://stackoverflow.com/questions/tagged/docusaurus',
+                label: 'Repository',
+                href: 'https://github.com/yuko1101/starrail.js',
               },
               {
-                label: 'Discord',
-                href: 'https://discordapp.com/invite/docusaurus',
+                label: 'Issues',
+                href: 'https://github.com/yuko1101/starrail.js/issues',
               },
               {
-                label: 'Twitter',
-                href: 'https://twitter.com/docusaurus',
+                label: 'Pull requests',
+                href: 'https://github.com/yuko1101/enka-network-api/pulls',
               },
             ],
           },
           {
-            title: 'More',
+            title: 'Other Links',
             items: [
               {
-                label: 'Blog',
-                to: '/blog',
+                label: 'npm',
+                href: 'https://www.npmjs.com/package/starrail.js'
               },
               {
-                label: 'GitHub',
-                href: 'https://github.com/facebook/docusaurus',
-              },
+                label: 'EnkaNetwork',
+                href: 'https://enka.network'
+              }
             ],
           },
         ],
-        copyright: `Copyright © ${new Date().getFullYear()} My Project, Inc. Built with Docusaurus.`,
+        copyright: `Copyright © ${new Date().getFullYear()} starrail.js, Inc. Built with Docusaurus.`,
       },
       prism: {
         theme: lightCodeTheme,

@@ -24,6 +24,10 @@ class LightConeExpType {
 
     readonly _data: JsonObject<JsonObject>;
 
+    /**
+     * @param expType
+     * @param client
+     */
     constructor(expType: number, client: StarRail) {
         this.expType = expType;
         this.client = client;

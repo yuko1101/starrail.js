@@ -15,7 +15,7 @@
 </div>
 
 <div align="center">
-    <a href="https://enka-network-api.vercel.app/docs/api/StarRail">
+    <a href="https://starrail.vercel.app/docs/api/StarRail">
         <b>&lt;/&gt; Documentation</b>
     </a>
     <b> | </b>
@@ -120,7 +120,7 @@ client.cachedAssetsManager.activateAutoCacheUpdater({
 # How to use
 
 ## Star Rail Character List
-[StarRail#getAllCharacters](https://enka-network-api.vercel.app/docs/api/StarRail#getAllCharacters)
+[StarRail#getAllCharacters](https://starrail.vercel.app/docs/api/StarRail#getAllCharacters)
 ```js
 const { StarRail } = require("starrail.js");
 const client = new StarRail();
@@ -131,7 +131,7 @@ console.log(characters.map(c => c.name.get("en")));
 ```
 
 ## Star Rail Light Cone List
-[StarRail#getAllLightCones](https://enka-network-api.vercel.app/docs/api/StarRail#getAllLightCones)
+[StarRail#getAllLightCones](https://starrail.vercel.app/docs/api/StarRail#getAllLightCones)
 ```js
 const { StarRail } = require("starrail.js");
 const client = new StarRail();
@@ -143,6 +143,6 @@ console.log(lightCones.map(w => w.name.get("jp")));
 
 More examples are available in [example](https://github.com/yuko1101/starrail.js/tree/main/example) folder.
 
-For more information, please check [Documentation](https://enka-network-api.vercel.app/docs/api/StarRail).
+For more information, please check [Documentation](https://starrail.vercel.app/docs/api/StarRail).
 
 You can see the changelog [here](https://github.com/yuko1101/starrail.js/blob/main/CHANGELOG.md).

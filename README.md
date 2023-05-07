@@ -1,6 +1,3 @@
-# starrail.js
-
-
 # StarRail.js
 
 ![StarRail.js](https://github.com/yuko1101/starrail.js/blob/main/docs/static/img/starrail-social-card.png?raw=true)

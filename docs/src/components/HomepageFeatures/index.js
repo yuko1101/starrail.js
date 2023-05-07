@@ -3,14 +3,14 @@ import clsx from 'clsx';
 import styles from './styles.module.css';
 
 // TODO: Add images
-import codeImage from '../../../static/img/code.png';
+import simpleCodeImage from '../../../static/img/simple-code.png';
 import autocompleteImage from '../../../static/img/autocomplete.png';
 import datalistImage from '../../../static/img/datalist.png';
 
 const FeatureList = [
   {
     title: 'Easy to Use',
-    img: codeImage,
+    img: simpleCodeImage,
     description: (
       <>
         This package is very simple to use.
@@ -41,7 +41,7 @@ const FeatureList = [
   }
 ];
 
-function Feature({ Svg, title, description }) {
+function Feature({ img, title, description }) {
   return (
     <div className={clsx('col col--4')}>
       <div className="text--center">

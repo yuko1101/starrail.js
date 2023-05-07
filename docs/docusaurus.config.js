@@ -119,7 +119,7 @@ const config = {
               },
               {
                 label: 'Pull requests',
-                href: 'https://github.com/yuko1101/enka-network-api/pulls',
+                href: 'https://github.com/yuko1101/starrail.js/pulls',
               },
             ],
           },

@@ -41,6 +41,10 @@ class LightConeData {
     readonly _data: JsonObject;
     readonly _itemData: JsonObject;
 
+    /**
+     * @param id
+     * @param client
+     */
     constructor(id: number, client: StarRail) {
         this.id = id;
         this.client = client;

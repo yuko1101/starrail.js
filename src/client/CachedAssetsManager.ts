@@ -39,6 +39,7 @@ const contents = [
     "EquipmentConfig", // Light Cones
     "ItemConfigEquipment", // Light Cones as Items
     "EquipmentExpType", // Light Cone Exp Types
+    "EquipmentSkillConfig", // Light Cone Superimpositions
 ];
 
 const textMapWhiteList: number[] = [
@@ -465,6 +466,17 @@ class CachedAssetsManager {
                 json.getAsNumber("ItemDesc", "Hash"),
             );
         });
+
+        Object.values(data["EquipmentSkillConfig"]).forEach(s => {
+            Object.values(s).forEach(l => {
+                const json = new JsonReader(l);
+                push(
+                    json.getAsNumber("SkillName", "Hash"),
+                    json.getAsNumber("SkillDesc", "Hash"),
+                );
+            });
+        });
+
 
         const requiredStringKeys = required.filter(key => key).map(key => key.toString());
 

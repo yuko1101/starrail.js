@@ -5,6 +5,7 @@ import TextAssets from "../assets/TextAssets";
 import Path, { PathId } from "../Path";
 import LightConeExpType from "./LightConeExpType";
 import ImageAssets from "../assets/ImageAssets";
+import LightConeSuperimposition from "./LightConeSuperimposition";
 
 /**
  * @en LightConeData
@@ -29,6 +30,8 @@ class LightConeData {
     readonly maxAscension: number;
     /**  */
     readonly maxSuperimposition: number;
+    /**  */
+    readonly superimpositions: LightConeSuperimposition[];
     /**  */
     readonly expType: LightConeExpType;
     /** Experience value provided by the light cone when used as a material */
@@ -72,6 +75,13 @@ class LightConeData {
 
         this.maxAscension = json.getAsNumber("MaxPromotion");
         this.maxSuperimposition = json.getAsNumber("MaxRank");
+
+        const skillId = json.getAsNumber("SkillID");
+        const superimpositions: LightConeSuperimposition[] = [];
+        for (let i = 1; i <= this.maxSuperimposition; i++) {
+            superimpositions.push(new LightConeSuperimposition(skillId, i, this.client));
+        }
+        this.superimpositions = superimpositions;
 
         this.expType = new LightConeExpType(json.getAsNumber("ExpType"), this.client);
 

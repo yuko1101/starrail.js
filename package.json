@@ -30,7 +30,7 @@
     "type": "git",
     "url": "git+https://github.com/yuko1101/starrail.js.git"
   },
-  "homepage": "https://github.com/yuko1101/starrail.js#readme",
+  "homepage": "https://starrail.vercel.app",
   "license": "MIT",
   "devDependencies": {
     "@types/unzipper": "^0.10.5",

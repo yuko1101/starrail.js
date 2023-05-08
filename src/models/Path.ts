@@ -1,4 +1,4 @@
-import { JsonManager, JsonObject } from "config_file.js";
+import { JsonObject, JsonReader } from "config_file.js";
 import StarRail from "../client/StarRail";
 import TextAssets from "./assets/TextAssets";
 import AssetsNotFoundError from "../errors/AssetsNotFoundError";
@@ -38,18 +38,18 @@ class Path {
      * @param id
      * @param client
      */
-    constructor(id: PathId | undefined, client: StarRail) {
-        this.id = id ?? "Unknown";
+    constructor(id: PathId, client: StarRail) {
+        this.id = id;
         this.client = client;
 
         const _data: JsonObject | undefined = client.cachedAssetsManager.getStarRailCacheData("AvatarBaseType")[this.id];
         if (!_data) throw new AssetsNotFoundError("Path", this.id);
         this._data = _data;
 
-        const json = new JsonManager(this._data, true, true);
+        const json = new JsonReader(this._data);
 
-        this.name = new TextAssets(json.get("BaseTypeText", "Hash").getAs<number>(), this.client);
-        this.description = new TextAssets(json.get("BaseTypeDesc", "Hash").getAs<number>(), this.client);
+        this.name = new TextAssets(json.getAsNumber("BaseTypeText", "Hash"), this.client);
+        this.description = new TextAssets(json.getAsNumber("BaseTypeDesc", "Hash"), this.client);
     }
 }
 

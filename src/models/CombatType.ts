@@ -1,4 +1,4 @@
-import { JsonManager, JsonObject } from "config_file.js";
+import { JsonObject, JsonReader } from "config_file.js";
 import StarRail from "../client/StarRail";
 import AssetsNotFoundError from "../errors/AssetsNotFoundError";
 import TextAssets from "./assets/TextAssets";
@@ -46,10 +46,10 @@ class CombatType {
         if (!_data) throw new AssetsNotFoundError("CombatType", this.id);
         this._data = _data;
 
-        const json = new JsonManager(this._data, true, true);
+        const json = new JsonReader(this._data);
 
-        this.name = new TextAssets(json.get("DamageTypeName", "Hash").getAs<number>(), this.client);
-        this.description = new TextAssets(json.get("DamageTypeIntro", "Hash").getAs<number>(), this.client);
+        this.name = new TextAssets(json.getAsNumber("DamageTypeName", "Hash"), this.client);
+        this.description = new TextAssets(json.getAsNumber("DamageTypeIntro", "Hash"), this.client);
     }
 }
 

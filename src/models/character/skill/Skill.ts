@@ -1,4 +1,4 @@
-import { JsonManager, JsonObject } from "config_file.js";
+import { JsonObject, JsonReader } from "config_file.js";
 import StarRail from "../../../client/StarRail";
 import TextAssets from "../../assets/TextAssets";
 import AssetsNotFoundError from "../../../errors/AssetsNotFoundError";
@@ -54,21 +54,21 @@ class Skill {
         if (!_data) throw new AssetsNotFoundError("Skill", this.id);
         this._data = Object.values(_data) as JsonObject[];
 
-        const json = new JsonManager(this._data[0], true, true);
+        const json = new JsonReader(this._data[0]);
 
-        this.name = new TextAssets(json.get("SkillName", "Hash").getAs<number>(), this.client);
-        this.tag = new TextAssets(json.get("SkillTag", "Hash").getAs<number>(), this.client);
-        this.skillTypeDescription = new TextAssets(json.get("SkillTypeDesc", "Hash").getAs<number>(), this.client);
+        this.name = new TextAssets(json.getAsNumber("SkillName", "Hash"), this.client);
+        this.tag = new TextAssets(json.getAsNumber("SkillTag", "Hash"), this.client);
+        this.skillTypeDescription = new TextAssets(json.getAsNumber("SkillTypeDesc", "Hash"), this.client);
 
-        this.attackType = json.getAs<AttackType | undefined>("AttackType") ?? null;
-        const combatTypeId = json.getAs<CombatTypeId | undefined>("StanceDamageType");
+        this.attackType = json.getAsStringWithDefault(null, "AttackType") as AttackType | null;
+        const combatTypeId = json.getAsStringWithDefault(undefined, "StanceDamageType") as CombatTypeId | undefined;
         this.combatType = combatTypeId ? new CombatType(combatTypeId, this.client) : null;
-        this.effectType = json.getAs<EffectType>("SkillEffect");
+        this.effectType = json.getAsString("SkillEffect") as EffectType;
 
-        this.maxLevel = json.getAs<number>("MaxLevel");
+        this.maxLevel = json.getAsNumber("MaxLevel");
 
-        this.skillIcon = new ImageAssets(json.getAs<string>("SkillIcon"), this.client);
-        this.ultraSkillIcon = new ImageAssets(json.getAs<string>("UltraSkillIcon"), this.client);
+        this.skillIcon = new ImageAssets(json.getAsString("SkillIcon"), this.client);
+        this.ultraSkillIcon = new ImageAssets(json.getAsString("UltraSkillIcon"), this.client);
 
     }
 

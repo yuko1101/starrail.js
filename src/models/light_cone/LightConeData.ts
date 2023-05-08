@@ -1,4 +1,4 @@
-import { JsonManager, JsonObject } from "config_file.js";
+import { JsonObject, JsonReader } from "config_file.js";
 import StarRail from "../../client/StarRail";
 import AssetsNotFoundError from "../../errors/AssetsNotFoundError";
 import TextAssets from "../assets/TextAssets";
@@ -57,25 +57,25 @@ class LightConeData {
         if (!_itemData) throw new AssetsNotFoundError("LightCone Item", this.id);
         this._itemData = _itemData;
 
-        const json = new JsonManager(this._data, true, true);
-        const itemJson = new JsonManager(this._itemData, true, true);
+        const json = new JsonReader(this._data);
+        const itemJson = new JsonReader(this._itemData);
 
-        this.name = new TextAssets(json.get("EquipmentName", "Hash").getAs<number>(), this.client);
-        this.description = new TextAssets(itemJson.get("ItemBGDesc", "Hash").getAs<number>(), this.client);
-        this.itemDescription = new TextAssets(itemJson.get("ItemDesc", "Hash").getAs<number>(), this.client);
+        this.name = new TextAssets(json.getAsNumber("EquipmentName", "Hash"), this.client);
+        this.description = new TextAssets(itemJson.getAsNumber("ItemBGDesc", "Hash"), this.client);
+        this.itemDescription = new TextAssets(itemJson.getAsNumber("ItemDesc", "Hash"), this.client);
 
-        this.path = new Path(json.getAs<PathId | undefined>("AvatarBaseType"), this.client);
+        this.path = new Path(json.getAsStringWithDefault("Unknown", "AvatarBaseType") as PathId, this.client);
 
-        this.maxAscension = json.getAs<number>("MaxPromotion");
-        this.maxSuperimposition = json.getAs<number>("MaxRank");
+        this.maxAscension = json.getAsNumber("MaxPromotion");
+        this.maxSuperimposition = json.getAsNumber("MaxRank");
 
-        this.expType = new LightConeExpType(json.getAs<number>("ExpType"), this.client);
+        this.expType = new LightConeExpType(json.getAsNumber("ExpType"), this.client);
 
-        this.expProvide = json.getAs<number>("ExpProvide");
-        this.coinCost = json.getAs<number>("CoinCost");
+        this.expProvide = json.getAsNumber("ExpProvide");
+        this.coinCost = json.getAsNumber("CoinCost");
 
-        this.icon = new ImageAssets(json.getAs<string>("ThumbnailPath"), this.client);
-        this.cardImage = new ImageAssets(json.getAs<string>("ImagePath"), this.client);
+        this.icon = new ImageAssets(json.getAsString("ThumbnailPath"), this.client);
+        this.cardImage = new ImageAssets(json.getAsString("ImagePath"), this.client);
     }
 }
 

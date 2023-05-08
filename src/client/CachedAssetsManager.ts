@@ -2,7 +2,7 @@ import fs from "fs";
 import path from "path";
 import { Axios } from "axios";
 import unzipper from "unzipper";
-import { ConfigFile, JsonManager, JsonObject, bindOptions, move } from "config_file.js";
+import { ConfigFile, JsonObject, JsonReader, bindOptions, move } from "config_file.js";
 import { fetchJSON } from "../utils/axios_utils";
 import ObjectKeysManager from "./ObjectKeysManager";
 import StarRail from "./StarRail";
@@ -118,7 +118,7 @@ class CachedAssetsManager {
     }
 
     /** Obtains a text map for a specific language, and if `store` is true, stores the data as a json file. */
-    async fetchLanguageData(lang: LanguageCode, store = true) {
+    async fetchLanguageData(lang: LanguageCode, store = true): Promise<{ [key: string]: string }> {
         await this.cacheDirectorySetup();
         const url = `${contentBaseUrl}/TextMap/TextMap${(lang === "chs" ? "cn" : lang).toUpperCase()}.json`;
         const json = (await fetchJSON(url, this.client)).data;
@@ -408,61 +408,61 @@ class CachedAssetsManager {
         push(...textMapWhiteList);
 
         Object.values(data["AvatarConfig"]).forEach(c => {
-            const json = new JsonManager(c, true, true);
+            const json = new JsonReader(c);
             push(
-                json.get("AvatarName", "Hash").getAs<number>(),
+                json.getAsNumber("AvatarName", "Hash"),
             );
         });
 
         Object.values(data["ItemConfigAvatar"]).forEach(c => {
-            const json = new JsonManager(c, true, true);
+            const json = new JsonReader(c);
             push(
-                json.get("ItemBGDesc", "Hash").getAs<number>(),
+                json.getAsNumber("ItemBGDesc", "Hash"),
             );
         });
 
         Object.values(data["DamageType"]).forEach(d => {
-            const json = new JsonManager(d, true, true);
+            const json = new JsonReader(d);
             push(
-                json.get("DamageTypeName", "Hash").getAs<number>(),
-                json.get("DamageTypeIntro", "Hash").getAs<number>(),
+                json.getAsNumber("DamageTypeName", "Hash"),
+                json.getAsNumber("DamageTypeIntro", "Hash"),
             );
         });
 
         Object.values(data["AvatarBaseType"]).forEach(p => {
-            const json = new JsonManager(p, true, true);
+            const json = new JsonReader(p);
             push(
-                json.get("BaseTypeText", "Hash").getAs<number>(),
-                json.get("BaseTypeDesc", "Hash").getAs<number>(),
+                json.getAsNumber("BaseTypeText", "Hash"),
+                json.getAsNumber("BaseTypeDesc", "Hash"),
             );
         });
 
         Object.values(data["AvatarSkillConfig"]).forEach(s => {
             Object.values(s).forEach(l => {
-                const json = new JsonManager(l, true, true);
+                const json = new JsonReader(l);
                 push(
-                    json.get("SkillName", "Hash").getAs<number>(),
-                    json.get("SkillTag", "Hash").getAs<number>(),
-                    json.get("SkillTypeDesc", "Hash").getAs<number>(),
-                    json.get("SkillDesc", "Hash").getAs<number>(),
-                    json.get("SimpleSkillDesc", "Hash").getAs<number>(),
+                    json.getAsNumber("SkillName", "Hash"),
+                    json.getAsNumber("SkillTag", "Hash"),
+                    json.getAsNumber("SkillTypeDesc", "Hash"),
+                    json.getAsNumber("SkillDesc", "Hash"),
+                    json.getAsNumber("SimpleSkillDesc", "Hash"),
                 );
             });
         });
 
         Object.values(data["EquipmentConfig"]).forEach(l => {
-            const json = new JsonManager(l, true, true);
+            const json = new JsonReader(l);
             push(
-                json.get("EquipmentName", "Hash").getAs<number>(),
-                json.get("EquipmentDesc", "Hash").getAs<number>(),
+                json.getAsNumber("EquipmentName", "Hash"),
+                json.getAsNumber("EquipmentDesc", "Hash"),
             );
         });
 
         Object.values(data["ItemConfigEquipment"]).forEach(l => {
-            const json = new JsonManager(l, true, true);
+            const json = new JsonReader(l);
             push(
-                json.get("ItemBGDesc", "Hash").getAs<number>(),
-                json.get("ItemDesc", "Hash").getAs<number>(),
+                json.getAsNumber("ItemBGDesc", "Hash"),
+                json.getAsNumber("ItemDesc", "Hash"),
             );
         });
 

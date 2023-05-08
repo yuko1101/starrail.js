@@ -1,4 +1,4 @@
-import { JsonManager, JsonObject } from "config_file.js";
+import { JsonObject, JsonReader } from "config_file.js";
 import StarRail from "../../client/StarRail";
 import AssetsNotFoundError from "../../errors/AssetsNotFoundError";
 import TextAssets from "../assets/TextAssets";
@@ -65,27 +65,27 @@ class CharacterData {
         if (!_itemData) throw new AssetsNotFoundError("Character Item", this.id);
         this._itemData = _itemData;
 
-        const json = new JsonManager(this._data, true, true);
-        const itemJson = new JsonManager(this._itemData, true, true);
+        const json = new JsonReader(this._data);
+        const itemJson = new JsonReader(this._itemData);
 
-        this.name = new TextAssets(json.get("AvatarName", "Hash").getAs<number>(), this.client);
-        this.description = new TextAssets(itemJson.get("ItemBGDesc", "Hash").getAs<number>(), this.client);
+        this.name = new TextAssets(json.getAsNumber("AvatarName", "Hash"), this.client);
+        this.description = new TextAssets(itemJson.getAsNumber("ItemBGDesc", "Hash"), this.client);
 
-        this.combatType = new CombatType(json.getAs<CombatTypeId>("DamageType"), this.client);
+        this.combatType = new CombatType(json.getAsString("DamageType") as CombatTypeId, this.client);
 
-        this.path = new Path(json.getAs<PathId>("AvatarBaseType"), this.client);
+        this.path = new Path(json.getAsString("AvatarBaseType") as PathId, this.client);
 
-        this.skills = json.getAs<number[]>("SkillList").map(skillId => new Skill(skillId, this.client));
+        this.skills = json.get("SkillList").mapArray((_, skillId) => new Skill(skillId.getAsNumber(), this.client));
 
-        this.icon = new ImageAssets(json.getAs<string>("DefaultAvatarHeadIconPath"), this.client);
-        this.sideIcon = new ImageAssets(json.getAs<string>("AvatarSideIconPath"), this.client);
-        this.miniIcon = new ImageAssets(json.getAs<string>("AvatarMiniIconPath"), this.client);
-        this.teamActionIcon = new ImageAssets(json.getAs<string>("ActionAvatarHeadIconPath"), this.client);
-        this.teamWaitingIcon = new ImageAssets(json.getAs<string>("WaitingAvatarHeadIconPath"), this.client);
-        this.splashImage = new ImageAssets(json.getAs<string>("AvatarCutinFrontImgPath"), this.client);
-        this.splashCutInFigureImage = new ImageAssets(json.getAs<string>("AvatarCutinImgPath"), this.client);
-        this.splashCutInBackgroundImage = new ImageAssets(json.getAs<string>("AvatarCutinBgImgPath"), this.client);
-        this.shopItemIcon = new ImageAssets(itemJson.getAs<string>("ItemAvatarIconPath"), this.client);
+        this.icon = new ImageAssets(json.getAsString("DefaultAvatarHeadIconPath"), this.client);
+        this.sideIcon = new ImageAssets(json.getAsString("AvatarSideIconPath"), this.client);
+        this.miniIcon = new ImageAssets(json.getAsString("AvatarMiniIconPath"), this.client);
+        this.teamActionIcon = new ImageAssets(json.getAsString("ActionAvatarHeadIconPath"), this.client);
+        this.teamWaitingIcon = new ImageAssets(json.getAsString("WaitingAvatarHeadIconPath"), this.client);
+        this.splashImage = new ImageAssets(json.getAsString("AvatarCutinFrontImgPath"), this.client);
+        this.splashCutInFigureImage = new ImageAssets(json.getAsString("AvatarCutinImgPath"), this.client);
+        this.splashCutInBackgroundImage = new ImageAssets(json.getAsString("AvatarCutinBgImgPath"), this.client);
+        this.shopItemIcon = new ImageAssets(itemJson.getAsString("ItemAvatarIconPath"), this.client);
     }
 }
 

@@ -1,4 +1,4 @@
-import { JsonObject } from "config_file.js";
+import { JsonObject, JsonReader } from "config_file.js";
 import StarRail from "../../client/StarRail";
 import AssetsNotFoundError from "../../errors/AssetsNotFoundError";
 
@@ -36,7 +36,9 @@ class LightConeExpType {
         if (!_data) throw new AssetsNotFoundError("LightConeExpType", this.expType);
         this._data = _data as JsonObject<JsonObject>;
 
-        this.levels = Object.values(this._data).map(e => { return { expType: e.ExpType as number, level: e.Level as number, exp: (e.Exp ?? 0) as number }; });
+        const json = new JsonReader(this._data);
+
+        this.levels = json.mapObject((_, v) => { return { expType: v.getAsNumber("ExpType"), level: v.getAsNumber("Level"), exp: v.getAsNumberWithDefault(0, "Exp") }; });
     }
 
     /**

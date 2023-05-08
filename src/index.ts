@@ -9,6 +9,7 @@ import Skill from "./models/character/skill/Skill";
 import CharacterData from "./models/character/CharacterData";
 import LightConeData from "./models/light_cone/LightConeData";
 import LightConeExpType from "./models/light_cone/LightConeExpType";
+import LightConeSuperimposition from "./models/light_cone/LightConeSuperimposition";
 import CombatType from "./models/CombatType";
 import Path from "./models/Path";
 
@@ -25,6 +26,7 @@ export {
     CharacterData,
     LightConeData,
     LightConeExpType,
+    LightConeSuperimposition,
     CombatType,
     Path,
 };

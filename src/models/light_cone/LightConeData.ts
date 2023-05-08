@@ -22,6 +22,8 @@ class LightConeData {
     /**  */
     readonly itemDescription: TextAssets;
     /**  */
+    readonly stars: number;
+    /**  */
     readonly path: Path;
     /**  */
     readonly maxAscension: number;
@@ -63,6 +65,8 @@ class LightConeData {
         this.name = new TextAssets(json.getAsNumber("EquipmentName", "Hash"), this.client);
         this.description = new TextAssets(itemJson.getAsNumber("ItemBGDesc", "Hash"), this.client);
         this.itemDescription = new TextAssets(itemJson.getAsNumber("ItemDesc", "Hash"), this.client);
+
+        this.stars = Number(json.getAsString("Rarity").slice(-1));
 
         this.path = new Path(json.getAsStringWithDefault("Unknown", "AvatarBaseType") as PathId, this.client);
 

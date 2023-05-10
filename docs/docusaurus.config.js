@@ -61,6 +61,11 @@ const config = {
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
+      algolia: { 
+        appId: "5OZ5AOCZ1S", 
+        apiKey: "1005cc2a90f0c5835fff1ce2ae2f579c", 
+        indexName: "starrail", 
+      },
       // Replace with your project's social card
       image: 'img/starrail-social-card.png',
       navbar: {

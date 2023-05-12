@@ -66,8 +66,6 @@ const { StarRail } = require("starrail.js");
 
 // Change the directory to store cache data.
 // Default directory is **/starrail.js/cache.
-// Re-fetching contents may be required, if you update 
-// starrail.js with the cache directory in it.
 const client = new StarRail();
 client.cachedAssetsManager.cacheDirectoryPath = "./cache";
 client.cachedAssetsManager.cacheDirectorySetup();
@@ -92,7 +90,7 @@ client.cachedAssetsManager.fetchAllContents(); // returns promise
 
 Also, you can activate auto cache updater.
 
-When using the auto-cache updater, we strongly recommend moving the cache directory directly under your project folder. (**DO NOT delete \*\*/starrail.js/cache when moving directory, just delete all folders/files in it.**)
+When using the auto-cache updater, we recommend moving the cache directory directly under your project folder. (**DO NOT delete \*\*/starrail.js/cache when moving directory, just delete all folders/files in it.**)
 
 ```js
 const { StarRail } = require("starrail.js");

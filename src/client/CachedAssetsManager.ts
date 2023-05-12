@@ -40,6 +40,8 @@ const contents = [
     "ItemConfigEquipment", // Light Cones as Items
     "EquipmentExpType", // Light Cone Exp Types
     "EquipmentSkillConfig", // Light Cone Superimpositions
+    "RelicConfig", // Relics
+    "RelicExpType", // Relic Exp Types
 ];
 
 const textMapWhiteList: number[] = [
@@ -476,7 +478,6 @@ class CachedAssetsManager {
                 );
             });
         });
-
 
         const requiredStringKeys = required.filter(key => key).map(key => key.toString());
 

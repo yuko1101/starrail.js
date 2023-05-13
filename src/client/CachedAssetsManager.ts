@@ -42,6 +42,10 @@ const contents = [
     "EquipmentSkillConfig", // Light Cone Superimpositions
     "RelicConfig", // Relics
     "RelicExpType", // Relic Exp Types
+    "RelicMainAffixConfig", // Relic Main Stats
+    "RelicSubAffixConfig", // Relic Sub Stats
+    "RelicSetConfig", // Relic Sets
+    "RelicSetSkillConfig", // Relic Set Bonus
 ];
 
 const textMapWhiteList: number[] = [
@@ -477,6 +481,13 @@ class CachedAssetsManager {
                     json.getAsNumber("SkillDesc", "Hash"),
                 );
             });
+        });
+
+        Object.values(data["RelicSetConfig"]).forEach(s => {
+            const json = new JsonReader(s);
+            push(
+                json.getAsNumber("SetName", "Hash"),
+            );
         });
 
         const requiredStringKeys = required.filter(key => key).map(key => key.toString());

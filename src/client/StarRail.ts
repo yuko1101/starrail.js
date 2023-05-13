@@ -3,6 +3,7 @@ import CachedAssetsManager, { LanguageCode } from "./CachedAssetsManager";
 import CharacterData from "../models/character/CharacterData";
 import { ImageBaseUrl } from "../models/assets/ImageAssets";
 import LightConeData from "../models/light_cone/LightConeData";
+import RelicData from "../models/relic/RelicData";
 
 const defaultImageBaseUrls: ImageBaseUrl[] = [];
 
@@ -54,6 +55,10 @@ class StarRail {
      */
     getAllLightCones(excludeTestLightCones = true): LightConeData[] {
         return new JsonReader(this.cachedAssetsManager.getStarRailCacheData("EquipmentConfig")).filterObject((_, lc) => (excludeTestLightCones && lc.has("AvatarBaseType")) || !excludeTestLightCones).map(([, lc]) => new LightConeData(lc.getAsNumber("EquipmentID"), this));
+    }
+
+    getAllRelics(): RelicData[] {
+        return new JsonReader(this.cachedAssetsManager.getStarRailCacheData("RelicConfig")).mapObject((_, relic) => new RelicData(relic.getAsNumber("ID"), this));
     }
 }
 

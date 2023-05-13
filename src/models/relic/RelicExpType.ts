@@ -38,7 +38,7 @@ class RelicExpType {
 
         const json = new JsonReader(this._data);
 
-        this.levels = json.mapObject((_, v) => { return { expType: v.getAsNumber("ExpType"), level: v.getAsNumber("Level"), exp: v.getAsNumberWithDefault(0, "Exp") }; });
+        this.levels = json.mapObject((_, v) => { return { expType: v.getAsNumber("TypeID"), level: v.getAsNumber("Level"), exp: v.getAsNumberWithDefault(0, "Exp") }; });
     }
 
     /**

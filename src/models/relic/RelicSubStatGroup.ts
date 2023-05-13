@@ -4,23 +4,23 @@ import AssetsNotFoundError from "../../errors/AssetsNotFoundError";
 import StatProperty, { StatPropertyType } from "../StatProperty";
 
 /** @typedef */
-export interface RelicMainStat {
+export interface RelicSubStat {
     id: number;
     groupId: number;
     statProperty: StatProperty;
 }
 
 /**
- * @en RelicMainStatGroup
+ * @en RelicSubStatGroup
  */
-class RelicMainStatGroup {
+class RelicSubStatGroup {
     /**  */
     readonly id: number;
     /**  */
     readonly client: StarRail;
 
     /**  */
-    readonly mainStats: RelicMainStat[];
+    readonly subStats: RelicSubStat[];
 
     readonly _data: JsonObject<JsonObject>;
 
@@ -32,13 +32,13 @@ class RelicMainStatGroup {
         this.id = id;
         this.client = client;
 
-        const _data: JsonObject | undefined = client.cachedAssetsManager.getStarRailCacheData("RelicMainAffixConfig")[this.id];
-        if (!_data) throw new AssetsNotFoundError("RelicMainStatGroup", this.id);
+        const _data: JsonObject | undefined = client.cachedAssetsManager.getStarRailCacheData("RelicSubAffixConfig")[this.id];
+        if (!_data) throw new AssetsNotFoundError("RelicSubStatGroup", this.id);
         this._data = _data as JsonObject<JsonObject>;
 
         const json = new JsonReader(this._data);
 
-        this.mainStats = json.mapObject((_, v) => {
+        this.subStats = json.mapObject((_, v) => {
             return {
                 id: v.getAsNumber("AffixID"),
                 groupId: this.id,
@@ -48,4 +48,4 @@ class RelicMainStatGroup {
     }
 }
 
-export default RelicMainStatGroup;
+export default RelicSubStatGroup;

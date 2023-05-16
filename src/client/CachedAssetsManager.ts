@@ -47,6 +47,7 @@ const contents = [
     "RelicSubAffixConfig", // Relic Sub Stats
     "RelicSetConfig", // Relic Sets
     "RelicSetSkillConfig", // Relic Set Bonus
+    "AvatarPropertyConfig", // StatProperty
 ];
 
 const textMapWhiteList: number[] = [
@@ -484,8 +485,8 @@ class CachedAssetsManager {
             });
         });
 
-        Object.values(data["ItemConfigRelic"]).forEach(l => {
-            const json = new JsonReader(l);
+        Object.values(data["ItemConfigRelic"]).forEach(r => {
+            const json = new JsonReader(r);
             push(
                 json.getAsNumber("ItemName", "Hash"),
                 json.getAsNumber("ItemBGDesc", "Hash"),
@@ -496,6 +497,16 @@ class CachedAssetsManager {
             const json = new JsonReader(s);
             push(
                 json.getAsNumber("SetName", "Hash"),
+            );
+        });
+
+        Object.values(data["AvatarPropertyConfig"]).forEach(s => {
+            const json = new JsonReader(s);
+            push(
+                json.getAsNumber("PropertyName", "Hash"),
+                json.getAsNumber("PropertyNameSkillTree", "Hash"),
+                json.getAsNumber("PropertyNameRelic", "Hash"),
+                json.getAsNumber("PropertyNameFilter", "Hash"),
             );
         });
 

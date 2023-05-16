@@ -1,4 +1,8 @@
+import { JsonObject, JsonReader } from "config_file.js";
 import StarRail from "../client/StarRail";
+import AssetsNotFoundError from "../errors/AssetsNotFoundError";
+import ImageAssets from "./assets/ImageAssets";
+import TextAssets from "./assets/TextAssets";
 
 /**
  * @en StatProperty
@@ -9,6 +13,25 @@ class StatProperty {
     /**  */
     readonly client: StarRail;
 
+    /**  */
+    readonly name: TextAssets;
+    /**  */
+    readonly nameSkillTree: TextAssets;
+    /**  */
+    readonly nameRelic: TextAssets;
+    /**  */
+    readonly nameFilter: TextAssets;
+    /**  */
+    readonly isDisplay: boolean;
+    /**  */
+    readonly isBattleDisplay: boolean;
+    /**  */
+    readonly order: number;
+    /**  */
+    readonly icon: ImageAssets;
+
+    readonly _data: JsonObject;
+
     /**
      * @param statPropertyType
      * @param client
@@ -16,6 +39,24 @@ class StatProperty {
     constructor(statPropertyType: StatPropertyType, client: StarRail) {
         this.statPropertyType = statPropertyType;
         this.client = client;
+
+        const _data = client.cachedAssetsManager.getStarRailCacheData("AvatarPropertyConfig")[this.statPropertyType];
+        if (!_data) throw new AssetsNotFoundError("StatProperty", this.statPropertyType);
+        this._data = _data;
+
+        const json = new JsonReader(this._data);
+
+        this.name = new TextAssets(json.getAsNumber("PropertyName", "Hash"), this.client);
+        this.nameSkillTree = new TextAssets(json.getAsNumber("PropertyNameSkillTree", "Hash"), this.client);
+        this.nameRelic = new TextAssets(json.getAsNumber("PropertyNameRelic", "Hash"), this.client);
+        this.nameFilter = new TextAssets(json.getAsNumber("PropertyNameFilter", "Hash"), this.client);
+
+        this.isDisplay = json.getAsBooleanWithDefault(false, "IsDisplay");
+        this.isBattleDisplay = json.getAsBooleanWithDefault(false, "isBattleDisplay");
+
+        this.order = json.getAsNumber("Order");
+
+        this.icon = new ImageAssets(json.getAsString("IconPath"), this.client);
     }
 }
 

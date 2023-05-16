@@ -5,6 +5,8 @@ import RelicExpType from "./RelicExpType";
 import RelicMainStatGroup from "./RelicMainStatGroup";
 import RelicSubStatGroup from "./RelicSubStatGroup";
 import RelicSet from "./RelicSet";
+import TextAssets from "../assets/TextAssets";
+import ImageAssets from "../assets/ImageAssets";
 
 /** @typedef */
 export type RelicType = "HEAD" | "HAND" | "BODY" | "FOOT" | "OBJECT" | "NECK";
@@ -18,6 +20,10 @@ class RelicData {
     /**  */
     readonly client: StarRail;
 
+    /**  */
+    readonly name: TextAssets;
+    /**  */
+    readonly description: TextAssets;
     /**  */
     readonly type: RelicType;
     /**  */
@@ -35,9 +41,14 @@ class RelicData {
     /** Coin cost to level up other light cones when the light cone is used as a material */
     readonly coinCost: number;
     /**  */
+    readonly icon: ImageAssets;
+    /**  */
+    readonly figureIcon: ImageAssets;
+    /**  */
     readonly set: RelicSet;
 
     readonly _data: JsonObject;
+    readonly _itemData: JsonObject;
 
     /**
      * @param id
@@ -51,7 +62,15 @@ class RelicData {
         if (!_data) throw new AssetsNotFoundError("Relic", this.id);
         this._data = _data;
 
+        const _itemData: JsonObject | undefined = client.cachedAssetsManager.getStarRailCacheData("ItemConfigRelic")[this.id];
+        if (!_itemData) throw new AssetsNotFoundError("Relic Item", this.id);
+        this._itemData = _itemData;
+
         const json = new JsonReader(this._data);
+        const itemJson = new JsonReader(this._itemData);
+
+        this.name = new TextAssets(itemJson.getAsNumber("ItemName", "Hash"), this.client);
+        this.description = new TextAssets(itemJson.getAsNumber("ItemBGDesc", "Hash"), this.client);
 
         this.type = json.getAsString("Type") as RelicType;
 
@@ -66,6 +85,9 @@ class RelicData {
 
         this.expProvide = json.getAsNumber("ExpProvide");
         this.coinCost = json.getAsNumber("CoinCost");
+
+        this.icon = new ImageAssets(itemJson.getAsString("ItemIconPath"), this.client);
+        this.figureIcon = new ImageAssets(itemJson.getAsString("ItemFigureIconPath"), this.client);
 
         this.set = new RelicSet(json.getAsNumber("SetID"), this.client);
 

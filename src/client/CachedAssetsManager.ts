@@ -41,6 +41,7 @@ const contents = [
     "EquipmentExpType", // Light Cone Exp Types
     "EquipmentSkillConfig", // Light Cone Superimpositions
     "RelicConfig", // Relics
+    "ItemConfigRelic", // Relics as Items
     "RelicExpType", // Relic Exp Types
     "RelicMainAffixConfig", // Relic Main Stats
     "RelicSubAffixConfig", // Relic Sub Stats
@@ -481,6 +482,14 @@ class CachedAssetsManager {
                     json.getAsNumber("SkillDesc", "Hash"),
                 );
             });
+        });
+
+        Object.values(data["ItemConfigRelic"]).forEach(l => {
+            const json = new JsonReader(l);
+            push(
+                json.getAsNumber("ItemName", "Hash"),
+                json.getAsNumber("ItemBGDesc", "Hash"),
+            );
         });
 
         Object.values(data["RelicSetConfig"]).forEach(s => {

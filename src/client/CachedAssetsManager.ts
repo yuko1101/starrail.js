@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
 import { Axios } from "axios";
-import unzipper from "unzipper";
+import AdmZip from "adm-zip";
 import { ConfigFile, JsonObject, JsonReader, bindOptions, move } from "config_file.js";
 import { fetchJSON } from "../utils/axios_utils";
 import ObjectKeysManager from "./ObjectKeysManager";
@@ -560,14 +560,14 @@ class CachedAssetsManager {
             await new Promise<void>(resolve => {
                 const cacheParentDirectory = path.resolve(this.cacheDirectoryPath, "..");
                 const zipPath = path.resolve(this.defaultCacheDirectoryPath, "..", "cache-downloaded.zip");
+
                 res.data.pipe(fs.createWriteStream(zipPath));
                 res.data.on("end", () => {
-                    fs.createReadStream(zipPath)
-                        .pipe(unzipper.Extract({ path: cacheParentDirectory }))
-                        .on("close", () => {
-                            fs.rmSync(zipPath);
-                            resolve();
-                        });
+                    const zip = new AdmZip(zipPath);
+                    zip.extractAllToAsync(cacheParentDirectory, undefined, undefined, () => {
+                        fs.rmSync(zipPath);
+                        resolve();
+                    });
                 });
             });
 

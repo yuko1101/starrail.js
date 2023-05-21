@@ -33,7 +33,6 @@
   "homepage": "https://starrail.vercel.app",
   "license": "MIT",
   "devDependencies": {
-    "@types/unzipper": "^0.10.5",
     "@typescript-eslint/eslint-plugin": "^5.59.1",
     "@typescript-eslint/parser": "^5.59.1",
     "eslint": "^8.39.0",
@@ -41,8 +40,9 @@
     "typescript": "^5.0.4"
   },
   "dependencies": {
+    "@types/adm-zip": "^0.5.0",
+    "adm-zip": "^0.5.10",
     "axios": "^1.4.0",
-    "config_file.js": "^1.2.0",
-    "unzipper": "^0.10.11"
+    "config_file.js": "^1.2.0"
   }
 }

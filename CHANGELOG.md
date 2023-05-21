@@ -1,3 +1,5 @@
+# 0.2.1
+- Use adm-zip library instead of unzipper.
 # 0.2.0
 - Added CharacterData#stars and LightConeData#stars.
 - Added LightConeData#superimpositions.

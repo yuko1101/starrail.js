@@ -62,6 +62,7 @@ export { RelicSubStat } from "./models/relic/RelicSubStatGroup";
 export { CombatTypeId } from "./models/CombatType";
 export { PathId } from "./models/Path";
 export { StatPropertyType } from "./models/StatProperty";
+export { Birthday } from "./models/User";
 
 // functions
 export { fetchJSON } from "./utils/axios_utils";

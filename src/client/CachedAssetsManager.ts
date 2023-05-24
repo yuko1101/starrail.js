@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
 import { Axios } from "axios";
-import unzipper from "unzipper";
+import unzip, { Entry } from "unzip-stream";
 import { ConfigFile, JsonObject, JsonReader, bindOptions, move } from "config_file.js";
 import { fetchJSON } from "../utils/axios_utils";
 import ObjectKeysManager from "./ObjectKeysManager";
@@ -558,16 +558,27 @@ class CachedAssetsManager {
         });
         if (res.status == 200) {
             await new Promise<void>(resolve => {
-                const cacheParentDirectory = path.resolve(this.cacheDirectoryPath, "..");
-                const zipPath = path.resolve(this.defaultCacheDirectoryPath, "..", "cache-downloaded.zip");
-                res.data.pipe(fs.createWriteStream(zipPath));
-                res.data.on("end", () => {
-                    fs.createReadStream(zipPath)
-                        .pipe(unzipper.Extract({ path: cacheParentDirectory }))
-                        .on("close", () => {
-                            fs.rmSync(zipPath);
-                            resolve();
-                        });
+                res.data
+                    .pipe(unzip.Parse())
+                    .on("entry", (entry: Entry) => {
+                        const entryPath = entry.path.replace(/^cache\/?/, "");
+                        const extractPath = path.resolve(this.cacheDirectoryPath, entryPath);
+
+                        if (entry.type === "Directory") {
+                            if (!fs.existsSync(extractPath)) fs.mkdirSync(extractPath);
+                            entry.autodrain();
+                        } else if (entryPath.startsWith("github/")) {
+                            if (fs.existsSync(extractPath)) {
+                                entry.autodrain();
+                                return;
+                            }
+                            entry.pipe(fs.createWriteStream(extractPath));
+                        } else {
+                            entry.pipe(fs.createWriteStream(extractPath));
+                        }
+                    });
+                res.data.on("close", () => {
+                    resolve();
                 });
             });
 

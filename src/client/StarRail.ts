@@ -4,6 +4,9 @@ import CharacterData from "../models/character/CharacterData";
 import { ImageBaseUrl } from "../models/assets/ImageAssets";
 import LightConeData from "../models/light_cone/LightConeData";
 import RelicData from "../models/relic/RelicData";
+import { fetchJSON } from "../utils/axios_utils";
+import RequestError from "../errors/RequestError";
+import User from "../models/User";
 
 const defaultImageBaseUrls: ImageBaseUrl[] = [];
 
@@ -41,6 +44,25 @@ class StarRail {
         }, options) as unknown as ClientOptions;
 
         this.cachedAssetsManager = new CachedAssetsManager(this);
+    }
+
+
+    /**
+     * @param uid
+     */
+    async fetchUser(uid: number | string): Promise<User> {
+        if (isNaN(Number(uid))) throw new Error("Parameter `uid` must be a number or a string number.");
+
+        const baseUrl = "https://api.mihomo.me/sr_info";
+        const url = `${baseUrl}/${uid}`;
+
+        const response = await fetchJSON(url, this, true);
+
+        if (response.status !== 200) {
+            throw new RequestError(`Request failed with unknown status code ${response.status} - ${response.statusText}\nRequest url: ${url}`, response.status, response.statusText);
+        }
+
+        return new User({ ...response.data }, this);
     }
 
     /**

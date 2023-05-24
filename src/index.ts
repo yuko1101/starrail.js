@@ -2,6 +2,7 @@ import CachedAssetsManager from "./client/CachedAssetsManager";
 import ObjectKeysManager from "./client/ObjectKeysManager";
 import StarRail from "./client/StarRail";
 import AssetsNotFoundError from "./errors/AssetsNotFoundError";
+import RequestError from "./errors/RequestError";
 import ImageAssets from "./models/assets/ImageAssets";
 import TextAssets from "./models/assets/TextAssets";
 import LeveledSkill from "./models/character/skill/LeveledSkill";
@@ -19,6 +20,7 @@ import RelicSubStatGroup from "./models/relic/RelicSubStatGroup";
 import CombatType from "./models/CombatType";
 import Path from "./models/Path";
 import StatProperty from "./models/StatProperty";
+import User from "./models/User";
 
 // classes
 export {
@@ -26,6 +28,7 @@ export {
     ObjectKeysManager,
     StarRail,
     AssetsNotFoundError,
+    RequestError,
     ImageAssets,
     TextAssets,
     LeveledSkill,
@@ -43,6 +46,7 @@ export {
     CombatType,
     Path,
     StatProperty,
+    User,
 };
 
 // typedefs

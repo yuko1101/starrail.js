@@ -6,6 +6,7 @@ import { ConfigFile, JsonObject, JsonReader, bindOptions, move } from "config_fi
 import { fetchJSON } from "../utils/axios_utils";
 import ObjectKeysManager from "./ObjectKeysManager";
 import StarRail from "./StarRail";
+import { getStableHash } from "../utils/hash_utils";
 
 const languages: LanguageCode[] = ["chs", "cht", "de", "en", "es", "fr", "id", "jp", "kr", "pt", "ru", "th", "vi"];
 
@@ -459,6 +460,14 @@ class CachedAssetsManager {
                     json.getAsNumber("SkillDesc", "Hash"),
                     json.getAsNumber("SimpleSkillDesc", "Hash"),
                 );
+            });
+        });
+
+        Object.values(data["AvatarSkillTreeConfig"]).forEach(s => {
+            Object.values(s).forEach(l => {
+                const json = new JsonReader(l);
+                const name = json.getAsString("PointName");
+                if (name !== "") push(getStableHash(name));
             });
         });
 

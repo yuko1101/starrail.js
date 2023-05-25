@@ -3,6 +3,7 @@ import StarRail from "../client/StarRail";
 import CharacterData from "./character/CharacterData";
 import ImageAssets from "./assets/ImageAssets";
 import AssetsNotFoundError from "../errors/AssetsNotFoundError";
+import Character from "./character/Character";
 
 /** @typedef */
 export interface Birthday {
@@ -48,6 +49,10 @@ class User {
     readonly forgottenHall: number;
     /**  */
     readonly simulatedUniverse: number;
+    /**  */
+    readonly supportCharacter: Character;
+    /** Characters on the user's display */
+    readonly starfaringCompanions: Character[];
 
     readonly _data: JsonObject;
 
@@ -99,6 +104,10 @@ class User {
 
         this.forgottenHall = playerSpaceInfo.getAsNumberWithDefault(0, "ChallengeData", "PreMazeGroupIndex");
         this.simulatedUniverse = playerSpaceInfo.getAsNumberWithDefault(0, "PassAreaProgress");
+
+
+        this.supportCharacter = new Character(playerDetailInfo.getAsJsonObject("AssistAvatar"), this.client);
+        this.starfaringCompanions = playerDetailInfo.getAsJsonArrayWithDefault([], "DisplayAvatarList").map(c => new Character(c as JsonObject, this.client));
 
     }
 }

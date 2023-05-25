@@ -4,10 +4,12 @@ import AssetsNotFoundError from "../../errors/AssetsNotFoundError";
 import StatProperty, { StatPropertyType } from "../StatProperty";
 
 /** @typedef */
-export interface RelicSubStat {
+export interface RelicSubStatData {
     id: number;
     groupId: number;
     statProperty: StatProperty;
+    baseValue: number;
+    stepValue: number;
 }
 
 /**
@@ -20,7 +22,7 @@ class RelicSubStatGroup {
     readonly client: StarRail;
 
     /**  */
-    readonly subStats: RelicSubStat[];
+    readonly subStats: RelicSubStatData[];
 
     readonly _data: JsonObject<JsonObject>;
 
@@ -43,6 +45,8 @@ class RelicSubStatGroup {
                 id: v.getAsNumber("AffixID"),
                 groupId: this.id,
                 statProperty: new StatProperty(v.getAsString("Property") as StatPropertyType, this.client),
+                baseValue: v.getAsNumber("BaseValue", "Value"),
+                stepValue: v.getAsNumber("StepValue", "Value"),
             };
         });
     }

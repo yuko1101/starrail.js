@@ -4,7 +4,7 @@ import AssetsNotFoundError from "../../errors/AssetsNotFoundError";
 import StatProperty, { StatPropertyType } from "../StatProperty";
 
 /** @typedef */
-export interface RelicMainStat {
+export interface RelicMainStatData {
     id: number;
     groupId: number;
     statProperty: StatProperty;
@@ -20,7 +20,7 @@ class RelicMainStatGroup {
     readonly client: StarRail;
 
     /**  */
-    readonly mainStats: RelicMainStat[];
+    readonly mainStats: RelicMainStatData[];
 
     readonly _data: JsonObject<JsonObject>;
 

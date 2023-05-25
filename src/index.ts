@@ -13,6 +13,7 @@ import LightCone from "./models/light_cone/LightCone";
 import LightConeData from "./models/light_cone/LightConeData";
 import LightConeExpType from "./models/light_cone/LightConeExpType";
 import LightConeSuperimposition from "./models/light_cone/LightConeSuperimposition";
+import Relic from "./models/relic/Relic";
 import RelicData from "./models/relic/RelicData";
 import RelicExpType from "./models/relic/RelicExpType";
 import RelicMainStatGroup from "./models/relic/RelicMainStatGroup";
@@ -41,6 +42,7 @@ export {
     LightConeData,
     LightConeExpType,
     LightConeSuperimposition,
+    Relic,
     RelicData,
     RelicExpType,
     RelicMainStatGroup,
@@ -59,10 +61,11 @@ export { ClientOptions } from "./client/StarRail";
 export { ImageBaseUrl } from "./models/assets/ImageAssets";
 export { AttackType, EffectType } from "./models/character/skill/Skill";
 export { LightConeLevel } from "./models/light_cone/LightConeExpType";
+export { RelicSubStat } from "./models/relic/Relic";
 export { RelicType } from "./models/relic/RelicData";
 export { RelicLevel } from "./models/relic/RelicExpType";
-export { RelicMainStat } from "./models/relic/RelicMainStatGroup";
-export { RelicSubStat } from "./models/relic/RelicSubStatGroup";
+export { RelicMainStatData } from "./models/relic/RelicMainStatGroup";
+export { RelicSubStatData } from "./models/relic/RelicSubStatGroup";
 export { CombatTypeId } from "./models/CombatType";
 export { PathId } from "./models/Path";
 export { StatPropertyType } from "./models/StatProperty";

@@ -39,7 +39,7 @@ class ImageAssets {
 
         this.url = (this.path === "" || this.imageBaseUrl == null) ? "" : `${this.imageBaseUrl.url}/${convertPathForImageBaseUrl(this.imageBaseUrl, this.path)}.png`;
 
-        this.isAvailable = this.path !== null && this.path !== undefined && this.path !== "";
+        this.isAvailable = this.url !== null && this.url !== undefined && this.url !== "";
     }
 }
 

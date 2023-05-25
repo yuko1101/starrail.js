@@ -3,6 +3,8 @@ import StarRail from "../../client/StarRail";
 import CharacterData from "./CharacterData";
 import LightCone from "../light_cone/LightCone";
 import Relic from "../relic/Relic";
+import SkillTreeNode from "./skill/SkillTreeNode";
+import LeveledSkillTreeNode from "./skill/LeveledSkillTreeNode";
 
 /**
  * @en Character
@@ -25,6 +27,8 @@ class Character {
     readonly ascension: number;
     /**  */
     readonly eidolons: number;
+    /**  */
+    readonly skills: LeveledSkillTreeNode[];
 
     readonly _data: JsonObject;
 
@@ -47,6 +51,8 @@ class Character {
         this.exp = json.getAsNumberWithDefault(0, "EXP");
         this.ascension = json.getAsNumberWithDefault(0, "Promotion");
         this.eidolons = json.getAsNumberWithDefault(0, "Rank");
+
+        this.skills = json.get("BehaviorList").mapArray((_, skill) => new SkillTreeNode(skill.getAsNumber("BehaviorID"), this.client).getSkillTreeNodeByLevel(skill.getAsNumber("Level")));
     }
 }
 

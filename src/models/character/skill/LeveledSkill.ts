@@ -13,6 +13,8 @@ class LeveledSkill {
     readonly client: StarRail;
 
     /**  */
+    readonly id: number;
+    /**  */
     readonly level: number;
     /**  */
     readonly description: TextAssets;
@@ -51,6 +53,8 @@ class LeveledSkill {
         this.client = client;
 
         const json = new JsonReader(this._data);
+
+        this.id = json.getAsNumber("SkillID");
 
         this.level = json.getAsNumber("Level");
 

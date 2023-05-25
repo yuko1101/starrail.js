@@ -36,6 +36,7 @@ const contents = [
     "DamageType", // Combat Types
     "AvatarBaseType", // Paths
     "AvatarSkillConfig", // Character Skills
+    "AvatarSkillTreeConfig", // Character Skill Trees
     "EquipmentConfig", // Light Cones
     "ItemConfigEquipment", // Light Cones as Items
     "EquipmentExpType", // Light Cone Exp Types

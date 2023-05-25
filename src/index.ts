@@ -7,7 +7,9 @@ import ImageAssets from "./models/assets/ImageAssets";
 import TextAssets from "./models/assets/TextAssets";
 import LeveledSkill from "./models/character/skill/LeveledSkill";
 import Skill from "./models/character/skill/Skill";
+import Character from "./models/character/Character";
 import CharacterData from "./models/character/CharacterData";
+import LightCone from "./models/light_cone/LightCone";
 import LightConeData from "./models/light_cone/LightConeData";
 import LightConeExpType from "./models/light_cone/LightConeExpType";
 import LightConeSuperimposition from "./models/light_cone/LightConeSuperimposition";
@@ -33,7 +35,9 @@ export {
     TextAssets,
     LeveledSkill,
     Skill,
+    Character,
     CharacterData,
+    LightCone,
     LightConeData,
     LightConeExpType,
     LightConeSuperimposition,

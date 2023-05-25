@@ -31,6 +31,7 @@
 A Node.js library for Star Rail.
 
 ### Features
+- User Data and Character Stats by UID.
 - All Characters and All Light Cones Data.
 - Cache Updater for the new update of Honkai: Star Rail. (Update characters and light cones immediately.)
 
@@ -113,6 +114,17 @@ client.cachedAssetsManager.activateAutoCacheUpdater({
 ```
 
 # How to use
+
+## Fetching Player Data
+[StarRail#fetchUser](https://starrail.vercel.app/docs/api/StarRail#fetchUser)
+```js
+const { StarRail } = require("starrail.js");
+const client = new StarRail();
+
+client.fetchUser(800069903).then(user => {
+  console.log(user);
+});
+```
 
 ## Star Rail Character List
 [StarRail#getAllCharacters](https://starrail.vercel.app/docs/api/StarRail#getAllCharacters)

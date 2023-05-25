@@ -11,7 +11,7 @@ export interface RelicSubStat {
     count: number;
     /**  */
     steps: number;
-    /** Calculated by [baseValue](RelicSubStatData#baseValue) * [count](#count) + [stepValue](RelicSubStatData#stepValue) * [steps](#steps) */
+    /** Calculated by [baseValue](RelicSubStatData#baseValue) \* [count](#count) + [stepValue](RelicSubStatData#stepValue) \* [steps](#steps) */
     value: number;
 }
 

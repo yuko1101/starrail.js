@@ -4,6 +4,7 @@ import TextAssets from "../../assets/TextAssets";
 import Skill from "./Skill";
 import { getStableHash } from "../../../utils/hash_utils";
 import ImageAssets from "../../assets/ImageAssets";
+import StatProperty, { StatPropertyType, StatPropertyValue } from "../../StatProperty";
 
 /**
  * @en LeveledSkillTreeNode
@@ -18,6 +19,8 @@ class LeveledSkillTreeNode {
     readonly level: number;
     /**  */
     readonly characterId: number;
+    /**  */
+    readonly addStats: StatPropertyValue[];
 
     readonly _data: JsonObject;
 
@@ -47,6 +50,8 @@ class LeveledSkillTreeNode {
         this.id = json.getAsNumber("PointID");
         this.level = json.getAsNumber("Level");
         this.characterId = json.getAsNumber("AvatarID");
+
+        this.addStats = json.get("StatusAddList").mapArray((_, s) => { return { statProperty: new StatProperty(s.getAsString("PropertyType") as StatPropertyType, this.client), value: s.getAsNumber("Value", "Value") }; });
 
 
         // The following properties are the same as for SkillTreeNode

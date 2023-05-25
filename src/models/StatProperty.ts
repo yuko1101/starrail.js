@@ -63,6 +63,12 @@ class StatProperty {
 export default StatProperty;
 
 /** @typedef */
+export interface StatPropertyValue {
+    statProperty: StatProperty;
+    value: number;
+}
+
+/** @typedef */
 export type StatPropertyType =
     | "MaxHP"
     | "Attack"

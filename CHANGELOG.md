@@ -1,3 +1,6 @@
+# 0.3.1
+- Added CharacterData#eidolons and Eidolon class.
+- Added CharacterData#skillTreeNodes.
 # 0.3.0
 - Added StarRail#fetchUser.
 - Renamed RelicSubStat to RelicSubStatData.

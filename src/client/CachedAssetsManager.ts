@@ -38,6 +38,7 @@ const contents = [
     "AvatarBaseType", // Paths
     "AvatarSkillConfig", // Character Skills
     "AvatarSkillTreeConfig", // Character Skill Trees
+    "AvatarRankConfig", // Character Eidolons
     "EquipmentConfig", // Light Cones
     "ItemConfigEquipment", // Light Cones as Items
     "EquipmentExpType", // Light Cone Exp Types
@@ -469,6 +470,14 @@ class CachedAssetsManager {
                 const name = json.getAsString("PointName");
                 if (name !== "") push(getStableHash(name));
             });
+        });
+
+        Object.values(data["AvatarRankConfig"]).forEach(e => {
+            const json = new JsonReader(e);
+            push(
+                getStableHash(json.getAsString("Name")),
+                getStableHash(json.getAsString("Desc")),
+            );
         });
 
         Object.values(data["EquipmentConfig"]).forEach(l => {

@@ -6,6 +6,8 @@ import CombatType, { CombatTypeId } from "../CombatType";
 import Path, { PathId } from "../Path";
 import Skill from "./skill/Skill";
 import ImageAssets from "../assets/ImageAssets";
+import SkillTreeNode from "./skill/SkillTreeNode";
+import Eidolon from "./Eidolon";
 
 /**
  * @en CharacterData
@@ -28,6 +30,10 @@ class CharacterData {
     readonly path: Path;
     /**  */
     readonly skills: Skill[];
+    /**  */
+    readonly skillTreeNodes: SkillTreeNode[];
+    /**  */
+    readonly eidolons: Eidolon[];
     /**  */
     readonly icon: ImageAssets;
     /**  */
@@ -80,6 +86,14 @@ class CharacterData {
         this.path = new Path(json.getAsString("AvatarBaseType") as PathId, this.client);
 
         this.skills = json.get("SkillList").mapArray((_, skillId) => new Skill(skillId.getAsNumber(), this.client));
+
+        const skillTreeData = this.client.cachedAssetsManager.getStarRailCacheData("AvatarSkillTreeConfig");
+        const skillTreeJson = new JsonReader(skillTreeData);
+        this.skillTreeNodes = skillTreeJson.filterObject((_, node) => node.getAsNumber("1", "AvatarID") === this.id).map(([nodeId]) => new SkillTreeNode(Number(nodeId), this.client));
+
+        const eidolonsData = this.client.cachedAssetsManager.getStarRailCacheData("AvatarRankConfig");
+        const eidolonsJson = new JsonReader(eidolonsData);
+        this.eidolons = eidolonsJson.filterObject((eidolonId) => Math.floor(Number(eidolonId) / 100) === this.id).map(([eidolonId]) => new Eidolon(Number(eidolonId), this.client));
 
         this.icon = new ImageAssets(json.getAsString("DefaultAvatarHeadIconPath"), this.client);
         this.sideIcon = new ImageAssets(json.getAsString("AvatarSideIconPath"), this.client);

@@ -7,6 +7,9 @@ import RelicData from "../models/relic/RelicData";
 import { fetchJSON } from "../utils/axios_utils";
 import RequestError from "../errors/RequestError";
 import User from "../models/User";
+import InvalidUidFormatError from "../errors/InvalidUidFormatError";
+import UserNotFoundError from "../errors/UserNotFoundError";
+import MihomoError from "../errors/MihomoError";
 
 const defaultImageBaseUrls: ImageBaseUrl[] = [];
 
@@ -49,6 +52,7 @@ class StarRail {
 
     /**
      * @param uid
+     * @throws {MihomoError}
      */
     async fetchUser(uid: number | string): Promise<User> {
         if (isNaN(Number(uid))) throw new Error("Parameter `uid` must be a number or a string number.");
@@ -60,6 +64,20 @@ class StarRail {
 
         if (response.status !== 200) {
             throw new RequestError(`Request failed with unknown status code ${response.status} - ${response.statusText}\nRequest url: ${url}`, response.status, response.statusText);
+        } else if (response.data["detail"]) {
+            switch (response.data["detail"]) {
+                case "Invalid uid":
+                    throw new InvalidUidFormatError(Number(uid));
+                default:
+                    throw new MihomoError(`Unknown error occurred. Error: ${response.data["detail"]}`);
+            }
+        } else if (response.data["ErrCode"]) {
+            switch (response.data["ErrCode"]) {
+                case 3612:
+                    throw new UserNotFoundError(Number(uid));
+                default:
+                    throw new MihomoError(`Unknown error occurred. ErrorCode: ${response.data["ErrCode"]}`);
+            }
         }
 
         return new User({ ...response.data }, this);

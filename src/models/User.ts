@@ -65,7 +65,6 @@ class User {
 
         this._data = data;
 
-        // TODO: error handling (e.g. user does not exist)
         const json = new JsonReader(this._data);
         const playerDetailInfo = json.get("PlayerDetailInfo");
 

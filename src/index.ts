@@ -2,13 +2,17 @@ import CachedAssetsManager from "./client/CachedAssetsManager";
 import ObjectKeysManager from "./client/ObjectKeysManager";
 import StarRail from "./client/StarRail";
 import AssetsNotFoundError from "./errors/AssetsNotFoundError";
+import InvalidUidFormatError from "./errors/InvalidUidFormatError";
+import MihomoError from "./errors/MihomoError";
 import RequestError from "./errors/RequestError";
+import UserNotFoundError from "./errors/UserNotFoundError";
 import ImageAssets from "./models/assets/ImageAssets";
 import TextAssets from "./models/assets/TextAssets";
 import LeveledSkill from "./models/character/skill/LeveledSkill";
 import Skill from "./models/character/skill/Skill";
 import Character from "./models/character/Character";
 import CharacterData from "./models/character/CharacterData";
+import Eidolon from "./models/character/Eidolon";
 import LightCone from "./models/light_cone/LightCone";
 import LightConeData from "./models/light_cone/LightConeData";
 import LightConeExpType from "./models/light_cone/LightConeExpType";
@@ -31,13 +35,17 @@ export {
     ObjectKeysManager,
     StarRail,
     AssetsNotFoundError,
+    InvalidUidFormatError,
+    MihomoError,
     RequestError,
+    UserNotFoundError,
     ImageAssets,
     TextAssets,
     LeveledSkill,
     Skill,
     Character,
     CharacterData,
+    Eidolon,
     LightCone,
     LightConeData,
     LightConeExpType,
@@ -73,3 +81,4 @@ export { Birthday } from "./models/User";
 
 // functions
 export { fetchJSON } from "./utils/axios_utils";
+export { getStableHash } from "./utils/hash_utils";

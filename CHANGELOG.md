@@ -1,6 +1,7 @@
 # 0.3.1
 - Added CharacterData#eidolons and Eidolon class.
 - Added CharacterData#skillTreeNodes.
+- Throws MihomoError if an error occurs when requesting with StarRail#fetchUser.
 # 0.3.0
 - Added StarRail#fetchUser.
 - Renamed RelicSubStat to RelicSubStatData.

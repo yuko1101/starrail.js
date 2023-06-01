@@ -15,7 +15,10 @@ class Eidolon {
     readonly client: StarRail;
     /**  */
     readonly rank: number;
-    /**  */
+    /**
+     * This is the icon of the eidolon, not the picture of the eidolon with the character in them.
+     * If you would like to get it, you can find it in `ui/ui3d/rank/_dependencies/textures`.
+     */
     readonly icon: ImageAssets;
     /**  */
     readonly name: TextAssets;
@@ -43,6 +46,7 @@ class Eidolon {
         this.icon = new ImageAssets(json.getAsString("IconPath"), this.client);
 
         this.name = new TextAssets(getStableHash(json.getAsString("Name")), this.client);
+        // TODO: replace placeholders with numbers in Param
         this.description = new TextAssets(getStableHash(json.getAsString("Desc")), this.client);
     }
 }

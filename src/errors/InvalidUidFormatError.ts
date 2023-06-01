@@ -1,18 +1,20 @@
-import MihomoError from "./MihomoError";
+import RequestError from "./RequestError";
 
 /**
  * @en InvalidUidFormatError
- * @extends {MihomoError}
+ * @extends {RequestError}
  */
-class InvalidUidFormatError extends MihomoError {
+class InvalidUidFormatError extends RequestError {
     /**  */
     readonly uid: number;
 
     /**
      * @param uid
+     * @param statusCode
+     * @param statusMessage
      */
-    constructor(uid: number) {
-        super(`Invalid uid format. (${uid} provided.)`);
+    constructor(uid: number, statusCode: number, statusMessage: string) {
+        super(`Invalid uid format. (${uid} provided.)`, statusCode, statusMessage);
 
         this.name = "InvalidUidFormatError";
         this.uid = uid;

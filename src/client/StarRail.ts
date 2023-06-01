@@ -63,13 +63,11 @@ class StarRail {
         const response = await fetchJSON(url, this, true);
 
         if (response.status !== 200) {
-            throw new RequestError(`Request failed with unknown status code ${response.status} - ${response.statusText}\nRequest url: ${url}`, response.status, response.statusText);
-        } else if (response.data["detail"]) {
             switch (response.data["detail"]) {
                 case "Invalid uid":
-                    throw new InvalidUidFormatError(Number(uid));
+                    throw new InvalidUidFormatError(Number(uid), response.status, response.statusText);
                 default:
-                    throw new MihomoError(`Unknown error occurred. Error: ${response.data["detail"]}`);
+                    throw new RequestError(`Request failed with unknown status code ${response.status} - ${response.statusText}\nError Detail: ${response.data["detail"]}\nRequest url: ${url}`, response.status, response.statusText);
             }
         } else if (response.data["ErrCode"]) {
             switch (response.data["ErrCode"]) {

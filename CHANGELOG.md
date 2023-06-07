@@ -1,3 +1,5 @@
+# 0.3.4
+- Fixed a error with _downloadCacheZip().
 # 0.3.3
 - Fixed errors with light cone promotion.
 - Fixed error handling with mihomo api.

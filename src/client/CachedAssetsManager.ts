@@ -586,7 +586,7 @@ class CachedAssetsManager {
                         const extractPath = path.resolve(this.cacheDirectoryPath, entryPath);
 
                         if (entry.type === "Directory") {
-                            if (!fs.existsSync(extractPath)) fs.mkdirSync(extractPath);
+                            if (!fs.existsSync(extractPath)) fs.mkdirSync(extractPath, { recursive: true });
                             entry.autodrain();
                         } else if (entryPath.startsWith("github/")) {
                             if (fs.existsSync(extractPath)) {

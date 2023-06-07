@@ -69,12 +69,12 @@ class StarRail {
                 default:
                     throw new RequestError(`Request failed with unknown status code ${response.status} - ${response.statusText}\nError Detail: ${response.data["detail"]}\nRequest url: ${url}`, response.status, response.statusText);
             }
-        } else if (response.data["ErrCode"]) {
-            switch (response.data["ErrCode"]) {
+        } else if (response.data["retcode"]) {
+            switch (response.data["retcode"]) {
                 case 3612:
                     throw new UserNotFoundError(Number(uid));
                 default:
-                    throw new MihomoError(`Unknown error occurred. ErrorCode: ${response.data["ErrCode"]}`);
+                    throw new MihomoError(`Unknown error occurred. ErrorCode: ${response.data["retcode"]}`);
             }
         }
 

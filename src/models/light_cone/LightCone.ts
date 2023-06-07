@@ -34,7 +34,7 @@ class LightCone {
         this.lightConeData = new LightConeData(json.getAsNumber("tid"), this.client);
 
         this.level = json.getAsNumber("level");
-        this.ascension = json.getAsNumber("promotion");
+        this.ascension = json.getAsNumberWithDefault(0, "promotion");
 
         this.superimposition = this.lightConeData.superimpositions[json.getAsNumber("rank") - 1];
 

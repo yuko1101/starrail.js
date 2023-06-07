@@ -31,12 +31,12 @@ class LightCone {
 
         const json = new JsonReader(this._data);
 
-        this.lightConeData = new LightConeData(json.getAsNumber("ID"), this.client);
+        this.lightConeData = new LightConeData(json.getAsNumber("tid"), this.client);
 
-        this.level = json.getAsNumber("Level");
-        this.ascension = json.getAsNumber("Promotion");
+        this.level = json.getAsNumber("level");
+        this.ascension = json.getAsNumber("promotion");
 
-        this.superimposition = this.lightConeData.superimpositions[json.getAsNumber("Rank") - 1];
+        this.superimposition = this.lightConeData.superimpositions[json.getAsNumber("rank") - 1];
 
     }
 }

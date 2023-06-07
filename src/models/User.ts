@@ -25,8 +25,6 @@ class User {
     /**  */
     readonly signature: string | null;
     /**  */
-    readonly birthday: Birthday | null;
-    /**  */
     readonly icon: ImageAssets;
     /**
      * The character used as the icon for the user
@@ -66,17 +64,14 @@ class User {
         this._data = data;
 
         const json = new JsonReader(this._data);
-        const playerDetailInfo = json.get("PlayerDetailInfo");
+        const detailInfo = json.get("detailInfo");
 
-        this.uid = playerDetailInfo.getAsNumber("UID");
-        this.nickname = playerDetailInfo.getAsString("NickName");
-        this.signature = playerDetailInfo.getAsStringWithDefault(null, "Signature");
-
-        const birthday = playerDetailInfo.getAsNumberWithDefault(null, "Birthday");
-        this.birthday = birthday ? { month: Math.floor(birthday / 100), day: birthday % 100 } : null;
+        this.uid = detailInfo.getAsNumber("uid");
+        this.nickname = detailInfo.getAsString("nickname");
+        this.signature = detailInfo.getAsStringWithDefault(null, "signature");
 
         // head icon ids can be found in PlayerIcon.json, ItemPlayerCard.json, AvatarPlayerIcon.json, or ItemConfigAvatarPlayerIcon.json
-        const headIconId = playerDetailInfo.getAsNumber("HeadIconID");
+        const headIconId = detailInfo.getAsNumber("headIcon");
         let headIcon = this.client.cachedAssetsManager.getStarRailCacheData("AvatarPlayerIcon")[headIconId];
         const isCharacterHeadIcon = !!headIcon;
         if (!headIcon) {
@@ -90,23 +85,23 @@ class User {
         this.iconCharacter = isCharacterHeadIcon ? new CharacterData(headIconJson.getAsNumber("AvatarID"), this.client) : null;
 
 
-        this.level = playerDetailInfo.getAsNumber("Level");
-        this.equilibriumLevel = playerDetailInfo.getAsNumberWithDefault(0, "WorldLevel");
-        this.friends = playerDetailInfo.getAsNumberWithDefault(0, "CurFriendCount");
+        this.level = detailInfo.getAsNumber("level");
+        this.equilibriumLevel = detailInfo.getAsNumberWithDefault(0, "worldLevel");
+        this.friends = detailInfo.getAsNumberWithDefault(0, "friendCount");
 
 
-        const playerSpaceInfo = playerDetailInfo.get("PlayerSpaceInfo");
+        const recordInfo = detailInfo.get("recordInfo");
 
-        this.achievements = playerSpaceInfo.getAsNumberWithDefault(0, "AchievementCount");
-        this.characterCount = playerSpaceInfo.getAsNumber("AvatarCount");
-        this.lightConeCount = playerSpaceInfo.getAsNumberWithDefault(0, "LightConeCount");
+        this.achievements = recordInfo.getAsNumberWithDefault(0, "achievementCount");
+        this.characterCount = recordInfo.getAsNumber("avatarCount");
+        this.lightConeCount = recordInfo.getAsNumberWithDefault(0, "equipmentCount");
 
-        this.forgottenHall = playerSpaceInfo.getAsNumberWithDefault(0, "ChallengeData", "PreMazeGroupIndex");
-        this.simulatedUniverse = playerSpaceInfo.getAsNumberWithDefault(0, "PassAreaProgress");
+        this.forgottenHall = recordInfo.getAsNumberWithDefault(0, "challengeInfo", "scheduleMaxLevel");
+        this.simulatedUniverse = recordInfo.getAsNumberWithDefault(0, "maxRogueChallengeScore");
 
 
-        this.supportCharacter = new Character(playerDetailInfo.getAsJsonObject("AssistAvatar"), this.client);
-        this.starfaringCompanions = playerDetailInfo.getAsJsonArrayWithDefault([], "DisplayAvatarList").map(c => new Character(c as JsonObject, this.client));
+        this.supportCharacter = new Character(detailInfo.getAsJsonObject("assistAvatarDetail"), this.client);
+        this.starfaringCompanions = detailInfo.getAsJsonArrayWithDefault([], "avatarDetailList").map(c => new Character(c as JsonObject, this.client));
 
     }
 }

@@ -43,18 +43,18 @@ class Relic {
 
         const json = new JsonReader(this._data);
 
-        this.relicData = new RelicData(json.getAsNumber("ID"), this.client);
+        this.relicData = new RelicData(json.getAsNumber("tid"), this.client);
 
-        this.level = json.getAsNumberWithDefault(0, "Level");
+        this.level = json.getAsNumberWithDefault(0, "level");
 
-        const mainAffixId = json.getAsNumber("MainAffixID");
+        const mainAffixId = json.getAsNumber("mainAffixId");
         this.mainStat = this.relicData.mainStatGroup.mainStats.find(mainStat => mainStat.id === mainAffixId) as RelicMainStatData;
 
-        this.subStats = json.get("RelicSubAffix").mapArray((_, subAffix) => {
-            const subAffixId = subAffix.getAsNumber("SubAffixID");
+        this.subStats = json.get("subAffixList").mapArray((_, subAffix) => {
+            const subAffixId = subAffix.getAsNumber("affixId");
             const subStatData = this.relicData.subStatGroup.subStats.find(s => s.id === subAffixId) as RelicSubStatData;
-            const count = subAffix.getAsNumber("Cnt");
-            const steps = subAffix.getAsNumberWithDefault(0, "Step");
+            const count = subAffix.getAsNumber("cnt");
+            const steps = subAffix.getAsNumberWithDefault(0, "step");
 
             return {
                 subStatData,

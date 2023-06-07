@@ -1,3 +1,6 @@
+# 0.3.2
+- Support HSR v1.1 data structure in mihomo api.
+- Removed User#birthday because it cannot be retrieved anymore.
 # 0.3.1
 - Added CharacterData#eidolons and Eidolon class.
 - Added CharacterData#skillTreeNodes.

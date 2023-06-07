@@ -42,17 +42,17 @@ class Character {
 
         const json = new JsonReader(this._data);
 
-        this.characterData = new CharacterData(json.getAsNumber("AvatarID"), this.client);
+        this.characterData = new CharacterData(json.getAsNumber("avatarId"), this.client);
 
-        this.lightCone = json.has("EquipmentID", "ID") ? new LightCone(json.getAsJsonObject("EquipmentID"), this.client) : null;
-        this.relics = json.getAsJsonArrayWithDefault([], "RelicList").map(relic => new Relic(relic as JsonObject, this.client));
+        this.lightCone = json.has("equipment", "tid") ? new LightCone(json.getAsJsonObject("equipment"), this.client) : null;
+        this.relics = json.getAsJsonArrayWithDefault([], "relicList").map(relic => new Relic(relic as JsonObject, this.client));
 
-        this.level = json.getAsNumber("Level");
-        this.exp = json.getAsNumberWithDefault(0, "EXP");
-        this.ascension = json.getAsNumberWithDefault(0, "Promotion");
-        this.eidolons = json.getAsNumberWithDefault(0, "Rank");
+        this.level = json.getAsNumber("level");
+        this.exp = json.getAsNumberWithDefault(0, "exp");
+        this.ascension = json.getAsNumberWithDefault(0, "promotion");
+        this.eidolons = json.getAsNumberWithDefault(0, "rank");
 
-        this.skills = json.get("BehaviorList").mapArray((_, skill) => new SkillTreeNode(skill.getAsNumber("BehaviorID"), this.client).getSkillTreeNodeByLevel(skill.getAsNumber("Level")));
+        this.skills = json.get("skillTreeList").mapArray((_, skill) => new SkillTreeNode(skill.getAsNumber("pointId"), this.client).getSkillTreeNodeByLevel(skill.getAsNumber("level")));
     }
 }
 

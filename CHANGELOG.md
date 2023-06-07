@@ -1,3 +1,6 @@
+# 0.3.3
+- Fixed errors with light cone promotion.
+- Fixed error handling with mihomo api.
 # 0.3.2
 - Support HSR v1.1 data structure in mihomo api.
 - Removed User#birthday because it cannot be retrieved anymore.

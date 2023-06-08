@@ -1,3 +1,5 @@
+# 0.4.0
+- Changed type of Relic#mainStat to RelicMainStat which contains the value.
 # 0.3.4
 - Fixed a error with _downloadCacheZip().
 # 0.3.3

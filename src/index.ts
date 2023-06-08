@@ -12,6 +12,7 @@ import LeveledSkill from "./models/character/skill/LeveledSkill";
 import Skill from "./models/character/skill/Skill";
 import Character from "./models/character/Character";
 import CharacterData from "./models/character/CharacterData";
+import CharacterStats from "./models/character/CharacterStats";
 import Eidolon from "./models/character/Eidolon";
 import LightCone from "./models/light_cone/LightCone";
 import LightConeData from "./models/light_cone/LightConeData";
@@ -45,6 +46,7 @@ export {
     Skill,
     Character,
     CharacterData,
+    CharacterStats,
     Eidolon,
     LightCone,
     LightConeData,
@@ -69,7 +71,7 @@ export { ClientOptions } from "./client/StarRail";
 export { ImageBaseUrl } from "./models/assets/ImageAssets";
 export { AttackType, EffectType } from "./models/character/skill/Skill";
 export { LightConeLevel } from "./models/light_cone/LightConeExpType";
-export { RelicSubStat } from "./models/relic/Relic";
+export { RelicMainStat, RelicSubStat } from "./models/relic/Relic";
 export { RelicType } from "./models/relic/RelicData";
 export { RelicLevel } from "./models/relic/RelicExpType";
 export { RelicMainStatData } from "./models/relic/RelicMainStatGroup";

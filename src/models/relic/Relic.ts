@@ -15,6 +15,13 @@ export interface RelicSubStat {
     value: number;
 }
 
+/** @typedef */
+export interface RelicMainStat {
+    mainStatData: RelicMainStatData;
+    /** Calculated by [baseValue](RelicMainStatData#baseValue) + [levelValue](RelicMainStatData#levelValue) \* [level](Relic#level) */
+    value: number;
+}
+
 /**
  * @en Relic
  */
@@ -27,7 +34,7 @@ class Relic {
     /**  */
     readonly level: number;
     /**  */
-    readonly mainStat: RelicMainStatData;
+    readonly mainStat: RelicMainStat;
     /**  */
     readonly subStats: RelicSubStat[];
 
@@ -48,7 +55,11 @@ class Relic {
         this.level = json.getAsNumberWithDefault(0, "level");
 
         const mainAffixId = json.getAsNumber("mainAffixId");
-        this.mainStat = this.relicData.mainStatGroup.mainStats.find(mainStat => mainStat.id === mainAffixId) as RelicMainStatData;
+        const mainStatData = this.relicData.mainStatGroup.mainStats.find(mainStat => mainStat.id === mainAffixId) as RelicMainStatData;
+        this.mainStat = {
+            mainStatData,
+            value: mainStatData.baseValue + mainStatData.levelValue * this.level,
+        };
 
         this.subStats = json.get("subAffixList").mapArray((_, subAffix) => {
             const subAffixId = subAffix.getAsNumber("affixId");

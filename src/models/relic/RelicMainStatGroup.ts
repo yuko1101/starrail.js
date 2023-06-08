@@ -8,6 +8,8 @@ export interface RelicMainStatData {
     id: number;
     groupId: number;
     statProperty: StatProperty;
+    baseValue: number;
+    levelValue: number;
 }
 
 /**
@@ -43,6 +45,8 @@ class RelicMainStatGroup {
                 id: v.getAsNumber("AffixID"),
                 groupId: this.id,
                 statProperty: new StatProperty(v.getAsString("Property") as StatPropertyType, this.client),
+                baseValue: v.getAsNumber("BaseValue", "Value"),
+                levelValue: v.getAsNumber("LevelAdd", "Value"),
             };
         });
     }

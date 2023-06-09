@@ -58,6 +58,8 @@ class StatProperty {
 
         this.icon = new ImageAssets(json.getAsString("IconPath"), this.client);
     }
+
+    static ALL_DAMAGE_TYPES: StatPropertyType[] = ["PhysicalAddedRatio", "FireAddedRatio", "IceAddedRatio", "ThunderAddedRatio", "WindAddedRatio", "QuantumAddedRatio", "ImaginaryAddedRatio"];
 }
 
 export default StatProperty;

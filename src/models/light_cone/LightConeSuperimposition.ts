@@ -2,6 +2,7 @@ import { JsonObject, JsonReader } from "config_file.js";
 import StarRail from "../../client/StarRail";
 import AssetsNotFoundError from "../../errors/AssetsNotFoundError";
 import TextAssets from "../assets/TextAssets";
+import StatProperty, { StatPropertyType, StatPropertyValue } from "../StatProperty";
 
 /**
  * @en LightConeSuperimposition
@@ -20,6 +21,8 @@ class LightConeSuperimposition {
     readonly description: TextAssets;
     /**  */
     readonly paramList: number[];
+    /**  */
+    readonly stats: StatPropertyValue[];
 
     readonly _data: JsonObject;
 
@@ -43,6 +46,13 @@ class LightConeSuperimposition {
         this.description = new TextAssets(json.getAsNumber("SkillDesc", "Hash"), this.client);
 
         this.paramList = json.get("ParamList").mapArray((_, v) => v.getAsNumber("Value"));
+
+        this.stats = json.get("AbilityProperty").mapArray((_, prop) => {
+            return {
+                statProperty: new StatProperty(prop.getAsString("PropertyType") as StatPropertyType, this.client),
+                value: prop.getAsNumber("Value", "Value"),
+            };
+        });
     }
 }
 

@@ -1,5 +1,8 @@
 # 0.4.0
 - Changed type of Relic#mainStat to RelicMainStat which contains the value.
+- Added LightConeSuperimposition#stats.
+- Added LightConeData#getStatsByLevel() and LightConeData#getSuperimpositionStats().
+- Added LightCone#basicStats and LightCone#extraStats.
 # 0.3.4
 - Fixed a error with _downloadCacheZip().
 # 0.3.3

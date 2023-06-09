@@ -43,6 +43,7 @@ const contents = [
     "ItemConfigEquipment", // Light Cones as Items
     "EquipmentExpType", // Light Cone Exp Types
     "EquipmentSkillConfig", // Light Cone Superimpositions
+    "EquipmentPromotionConfig", // Light Cone Promotions and Light Cone Stats
     "RelicConfig", // Relics
     "ItemConfigRelic", // Relics as Items
     "RelicExpType", // Relic Exp Types

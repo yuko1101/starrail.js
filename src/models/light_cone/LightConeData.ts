@@ -6,6 +6,7 @@ import Path, { PathId } from "../Path";
 import LightConeExpType from "./LightConeExpType";
 import ImageAssets from "../assets/ImageAssets";
 import LightConeSuperimposition from "./LightConeSuperimposition";
+import StatProperty, { StatPropertyValue } from "../StatProperty";
 
 /**
  * @en LightConeData
@@ -90,6 +91,37 @@ class LightConeData {
 
         this.icon = new ImageAssets(json.getAsString("ThumbnailPath"), this.client);
         this.cardImage = new ImageAssets(json.getAsString("ImagePath"), this.client);
+    }
+
+    /**
+     * @param ascension
+     * @param level
+     */
+    getStatsByLevel(ascension: number, level: number): StatPropertyValue[] {
+        const ascensionData = this.client.cachedAssetsManager.getStarRailCacheData("EquipmentPromotionConfig")[this.id][ascension];
+        const ascensionJson = new JsonReader(ascensionData);
+
+        return [
+            {
+                statProperty: new StatProperty("BaseHP", this.client),
+                value: ascensionJson.getAsNumber("BaseHP", "Value") + ascensionJson.getAsNumber("BaseHPAdd", "Value") * (level - 1),
+            },
+            {
+                statProperty: new StatProperty("BaseAttack", this.client),
+                value: ascensionJson.getAsNumber("BaseAttack", "Value") + ascensionJson.getAsNumber("BaseAttackAdd", "Value") * (level - 1),
+            },
+            {
+                statProperty: new StatProperty("BaseDefence", this.client),
+                value: ascensionJson.getAsNumber("BaseDefence", "Value") + ascensionJson.getAsNumber("BaseDefenceAdd", "Value") * (level - 1),
+            },
+        ];
+    }
+
+    /**
+     * @param superimposition
+     */
+    getSuperimpositionStats(superimposition: number): StatPropertyValue[] {
+        return this.superimpositions[superimposition - 1].stats;
     }
 }
 

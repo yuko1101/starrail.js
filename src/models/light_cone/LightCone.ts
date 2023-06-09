@@ -2,6 +2,7 @@ import { JsonObject, JsonReader } from "config_file.js";
 import StarRail from "../../client/StarRail";
 import LightConeData from "./LightConeData";
 import LightConeSuperimposition from "./LightConeSuperimposition";
+import { StatPropertyValue } from "../StatProperty";
 
 /**
  * @en
@@ -18,6 +19,10 @@ class LightCone {
     readonly ascension: number;
     /**  */
     readonly superimposition: LightConeSuperimposition;
+    /** BaseHP, BaseAttack, and BaseDefence of this light cone. */
+    readonly basicStats: StatPropertyValue[];
+    /** Additional stats of this light cone skill */
+    readonly extraStats: StatPropertyValue[];
 
     readonly _data: JsonObject;
 
@@ -37,6 +42,10 @@ class LightCone {
         this.ascension = json.getAsNumberWithDefault(0, "promotion");
 
         this.superimposition = this.lightConeData.superimpositions[json.getAsNumber("rank") - 1];
+
+        this.basicStats = this.lightConeData.getStatsByLevel(this.ascension, this.level);
+        this.extraStats = this.lightConeData.getSuperimpositionStats(this.superimposition.level);
+
 
     }
 }

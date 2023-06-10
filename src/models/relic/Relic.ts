@@ -56,6 +56,10 @@ class Relic {
 
 export default Relic;
 
+/**
+ * @en RelicMainStat
+ * @extends {StatPropertyValue}
+ */
 export class RelicMainStat extends StatPropertyValue {
     /**  */
     readonly mainStatData: RelicMainStatData;
@@ -79,6 +83,10 @@ export class RelicMainStat extends StatPropertyValue {
     }
 }
 
+/**
+ * @en RelicSubStat
+ * @extends {StatPropertyValue}
+ */
 export class RelicSubStat extends StatPropertyValue {
     /**  */
     readonly subStatData: RelicSubStatData;

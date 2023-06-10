@@ -5,6 +5,8 @@ import LightCone from "../light_cone/LightCone";
 import Relic from "../relic/Relic";
 import SkillTreeNode from "./skill/SkillTreeNode";
 import LeveledSkillTreeNode from "./skill/LeveledSkillTreeNode";
+import { StatPropertyValue } from "../StatProperty";
+import CharacterStats from "./CharacterStats";
 
 /**
  * @en Character
@@ -29,6 +31,10 @@ class Character {
     readonly eidolons: number;
     /**  */
     readonly skills: LeveledSkillTreeNode[];
+    /**  */
+    readonly basicStats: StatPropertyValue[];
+    /**  */
+    readonly stats: CharacterStats;
 
     readonly _data: JsonObject;
 
@@ -53,6 +59,10 @@ class Character {
         this.eidolons = json.getAsNumberWithDefault(0, "rank");
 
         this.skills = json.get("skillTreeList").mapArray((_, skill) => new SkillTreeNode(skill.getAsNumber("pointId"), this.client).getSkillTreeNodeByLevel(skill.getAsNumber("level")));
+
+        this.basicStats = this.characterData.getStatsByLevel(this.ascension, this.level);
+
+        this.stats = new CharacterStats(this);
     }
 }
 

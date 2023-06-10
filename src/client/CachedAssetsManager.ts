@@ -39,11 +39,12 @@ const contents = [
     "AvatarSkillConfig", // Character Skills
     "AvatarSkillTreeConfig", // Character Skill Trees
     "AvatarRankConfig", // Character Eidolons
+    "AvatarPromotionConfig", // Character Promotions and Character Basic Stats.
     "EquipmentConfig", // Light Cones
     "ItemConfigEquipment", // Light Cones as Items
     "EquipmentExpType", // Light Cone Exp Types
     "EquipmentSkillConfig", // Light Cone Superimpositions
-    "EquipmentPromotionConfig", // Light Cone Promotions and Light Cone Stats
+    "EquipmentPromotionConfig", // Light Cone Promotions and Light Cone Basic Stats
     "RelicConfig", // Relics
     "ItemConfigRelic", // Relics as Items
     "RelicExpType", // Relic Exp Types

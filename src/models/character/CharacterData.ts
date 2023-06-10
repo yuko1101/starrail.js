@@ -8,6 +8,7 @@ import Skill from "./skill/Skill";
 import ImageAssets from "../assets/ImageAssets";
 import SkillTreeNode from "./skill/SkillTreeNode";
 import Eidolon from "./Eidolon";
+import StatProperty, { StatPropertyValue } from "../StatProperty";
 
 /**
  * @en CharacterData
@@ -104,6 +105,42 @@ class CharacterData {
         this.splashCutInFigureImage = new ImageAssets(json.getAsString("AvatarCutinImgPath"), this.client);
         this.splashCutInBackgroundImage = new ImageAssets(json.getAsString("AvatarCutinBgImgPath"), this.client);
         this.shopItemIcon = new ImageAssets(itemJson.getAsString("ItemAvatarIconPath"), this.client);
+    }
+
+    /**
+     * @param ascension
+     * @param level
+     */
+    getStatsByLevel(ascension: number, level: number): StatPropertyValue[] {
+        const ascensionData = this.client.cachedAssetsManager.getStarRailCacheData("AvatarPromotionConfig")[this.id][ascension];
+        const ascensionJson = new JsonReader(ascensionData);
+
+        return [
+            {
+                statProperty: new StatProperty("BaseAttack", this.client),
+                value: ascensionJson.getAsNumber("AttackBase", "Value") + ascensionJson.getAsNumber("AttackAdd", "Value") * (level - 1),
+            },
+            {
+                statProperty: new StatProperty("BaseDefence", this.client),
+                value: ascensionJson.getAsNumber("DefenceBase", "Value") + ascensionJson.getAsNumber("DefenceAdd", "Value") * (level - 1),
+            },
+            {
+                statProperty: new StatProperty("BaseHP", this.client),
+                value: ascensionJson.getAsNumber("HPBase", "Value") + ascensionJson.getAsNumber("HPAdd", "Value") * (level - 1),
+            },
+            {
+                statProperty: new StatProperty("BaseSpeed", this.client),
+                value: ascensionJson.getAsNumber("SpeedBase", "Value"),
+            },
+            {
+                statProperty: new StatProperty("CriticalChanceBase", this.client),
+                value: ascensionJson.getAsNumber("CriticalChance", "Value"),
+            },
+            {
+                statProperty: new StatProperty("CriticalDamageBase", this.client),
+                value: ascensionJson.getAsNumber("CriticalDamage", "Value"),
+            },
+        ];
     }
 }
 

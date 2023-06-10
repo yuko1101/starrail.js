@@ -12,7 +12,7 @@ import LeveledSkill from "./models/character/skill/LeveledSkill";
 import Skill from "./models/character/skill/Skill";
 import Character from "./models/character/Character";
 import CharacterData from "./models/character/CharacterData";
-import CharacterStats from "./models/character/CharacterStats";
+import CharacterStats, { StatList } from "./models/character/CharacterStats";
 import Eidolon from "./models/character/Eidolon";
 import LightCone from "./models/light_cone/LightCone";
 import LightConeData from "./models/light_cone/LightConeData";
@@ -47,6 +47,7 @@ export {
     Character,
     CharacterData,
     CharacterStats,
+    StatList,
     Eidolon,
     LightCone,
     LightConeData,
@@ -78,9 +79,10 @@ export { RelicMainStatData } from "./models/relic/RelicMainStatGroup";
 export { RelicSubStatData } from "./models/relic/RelicSubStatGroup";
 export { CombatTypeId } from "./models/CombatType";
 export { PathId } from "./models/Path";
-export { StatPropertyType } from "./models/StatProperty";
+export { StatPropertyType, StatPropertyValue } from "./models/StatProperty";
 export { Birthday } from "./models/User";
 
 // functions
+export { sumStats } from "./models/character/CharacterStats";
 export { fetchJSON } from "./utils/axios_utils";
 export { getStableHash } from "./utils/hash_utils";

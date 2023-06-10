@@ -2,6 +2,7 @@ import { separateByValue } from "config_file.js";
 import { StatPropertyType, StatPropertyValue } from "../StatProperty";
 import Character from "./Character";
 import StarRail from "../../client/StarRail";
+import RelicSet from "../relic/RelicSet";
 
 /**
  * @en CharacterStats
@@ -10,9 +11,13 @@ class CharacterStats {
     /**  */
     readonly relicsStats: StatList;
     /**  */
+    readonly relicSetsStats: StatList;
+    /**  */
     readonly lightConeStats: StatList;
     /**  */
     readonly characterStats: StatList;
+    /**  */
+    readonly skillTreeNodesStats: StatList;
     /**  */
     readonly overallStats: StatList;
 
@@ -22,12 +27,17 @@ class CharacterStats {
     constructor(character: Character) {
         const client = character.client;
 
-        const relicStatProperties: StatPropertyValue[] = character.relics.map(r => [new StatPropertyValue(r.mainStat.mainStatData.statProperty.statPropertyType, r.mainStat.value, client), ...r.subStats.map(s => new StatPropertyValue(s.subStatData.statProperty.statPropertyType, s.value, client))]).reduce((a, b) => [...a, ...b]);
+        const relicsStatProperties: StatPropertyValue[] = character.relics.flatMap(r => [new StatPropertyValue(r.mainStat.mainStatData.statProperty.statPropertyType, r.mainStat.value, client), ...r.subStats.map(s => new StatPropertyValue(s.subStatData.statProperty.statPropertyType, s.value, client))]);
+        const relicSetsStatProperties: StatPropertyValue[] = RelicSet.getActiveSetBonus(character.relics).flatMap(set => set.activeBonus).flatMap(bonus => bonus.stats);
         const lightConeStatProperties: StatPropertyValue[] = [...(character.lightCone?.basicStats ?? []), ...(character.lightCone?.extraStats ?? [])];
         const characterStatProperties: StatPropertyValue[] = character.basicStats;
+        const skillTreeNodesStatProperties: StatPropertyValue[] = character.skills.flatMap(node => node.stats);
 
-        const relicsStats = sumStats(relicStatProperties, client);
+        const relicsStats = sumStats(relicsStatProperties, client);
         this.relicsStats = new StatList(relicsStats, client);
+
+        const relicSetsStats = sumStats(relicSetsStatProperties, client);
+        this.relicSetsStats = new StatList(relicSetsStats, client);
 
         const lightConeStats = sumStats(lightConeStatProperties, client);
         this.lightConeStats = new StatList(lightConeStats, client);
@@ -35,7 +45,10 @@ class CharacterStats {
         const characterStats = Object.fromEntries(characterStatProperties.map(stat => [stat.statProperty.statPropertyType, stat]));
         this.characterStats = new StatList(characterStats, client);
 
-        const overallStats = sumStats([...relicStatProperties, ...lightConeStatProperties, ...characterStatProperties], client);
+        const skillTreeNodesStats = sumStats(skillTreeNodesStatProperties, client);
+        this.skillTreeNodesStats = new StatList(skillTreeNodesStats, client);
+
+        const overallStats = sumStats([relicsStatProperties, relicSetsStatProperties, lightConeStatProperties, characterStatProperties, skillTreeNodesStatProperties].flat(), client);
         this.overallStats = new StatList(overallStats, client);
     }
 }

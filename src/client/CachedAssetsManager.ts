@@ -523,6 +523,15 @@ class CachedAssetsManager {
             );
         });
 
+        Object.values(data["RelicSetSkillConfig"]).forEach(s => {
+            Object.values(s).forEach(b => {
+                const json = new JsonReader(b);
+                push(
+                    getStableHash(json.getAsString("SkillDesc")),
+                );
+            });
+        });
+
         Object.values(data["AvatarPropertyConfig"]).forEach(s => {
             const json = new JsonReader(s);
             push(

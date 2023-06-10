@@ -20,7 +20,7 @@ class LeveledSkillTreeNode {
     /**  */
     readonly characterId: number;
     /**  */
-    readonly addStats: StatPropertyValue[];
+    readonly stats: StatPropertyValue[];
 
     readonly _data: JsonObject;
 
@@ -51,7 +51,7 @@ class LeveledSkillTreeNode {
         this.level = json.getAsNumber("Level");
         this.characterId = json.getAsNumber("AvatarID");
 
-        this.addStats = json.get("StatusAddList").mapArray((_, s) => new StatPropertyValue(s.getAsString("PropertyType") as StatPropertyType, s.getAsNumber("Value", "Value"), this.client));
+        this.stats = json.get("StatusAddList").mapArray((_, s) => new StatPropertyValue(s.getAsString("PropertyType") as StatPropertyType, s.getAsNumber("Value", "Value"), this.client));
 
 
         // The following properties are the same as for SkillTreeNode

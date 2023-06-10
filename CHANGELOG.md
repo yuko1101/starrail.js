@@ -4,6 +4,8 @@
 - Added LightConeData#getStatsByLevel() and LightConeData#getSuperimpositionStats().
 - Added LightCone#basicStats and LightCone#extraStats.
 - Changed some stat-related typedefs into classes.
+- Renamed LeveledSkillTreeNode#addStats to LeveledSkillTreeNode#stats.
+- Added RelicSetBonus#description.
 # 0.3.4
 - Fixed a error with _downloadCacheZip().
 # 0.3.3

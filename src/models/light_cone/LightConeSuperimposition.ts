@@ -49,17 +49,9 @@ class LightConeSuperimposition {
 
         this.stats = json.get("AbilityProperty").mapArray((_, prop) => {
             if (prop.getAsString("PropertyType") === "AllDamageTypeAddedRatio") {
-                return StatProperty.ALL_DAMAGE_TYPES.map(damageType => {
-                    return {
-                        statProperty: new StatProperty(damageType, this.client),
-                        value: prop.getAsNumber("Value", "Value"),
-                    };
-                });
+                return StatProperty.ALL_DAMAGE_TYPES.map(damageType => new StatPropertyValue(damageType, prop.getAsNumber("Value", "Value"), this.client));
             }
-            return [{
-                statProperty: new StatProperty(prop.getAsString("PropertyType") as StatPropertyType, this.client),
-                value: prop.getAsNumber("Value", "Value"),
-            }];
+            return [new StatPropertyValue(prop.getAsString("PropertyType") as StatPropertyType, prop.getAsNumber("Value", "Value"), this.client)];
         }).reduce((a, b) => [...a, ...b], []);
     }
 }

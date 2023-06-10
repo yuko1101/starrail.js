@@ -64,10 +64,24 @@ class StatProperty {
 
 export default StatProperty;
 
-/** @typedef */
-export interface StatPropertyValue {
-    statProperty: StatProperty;
-    value: number;
+export class StatPropertyValue {
+    /**  */
+    readonly client: StarRail;
+    /**  */
+    readonly statProperty: StatProperty;
+    /**  */
+    readonly value: number;
+
+    /**
+     * @param statPropertyType
+     * @param value
+     * @param client
+     */
+    constructor(statPropertyType: StatPropertyType, value: number, client: StarRail) {
+        this.client = client;
+        this.statProperty = new StatProperty(statPropertyType, this.client);
+        this.value = value;
+    }
 }
 
 /** @typedef */

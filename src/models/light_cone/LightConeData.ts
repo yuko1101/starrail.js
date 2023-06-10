@@ -6,7 +6,7 @@ import Path, { PathId } from "../Path";
 import LightConeExpType from "./LightConeExpType";
 import ImageAssets from "../assets/ImageAssets";
 import LightConeSuperimposition from "./LightConeSuperimposition";
-import StatProperty, { StatPropertyValue } from "../StatProperty";
+import { StatPropertyValue } from "../StatProperty";
 
 /**
  * @en LightConeData
@@ -102,18 +102,9 @@ class LightConeData {
         const ascensionJson = new JsonReader(ascensionData);
 
         return [
-            {
-                statProperty: new StatProperty("BaseHP", this.client),
-                value: ascensionJson.getAsNumber("BaseHP", "Value") + ascensionJson.getAsNumber("BaseHPAdd", "Value") * (level - 1),
-            },
-            {
-                statProperty: new StatProperty("BaseAttack", this.client),
-                value: ascensionJson.getAsNumber("BaseAttack", "Value") + ascensionJson.getAsNumber("BaseAttackAdd", "Value") * (level - 1),
-            },
-            {
-                statProperty: new StatProperty("BaseDefence", this.client),
-                value: ascensionJson.getAsNumber("BaseDefence", "Value") + ascensionJson.getAsNumber("BaseDefenceAdd", "Value") * (level - 1),
-            },
+            new StatPropertyValue("BaseHP", ascensionJson.getAsNumber("BaseHP", "Value") + ascensionJson.getAsNumber("BaseHPAdd", "Value") * (level - 1), this.client),
+            new StatPropertyValue("BaseAttack", ascensionJson.getAsNumber("BaseAttack", "Value") + ascensionJson.getAsNumber("BaseAttackAdd", "Value") * (level - 1), this.client),
+            new StatPropertyValue("BaseDefence", ascensionJson.getAsNumber("BaseDefence", "Value") + ascensionJson.getAsNumber("BaseDefenceAdd", "Value") * (level - 1), this.client),
         ];
     }
 

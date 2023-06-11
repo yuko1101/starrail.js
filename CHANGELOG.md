@@ -7,6 +7,7 @@
 - Renamed LeveledSkillTreeNode#addStats to LeveledSkillTreeNode#stats.
 - Added RelicSetBonus#description.
 - Added StatProperty#isPercent.
+- Added StatPropertyValue#valueText (getter).
 # 0.3.4
 - Fixed a error with _downloadCacheZip().
 # 0.3.3

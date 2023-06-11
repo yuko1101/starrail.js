@@ -122,6 +122,13 @@ export class StatPropertyValue {
         this.statProperty = new StatProperty(statPropertyType, this.client);
         this.value = value;
     }
+
+    /**  */
+    public get valueText(): string {
+        if (this.statProperty.isPercent) return this.value.toFixed(1) + "%";
+        return this.value.toFixed(0);
+    }
+
 }
 
 /** @typedef */

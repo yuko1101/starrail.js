@@ -12,7 +12,7 @@ import LeveledSkill from "./models/character/skill/LeveledSkill";
 import Skill from "./models/character/skill/Skill";
 import Character from "./models/character/Character";
 import CharacterData from "./models/character/CharacterData";
-import CharacterStats, { StatList } from "./models/character/CharacterStats";
+import CharacterStats, { StatList, OverallStatList } from "./models/character/CharacterStats";
 import Eidolon from "./models/character/Eidolon";
 import LightCone from "./models/light_cone/LightCone";
 import LightConeData from "./models/light_cone/LightConeData";
@@ -48,6 +48,7 @@ export {
     CharacterData,
     CharacterStats,
     StatList,
+    OverallStatList,
     Eidolon,
     LightCone,
     LightConeData,
@@ -92,4 +93,4 @@ export { getStableHash } from "./utils/hash_utils";
 
 // constants
 export { combatTypeIconColors } from "./models/CombatType";
-export { percentStatPropertyTypes } from "./models/StatProperty";
+export { statPropertyTypes, otherStatPropertyTypes } from "./models/StatProperty";

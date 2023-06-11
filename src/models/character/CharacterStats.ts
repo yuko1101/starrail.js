@@ -1,5 +1,5 @@
 import { separateByValue } from "config_file.js";
-import { StatPropertyType, StatPropertyValue } from "../StatProperty";
+import { OtherStatPropertyType, StatPropertyType, StatPropertyValue, isStatPropertyType, otherStatPropertyTypes, statPropertyTypes } from "../StatProperty";
 import Character from "./Character";
 import StarRail from "../../client/StarRail";
 import RelicSet from "../relic/RelicSet";
@@ -49,7 +49,7 @@ class CharacterStats {
         this.skillTreeNodesStats = new StatList(skillTreeNodesStats, client);
 
         const overallStats = sumStats([relicsStatProperties, relicSetsStatProperties, lightConeStatProperties, characterStatProperties, skillTreeNodesStatProperties].flat(), client);
-        this.overallStats = new StatList(overallStats, client);
+        this.overallStats = new OverallStatList(overallStats, client);
     }
 }
 
@@ -58,7 +58,7 @@ export default CharacterStats;
 /**
  * @en StatList
  */
-class StatList {
+export class StatList {
     /**  */
     readonly list: { [key: string]: StatPropertyValue };
     /**  */
@@ -73,8 +73,9 @@ class StatList {
         this.client = client;
     }
 
-    getByType(type: StatPropertyType): StatPropertyValue {
-        return this.list[type] ?? new StatPropertyValue(type, 0, this.client);
+    getByType(type: StatPropertyType | OtherStatPropertyType): StatPropertyValue {
+        const defaultValue = isStatPropertyType(type) ? statPropertyTypes[type].defaultValue : otherStatPropertyTypes[type].defaultValue;
+        return this.list[type] ?? new StatPropertyValue(type, defaultValue, this.client);
     }
 
     getAll(): StatPropertyValue[] {
@@ -83,15 +84,48 @@ class StatList {
 }
 
 /**
+ * @en OverallStatList
+ * @extends {StatList}
+ */
+export class OverallStatList extends StatList {
+    /**
+     * @param list
+     * @param client
+     */
+    constructor(list: { [key: string]: StatPropertyValue }, client: StarRail) {
+        super(list, client);
+    }
+
+    /**  */
+    public get maxHP(): StatPropertyValue {
+        return new StatPropertyValue("MaxHP", this.getByType("BaseHP").value * (1 + this.getByType("HPAddedRatio").value) + this.getByType("HPDelta").value, this.client);
+    }
+
+    /**  */
+    public get defense(): StatPropertyValue {
+        return new StatPropertyValue("Defence", this.getByType("BaseDefence").value * (1 + this.getByType("DefenceAddedRatio").value) + this.getByType("DefenceDelta").value, this.client);
+    }
+
+    /**  */
+    public get attack(): StatPropertyValue {
+        return new StatPropertyValue("Attack", this.getByType("BaseAttack").value * (1 + this.getByType("AttackAddedRatio").value) + this.getByType("AttackDelta").value, this.client);
+    }
+
+    /**  */
+    public get speed(): StatPropertyValue {
+        return new StatPropertyValue("Speed", this.getByType("BaseSpeed").value * (1 + this.getByType("SpeedAddedRatio").value) + this.getByType("SpeedDelta").value, this.client);
+    }
+
+}
+
+/**
  * @param stats
  * @param client
  * @returns
  */
-function sumStats(stats: StatPropertyValue[], client: StarRail): { [key: string]: StatPropertyValue } {
+export function sumStats(stats: StatPropertyValue[], client: StarRail): { [key: string]: StatPropertyValue } {
     return Object.fromEntries(
         Object.entries(separateByValue(stats, stat => stat.type))
             .map(([type, list]) => [type, list.reduce((a, b) => new StatPropertyValue(a.type, a.value + b.value, client))]),
     );
 }
-
-export { StatList, sumStats };

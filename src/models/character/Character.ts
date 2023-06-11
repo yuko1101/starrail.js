@@ -60,7 +60,11 @@ class Character {
 
         this.skills = json.get("skillTreeList").mapArray((_, skill) => new SkillTreeNode(skill.getAsNumber("pointId"), this.client).getSkillTreeNodeByLevel(skill.getAsNumber("level")));
 
-        this.basicStats = this.characterData.getStatsByLevel(this.ascension, this.level);
+        this.basicStats = [
+            ...this.characterData.getStatsByLevel(this.ascension, this.level),
+            new StatPropertyValue("SPRatioBase", 1, this.client),
+            new StatPropertyValue("MaxSP", this.characterData.maxEnergy, this.client),
+        ];
 
         this.stats = new CharacterStats(this);
     }

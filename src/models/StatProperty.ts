@@ -95,7 +95,7 @@ export class StatPropertyValue {
 
     /**  */
     public get valueText(): string {
-        if (this.isPercent) return this.value.toFixed(1) + "%";
+        if (this.isPercent) return (this.value * 100).toFixed(1) + "%";
         return this.value.toFixed(0);
     }
 
@@ -113,8 +113,8 @@ export const statPropertyTypes = {
     "HealRatio": { "isPercent": true, "defaultValue": 0, "comment": "unknown, not used, likely percent" },
     "MaxSP": { "isPercent": false, "defaultValue": 0 },
     "SPRatio": { "isPercent": true, "defaultValue": 0, "comment": "unknown, not used, likely percent" },
-    "StatusProbability": { "isPercent": true, "defaultValue": 0 },
-    "StatusResistance": { "isPercent": true, "defaultValue": 0 },
+    "StatusProbability": { "isPercent": true, "defaultValue": 0, "comment": "unknown, only used in inventory sort, likely percent" },
+    "StatusResistance": { "isPercent": true, "defaultValue": 0, "comment": "unknown, only used in inventory sort, likely percent" },
     "CriticalChanceBase": { "isPercent": true, "defaultValue": 0 },
     "CriticalDamageBase": { "isPercent": true, "defaultValue": 0 },
     "HealRatioBase": { "isPercent": true, "defaultValue": 0 },

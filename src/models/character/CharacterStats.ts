@@ -73,6 +73,38 @@ export class StatList {
         this.client = client;
     }
 
+    public get critRate(): StatPropertyValue {
+        return this.getByType("CriticalChanceBase");
+    }
+
+    public get critDamage(): StatPropertyValue {
+        return this.getByType("CriticalDamageBase");
+    }
+
+    public get breakEffect(): StatPropertyValue {
+        return this.getByType("BreakDamageAddedRatioBase");
+    }
+
+    public get outgoingHealingBoost(): StatPropertyValue {
+        return this.getByType("HealRatioBase");
+    }
+
+    public get maxEnergy(): StatPropertyValue {
+        return this.getByType("MaxSP");
+    }
+
+    public get energyRegenRate(): StatPropertyValue {
+        return this.getByType("SPRatioBase");
+    }
+
+    public get effectHitRate(): StatPropertyValue {
+        return this.getByType("StatusProbabilityBase");
+    }
+
+    public get effectResistance(): StatPropertyValue {
+        return this.getByType("StatusResistanceBase");
+    }
+
     getByType(type: StatPropertyType | OtherStatPropertyType): StatPropertyValue {
         const defaultValue = isStatPropertyType(type) ? statPropertyTypes[type].defaultValue : otherStatPropertyTypes[type].defaultValue;
         return this.list[type] ?? new StatPropertyValue(type, defaultValue, this.client);

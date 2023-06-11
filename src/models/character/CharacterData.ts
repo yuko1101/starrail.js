@@ -26,6 +26,8 @@ class CharacterData {
     /**  */
     readonly stars: number;
     /**  */
+    readonly maxEnergy: number;
+    /**  */
     readonly combatType: CombatType;
     /**  */
     readonly path: Path;
@@ -81,6 +83,8 @@ class CharacterData {
         this.description = new TextAssets(itemJson.getAsNumber("ItemBGDesc", "Hash"), this.client);
 
         this.stars = Number(json.getAsString("Rarity").slice(-1));
+
+        this.maxEnergy = json.getAsNumber("SPNeed", "Value");
 
         this.combatType = new CombatType(json.getAsString("DamageType") as CombatTypeId, this.client);
 

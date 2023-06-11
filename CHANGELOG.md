@@ -8,6 +8,7 @@
 - Added RelicSetBonus#description.
 - Added StatProperty#isPercent.
 - Added StatPropertyValue#valueText (getter).
+- Added Character#basicStats and Character#stats.
 # 0.3.4
 - Fixed a error with _downloadCacheZip().
 # 0.3.3

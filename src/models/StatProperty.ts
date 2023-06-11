@@ -29,6 +29,8 @@ class StatProperty {
     readonly order: number;
     /**  */
     readonly icon: ImageAssets;
+    /**  */
+    readonly isPercent: boolean;
 
     readonly _data: JsonObject;
 
@@ -57,12 +59,50 @@ class StatProperty {
         this.order = json.getAsNumber("Order");
 
         this.icon = new ImageAssets(json.getAsString("IconPath"), this.client);
+
+        this.isPercent = percentStatPropertyTypes.includes(this.statPropertyType);
     }
 
     static ALL_DAMAGE_TYPES: StatPropertyType[] = ["PhysicalAddedRatio", "FireAddedRatio", "IceAddedRatio", "ThunderAddedRatio", "WindAddedRatio", "QuantumAddedRatio", "ImaginaryAddedRatio"];
 }
 
 export default StatProperty;
+
+const percentStatPropertyTypes: StatPropertyType[] = [
+    "CriticalChance", // percent
+    "CriticalDamage", // percent
+    "BreakDamageAddedRatio", // percent
+    "BreakDamageAddedRatioBase", // percent
+    "HealRatio", // percent
+    "SPRatio", // percent
+    "StatusProbability", // percent
+    "StatusResistance", // percent
+    "CriticalChanceBase", // percent
+    "CriticalDamageBase", // percent
+    "HealRatioBase", // percent
+    "StanceBreakAddedRatio", // unknown, not used, likely percent
+    "SPRatioBase", // percent
+    "StatusProbabilityBase", // percent
+    "StatusResistanceBase", // percent
+    "PhysicalAddedRatio", // percent
+    "PhysicalResistance", // percent
+    "FireAddedRatio", // percent
+    "FireResistance", // percent
+    "IceAddedRatio", // percent
+    "IceResistance", // percent
+    "ThunderAddedRatio", // percent
+    "ThunderResistance", // percent
+    "WindAddedRatio", // percent
+    "WindResistance", // percent
+    "QuantumAddedRatio", // percent
+    "QuantumResistance", // percent
+    "ImaginaryAddedRatio", // percent
+    "ImaginaryResistance", // percent
+    "HPAddedRatio", // percent
+    "AttackAddedRatio", // percent
+    "DefenceAddedRatio", // percent
+    "HealTakenRatio", // percent
+];
 
 export class StatPropertyValue {
     /**  */
@@ -86,56 +126,57 @@ export class StatPropertyValue {
 
 /** @typedef */
 export type StatPropertyType =
-    | "MaxHP"
-    | "Attack"
-    | "Defence"
-    | "Speed"
-    | "CriticalChance"
-    | "CriticalDamage"
-    | "BreakDamageAddedRatio"
-    | "BreakDamageAddedRatioBase"
-    | "HealRatio"
-    | "MaxSP"
-    | "SPRatio"
-    | "StatusProbability"
-    | "StatusResistance"
-    | "CriticalChanceBase"
-    | "CriticalDamageBase"
-    | "HealRatioBase"
-    | "StanceBreakAddedRatio"
-    | "SPRatioBase"
-    | "StatusProbabilityBase"
-    | "StatusResistanceBase"
-    | "PhysicalAddedRatio"
-    | "PhysicalResistance"
-    | "FireAddedRatio"
-    | "FireResistance"
-    | "IceAddedRatio"
-    | "IceResistance"
-    | "ThunderAddedRatio"
-    | "ThunderResistance"
-    | "WindAddedRatio"
-    | "WindResistance"
-    | "QuantumAddedRatio"
-    | "QuantumResistance"
-    | "ImaginaryAddedRatio"
-    | "ImaginaryResistance"
-    | "BaseHP"
-    | "HPDelta"
-    | "HPAddedRatio"
-    | "BaseAttack"
-    | "AttackDelta"
-    | "AttackAddedRatio"
-    | "BaseDefence"
-    | "DefenceDelta"
-    | "DefenceAddedRatio"
-    | "BaseSpeed"
-    | "HealTakenRatio"
-    | "PhysicalResistanceDelta"
-    | "FireResistanceDelta"
-    | "IceResistanceDelta"
-    | "ThunderResistanceDelta"
-    | "WindResistanceDelta"
-    | "QuantumResistanceDelta"
-    | "ImaginaryResistanceDelta"
-    | "SpeedDelta";
+    | "MaxHP" // flat
+    | "Attack" // flat
+    | "Defence" // flat
+    | "Speed" // flat
+    | "CriticalChance" // percent
+    | "CriticalDamage" // percent
+    | "BreakDamageAddedRatio" // percent
+    | "BreakDamageAddedRatioBase" // percent
+    | "HealRatio" // percent
+    | "MaxSP" // flat
+    | "SPRatio" // percent
+    | "StatusProbability" // percent
+    | "StatusResistance" // percent
+    | "CriticalChanceBase" // percent
+    | "CriticalDamageBase" // percent
+    | "HealRatioBase" // percent
+    | "StanceBreakAddedRatio" // unknown, not used, likely percent
+    | "SPRatioBase" // percent
+    | "StatusProbabilityBase" // percent
+    | "StatusResistanceBase" // percent
+    | "PhysicalAddedRatio" // percent
+    | "PhysicalResistance" // percent
+    | "FireAddedRatio" // percent
+    | "FireResistance" // percent
+    | "IceAddedRatio" // percent
+    | "IceResistance" // percent
+    | "ThunderAddedRatio" // percent
+    | "ThunderResistance" // percent
+    | "WindAddedRatio" // percent
+    | "WindResistance" // percent
+    | "QuantumAddedRatio" // percent
+    | "QuantumResistance" // percent
+    | "ImaginaryAddedRatio" // percent
+    | "ImaginaryResistance" // percent
+    | "BaseHP" // flat
+    | "HPDelta" // flat
+    | "HPAddedRatio" // percent
+    | "BaseAttack" // flat
+    | "AttackDelta" // flat
+    | "AttackAddedRatio" // percent
+    | "BaseDefence" // flat
+    | "DefenceDelta" // flat
+    | "DefenceAddedRatio" // percent
+    | "BaseSpeed" // flat
+    | "HealTakenRatio" // percent
+    | "PhysicalResistanceDelta" // unknown, not used, likely flat
+    | "FireResistanceDelta" // unknown, not used, likely flat
+    | "IceResistanceDelta" // unknown, not used, likely flat
+    | "ThunderResistanceDelta" // unknown, not used, likely flat
+    | "WindResistanceDelta" // unknown, not used, likely flat
+    | "QuantumResistanceDelta" // unknown, not used, likely flat
+    | "ImaginaryResistanceDelta" // unknown, not used, likely flat
+    | "SpeedDelta" // flat
+    ;

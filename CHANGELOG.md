@@ -6,6 +6,7 @@
 - Changed some stat-related typedefs into classes.
 - Renamed LeveledSkillTreeNode#addStats to LeveledSkillTreeNode#stats.
 - Added RelicSetBonus#description.
+- Added StatProperty#isPercent.
 # 0.3.4
 - Fixed a error with _downloadCacheZip().
 # 0.3.3

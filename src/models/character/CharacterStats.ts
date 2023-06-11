@@ -73,36 +73,96 @@ export class StatList {
         this.client = client;
     }
 
+    // Advanced Stats
+    /**  */
     public get critRate(): StatPropertyValue {
         return this.getByType("CriticalChanceBase");
     }
-
+    /**  */
     public get critDamage(): StatPropertyValue {
         return this.getByType("CriticalDamageBase");
     }
-
+    /**  */
     public get breakEffect(): StatPropertyValue {
         return this.getByType("BreakDamageAddedRatioBase");
     }
-
+    /**  */
     public get outgoingHealingBoost(): StatPropertyValue {
         return this.getByType("HealRatioBase");
     }
-
+    /**  */
     public get maxEnergy(): StatPropertyValue {
         return this.getByType("MaxSP");
     }
-
+    /**  */
     public get energyRegenRate(): StatPropertyValue {
         return this.getByType("SPRatioBase");
     }
-
+    /**  */
     public get effectHitRate(): StatPropertyValue {
         return this.getByType("StatusProbabilityBase");
     }
-
+    /**  */
     public get effectResistance(): StatPropertyValue {
         return this.getByType("StatusResistanceBase");
+    }
+
+    // DMG Type
+    /**  */
+    public get physicalDamageBonus(): StatPropertyValue {
+        return this.getByType("PhysicalAddedRatio");
+    }
+    /**  */
+    public get fireDamageBonus(): StatPropertyValue {
+        return this.getByType("FireAddedRatio");
+    }
+    /**  */
+    public get iceDamageBonus(): StatPropertyValue {
+        return this.getByType("IceAddedRatio");
+    }
+    /**  */
+    public get lightningDamageBonus(): StatPropertyValue {
+        return this.getByType("ThunderAddedRatio");
+    }
+    /**  */
+    public get windDamageBonus(): StatPropertyValue {
+        return this.getByType("WindAddedRatio");
+    }
+    /**  */
+    public get quantumDamageBonus(): StatPropertyValue {
+        return this.getByType("QuantumAddedRatio");
+    }
+    /**  */
+    public get imaginaryDamageBonus(): StatPropertyValue {
+        return this.getByType("ImaginaryAddedRatio");
+    }
+    /**  */
+    public get physicalResistanceBoost(): StatPropertyValue {
+        return this.getByType("PhysicalResistance");
+    }
+    /**  */
+    public get fireResistanceBoost(): StatPropertyValue {
+        return this.getByType("FireResistance");
+    }
+    /**  */
+    public get iceResistanceBoost(): StatPropertyValue {
+        return this.getByType("IceResistance");
+    }
+    /**  */
+    public get lightningResistanceBoost(): StatPropertyValue {
+        return this.getByType("ThunderResistance");
+    }
+    /**  */
+    public get windResistanceBoost(): StatPropertyValue {
+        return this.getByType("WindResistance");
+    }
+    /**  */
+    public get quantumResistanceBoost(): StatPropertyValue {
+        return this.getByType("QuantumResistance");
+    }
+    /**  */
+    public get imaginaryResistanceBoost(): StatPropertyValue {
+        return this.getByType("ImaginaryResistance");
     }
 
     getByType(type: StatPropertyType | OtherStatPropertyType): StatPropertyValue {

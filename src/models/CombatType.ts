@@ -64,6 +64,7 @@ class CombatType {
 
 export default CombatType;
 
+/** @constant */
 export const combatTypeIconColors: { [key in CombatTypeId]: number } = {
     Physical: 0xCFCFCF,
     Fire: 0xEE4639,
@@ -72,4 +73,4 @@ export const combatTypeIconColors: { [key in CombatTypeId]: number } = {
     Wind: 0x5FCC97,
     Quantum: 0x6A65CC,
     Imaginary: 0xFAE762,
-};
+} as const;

@@ -165,11 +165,18 @@ export class StatList {
         return this.getByType("ImaginaryResistance");
     }
 
+    /**
+     * @param type
+     * @returns
+     */
     getByType(type: StatPropertyType | OtherStatPropertyType): StatPropertyValue {
         const defaultValue = isStatPropertyType(type) ? statPropertyTypes[type].defaultValue : otherStatPropertyTypes[type].defaultValue;
         return this.list[type] ?? new StatPropertyValue(type, defaultValue, this.client);
     }
 
+    /**
+     * @returns
+     */
     getAll(): StatPropertyValue[] {
         return Object.values(this.list);
     }
@@ -188,6 +195,7 @@ export class OverallStatList extends StatList {
         super(list, client);
     }
 
+    // Base Stats
     /**  */
     public get maxHP(): StatPropertyValue {
         return new StatPropertyValue("MaxHP", this.getByType("BaseHP").value * (1 + this.getByType("HPAddedRatio").value) + this.getByType("HPDelta").value, this.client);

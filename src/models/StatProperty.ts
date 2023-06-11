@@ -63,6 +63,7 @@ class StatProperty {
         this.isPercent = statPropertyTypes[this.statPropertyType].isPercent;
     }
 
+    /**  */
     static ALL_DAMAGE_TYPES: StatPropertyType[] = ["PhysicalAddedRatio", "FireAddedRatio", "IceAddedRatio", "ThunderAddedRatio", "WindAddedRatio", "QuantumAddedRatio", "ImaginaryAddedRatio"];
 }
 
@@ -101,6 +102,7 @@ export class StatPropertyValue {
 
 }
 
+/** @constant */
 export const statPropertyTypes = {
     "MaxHP": { "isPercent": false, "defaultValue": 0 },
     "Attack": { "isPercent": false, "defaultValue": 0 },
@@ -160,6 +162,7 @@ export const statPropertyTypes = {
 /** @typedef */
 export type StatPropertyType = keyof typeof statPropertyTypes;
 
+/** @constant */
 export const otherStatPropertyTypes = {
     "SpeedAddedRatio": { "isPercent": true, "defaultValue": 0 },
 } as const;
@@ -170,6 +173,10 @@ export const otherStatPropertyTypes = {
  */
 export type OtherStatPropertyType = keyof typeof otherStatPropertyTypes;
 
+/**
+ * @param type
+ * @returns
+ */
 export function isStatPropertyType(type: StatPropertyType | OtherStatPropertyType): type is StatPropertyType {
     return type != "SpeedAddedRatio";
 }

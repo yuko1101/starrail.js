@@ -88,3 +88,6 @@ export { Birthday } from "./models/User";
 export { sumStats } from "./models/character/CharacterStats";
 export { fetchJSON } from "./utils/axios_utils";
 export { getStableHash } from "./utils/hash_utils";
+
+// constants
+export { percentStatPropertyTypes } from "./models/StatProperty";

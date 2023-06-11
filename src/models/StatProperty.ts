@@ -68,7 +68,7 @@ class StatProperty {
 
 export default StatProperty;
 
-const percentStatPropertyTypes: StatPropertyType[] = [
+export const percentStatPropertyTypes: StatPropertyType[] = [
     "CriticalChance", // percent
     "CriticalDamage", // percent
     "BreakDamageAddedRatio", // percent

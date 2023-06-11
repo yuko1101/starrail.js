@@ -42,7 +42,7 @@ class CharacterStats {
         const lightConeStats = sumStats(lightConeStatProperties, client);
         this.lightConeStats = new StatList(lightConeStats, client);
 
-        const characterStats = Object.fromEntries(characterStatProperties.map(stat => [stat.statProperty.statPropertyType, stat]));
+        const characterStats = Object.fromEntries(characterStatProperties.map(stat => [stat.type, stat]));
         this.characterStats = new StatList(characterStats, client);
 
         const skillTreeNodesStats = sumStats(skillTreeNodesStatProperties, client);
@@ -89,8 +89,8 @@ class StatList {
  */
 function sumStats(stats: StatPropertyValue[], client: StarRail): { [key: string]: StatPropertyValue } {
     return Object.fromEntries(
-        Object.entries(separateByValue(stats, stat => stat.statProperty.statPropertyType))
-            .map(([type, list]) => [type, list.reduce((a, b) => new StatPropertyValue(a.statProperty.statPropertyType, a.value + b.value, client))]),
+        Object.entries(separateByValue(stats, stat => stat.type))
+            .map(([type, list]) => [type, list.reduce((a, b) => new StatPropertyValue(a.type, a.value + b.value, client))]),
     );
 }
 

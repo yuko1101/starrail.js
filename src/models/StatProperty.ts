@@ -68,7 +68,7 @@ class StatProperty {
 
 export default StatProperty;
 
-export const percentStatPropertyTypes: StatPropertyType[] = [
+export const percentStatPropertyTypes: (StatPropertyType | OtherStatPropertyType)[] = [
     "CriticalChance", // percent
     "CriticalDamage", // percent
     "BreakDamageAddedRatio", // percent
@@ -102,13 +102,19 @@ export const percentStatPropertyTypes: StatPropertyType[] = [
     "AttackAddedRatio", // percent
     "DefenceAddedRatio", // percent
     "HealTakenRatio", // percent
+
+    "SpeedAddedRatio", // does not exist in AvatarPropertyConfig.json, percent
 ];
 
 export class StatPropertyValue {
     /**  */
     readonly client: StarRail;
     /**  */
-    readonly statProperty: StatProperty;
+    readonly type: StatPropertyType | OtherStatPropertyType;
+    /** This will be null if type of provided `statPropertyType` is [OtherStatPropertyType](OtherStatPropertyType) */
+    readonly statProperty: StatProperty | null;
+    /**  */
+    readonly isPercent: boolean;
     /**  */
     readonly value: number;
 
@@ -117,15 +123,17 @@ export class StatPropertyValue {
      * @param value
      * @param client
      */
-    constructor(statPropertyType: StatPropertyType, value: number, client: StarRail) {
+    constructor(statPropertyType: StatPropertyType | OtherStatPropertyType, value: number, client: StarRail) {
         this.client = client;
-        this.statProperty = new StatProperty(statPropertyType, this.client);
+        this.type = statPropertyType;
+        this.statProperty = isStatPropertyType(statPropertyType) ? new StatProperty(statPropertyType, this.client) : null;
+        this.isPercent = percentStatPropertyTypes.includes(statPropertyType);
         this.value = value;
     }
 
     /**  */
     public get valueText(): string {
-        if (this.statProperty.isPercent) return this.value.toFixed(1) + "%";
+        if (this.isPercent) return this.value.toFixed(1) + "%";
         return this.value.toFixed(0);
     }
 
@@ -187,3 +195,15 @@ export type StatPropertyType =
     | "ImaginaryResistanceDelta" // unknown, not used, likely flat
     | "SpeedDelta" // flat
     ;
+
+/**
+ * StatPropertyTypes which do not exist in AvatarPropertyConfig.json
+ * @typedef
+ */
+export type OtherStatPropertyType =
+    | "SpeedAddedRatio" // percent
+    ;
+
+export function isStatPropertyType(type: StatPropertyType | OtherStatPropertyType): type is StatPropertyType {
+    return type != "SpeedAddedRatio";
+}

@@ -31,6 +31,11 @@ class CombatType {
     readonly name: TextAssets;
     /**  */
     readonly description: TextAssets;
+    /**  */
+    readonly color: number;
+
+    /** Not exact as it is an approximate value */
+    readonly iconColor: number;
 
     readonly _data: JsonObject;
 
@@ -50,7 +55,21 @@ class CombatType {
 
         this.name = new TextAssets(json.getAsNumber("DamageTypeName", "Hash"), this.client);
         this.description = new TextAssets(json.getAsNumber("DamageTypeIntro", "Hash"), this.client);
+
+        this.color = parseInt(json.getAsString("Color").replace(/^#/, ""), 16);
+
+        this.iconColor = combatTypeIconColors[this.id];
     }
 }
 
 export default CombatType;
+
+export const combatTypeIconColors: { [key in CombatTypeId]: number } = {
+    Physical: 0xCFCFCF,
+    Fire: 0xEE4639,
+    Ice: 0x4CABDE,
+    Thunder: 0xC65EE2,
+    Wind: 0x5FCC97,
+    Quantum: 0x6A65CC,
+    Imaginary: 0xFAE762,
+};

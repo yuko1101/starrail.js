@@ -81,13 +81,15 @@ export { RelicMainStatData } from "./models/relic/RelicMainStatGroup";
 export { RelicSubStatData } from "./models/relic/RelicSubStatGroup";
 export { CombatTypeId } from "./models/CombatType";
 export { PathId } from "./models/Path";
-export { StatPropertyType } from "./models/StatProperty";
+export { StatPropertyType, OtherStatPropertyType } from "./models/StatProperty";
 export { Birthday } from "./models/User";
 
 // functions
 export { sumStats } from "./models/character/CharacterStats";
+export { isStatPropertyType } from "./models/StatProperty";
 export { fetchJSON } from "./utils/axios_utils";
 export { getStableHash } from "./utils/hash_utils";
 
 // constants
+export { combatTypeIconColors } from "./models/CombatType";
 export { percentStatPropertyTypes } from "./models/StatProperty";

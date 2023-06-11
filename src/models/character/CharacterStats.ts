@@ -3,6 +3,7 @@ import { OtherStatPropertyType, StatPropertyType, StatPropertyValue, isStatPrope
 import Character from "./Character";
 import StarRail from "../../client/StarRail";
 import RelicSet from "../relic/RelicSet";
+import { CombatTypeId } from "../CombatType";
 
 /**
  * @en CharacterStats
@@ -34,22 +35,22 @@ class CharacterStats {
         const skillTreeNodesStatProperties: StatPropertyValue[] = character.skills.flatMap(node => node.stats);
 
         const relicsStats = sumStats(relicsStatProperties, client);
-        this.relicsStats = new StatList(relicsStats, client);
+        this.relicsStats = new StatList(relicsStats, character.characterData.combatType.id, client);
 
         const relicSetsStats = sumStats(relicSetsStatProperties, client);
-        this.relicSetsStats = new StatList(relicSetsStats, client);
+        this.relicSetsStats = new StatList(relicSetsStats, character.characterData.combatType.id, client);
 
         const lightConeStats = sumStats(lightConeStatProperties, client);
-        this.lightConeStats = new StatList(lightConeStats, client);
+        this.lightConeStats = new StatList(lightConeStats, character.characterData.combatType.id, client);
 
         const characterStats = Object.fromEntries(characterStatProperties.map(stat => [stat.type, stat]));
-        this.characterStats = new StatList(characterStats, client);
+        this.characterStats = new StatList(characterStats, character.characterData.combatType.id, client);
 
         const skillTreeNodesStats = sumStats(skillTreeNodesStatProperties, client);
-        this.skillTreeNodesStats = new StatList(skillTreeNodesStats, client);
+        this.skillTreeNodesStats = new StatList(skillTreeNodesStats, character.characterData.combatType.id, client);
 
         const overallStats = sumStats([relicsStatProperties, relicSetsStatProperties, lightConeStatProperties, characterStatProperties, skillTreeNodesStatProperties].flat(), client);
-        this.overallStats = new OverallStatList(overallStats, client);
+        this.overallStats = new OverallStatList(overallStats, character.characterData.combatType.id, client);
     }
 }
 
@@ -62,14 +63,17 @@ export class StatList {
     /**  */
     readonly list: { [key: string]: StatPropertyValue };
     /**  */
+    readonly combatTypeId: CombatTypeId;
+    /**  */
     readonly client: StarRail;
 
     /**
      * @param stats
      * @param client
      */
-    constructor(list: { [key: string]: StatPropertyValue }, client: StarRail) {
+    constructor(list: { [key: string]: StatPropertyValue }, combatTypeId: CombatTypeId, client: StarRail) {
         this.list = list;
+        this.combatTypeId = combatTypeId;
         this.client = client;
     }
 
@@ -180,6 +184,28 @@ export class StatList {
     getAll(): StatPropertyValue[] {
         return Object.values(this.list);
     }
+
+    /**
+     * @returns
+     */
+    getMatchedDamageBonus(): StatPropertyValue {
+        switch (this.combatTypeId) {
+            case "Physical":
+                return this.physicalDamageBonus;
+            case "Fire":
+                return this.fireDamageBonus;
+            case "Ice":
+                return this.iceDamageBonus;
+            case "Thunder":
+                return this.lightningDamageBonus;
+            case "Wind":
+                return this.windDamageBonus;
+            case "Quantum":
+                return this.quantumDamageBonus;
+            case "Imaginary":
+                return this.imaginaryDamageBonus;
+        }
+    }
 }
 
 /**
@@ -191,8 +217,8 @@ export class OverallStatList extends StatList {
      * @param list
      * @param client
      */
-    constructor(list: { [key: string]: StatPropertyValue }, client: StarRail) {
-        super(list, client);
+    constructor(list: { [key: string]: StatPropertyValue }, combatTypeId: CombatTypeId, client: StarRail) {
+        super(list, combatTypeId, client);
     }
 
     // Base Stats

@@ -31,7 +31,7 @@
 A Node.js library for Star Rail.
 
 ### Features
-- User Data and Character Stats by UID.
+- User Data and Character Stats by UID (with MiHoMo API).
 - All Characters and All Light Cones Data.
 - Cache Updater for the new update of Honkai: Star Rail. (Update characters and light cones immediately.)
 

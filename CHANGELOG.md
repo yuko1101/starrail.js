@@ -1,3 +1,5 @@
+# 0.4.1
+- Changed type of CharacterStats#overallStats to OverlayStatList. (forgot updating)
 # 0.4.0
 - Changed type of Relic#mainStat to RelicMainStat which contains the value.
 - Added LightConeSuperimposition#stats.

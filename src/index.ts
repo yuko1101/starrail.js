@@ -25,6 +25,7 @@ import RelicMainStatGroup from "./models/relic/RelicMainStatGroup";
 import RelicSet from "./models/relic/RelicSet";
 import RelicSetBonus from "./models/relic/RelicSetBonus";
 import RelicSubStatGroup from "./models/relic/RelicSubStatGroup";
+import RelicType from "./models/relic/RelicType";
 import CombatType from "./models/CombatType";
 import Path from "./models/Path";
 import StatProperty, { StatPropertyValue } from "./models/StatProperty";
@@ -63,6 +64,7 @@ export {
     RelicSet,
     RelicSetBonus,
     RelicSubStatGroup,
+    RelicType,
     CombatType,
     Path,
     StatProperty,
@@ -76,10 +78,10 @@ export { ClientOptions } from "./client/StarRail";
 export { ImageBaseUrl } from "./models/assets/ImageAssets";
 export { AttackType, EffectType } from "./models/character/skill/Skill";
 export { LightConeLevel } from "./models/light_cone/LightConeExpType";
-export { RelicType } from "./models/relic/RelicData";
 export { RelicLevel } from "./models/relic/RelicExpType";
 export { RelicMainStatData } from "./models/relic/RelicMainStatGroup";
 export { RelicSubStatData } from "./models/relic/RelicSubStatGroup";
+export { RelicTypeId } from "./models/relic/RelicType";
 export { CombatTypeId } from "./models/CombatType";
 export { PathId } from "./models/Path";
 export { StatPropertyType, OtherStatPropertyType } from "./models/StatProperty";

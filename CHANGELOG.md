@@ -1,5 +1,7 @@
 # 0.4.2
 - Renamed StatProperty#statPropertyType to StatProperty#type.
+- Renamed typedef RelicType to RelicTypeId, and added RelicType class.
+- Changed type of RelicData#type to RelicType (class).
 # 0.4.1
 - Changed type of CharacterStats#overallStats to OverlayStatList. (forgot updating)
 # 0.4.0

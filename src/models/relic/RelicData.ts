@@ -7,9 +7,7 @@ import RelicSubStatGroup from "./RelicSubStatGroup";
 import RelicSet from "./RelicSet";
 import TextAssets from "../assets/TextAssets";
 import ImageAssets from "../assets/ImageAssets";
-
-/** @typedef */
-export type RelicType = "HEAD" | "HAND" | "BODY" | "FOOT" | "OBJECT" | "NECK";
+import RelicType, { RelicTypeId } from "./RelicType";
 
 /**
  * @en RelicData
@@ -72,7 +70,7 @@ class RelicData {
         this.name = new TextAssets(itemJson.getAsNumber("ItemName", "Hash"), this.client);
         this.description = new TextAssets(itemJson.getAsNumber("ItemBGDesc", "Hash"), this.client);
 
-        this.type = json.getAsString("Type") as RelicType;
+        this.type = new RelicType(json.getAsString("Type") as RelicTypeId, this.client);
 
         this.stars = Number(json.getAsString("Rarity").slice(-1));
 

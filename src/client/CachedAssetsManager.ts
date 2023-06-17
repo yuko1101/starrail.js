@@ -52,6 +52,7 @@ const contents = [
     "RelicSubAffixConfig", // Relic Sub Stats
     "RelicSetConfig", // Relic Sets
     "RelicSetSkillConfig", // Relic Set Bonus
+    "RelicBaseType", // Relic Types
     "AvatarPropertyConfig", // StatProperty
     "AvatarPlayerIcon", // Character Icon for a player
     "PlayerIcon", // Other Icon for a player
@@ -530,6 +531,13 @@ class CachedAssetsManager {
                     getStableHash(json.getAsString("SkillDesc")),
                 );
             });
+        });
+
+        Object.values(data["RelicBaseType"]).forEach(t => {
+            const json = new JsonReader(t);
+            push(
+                json.getAsNumber("BaseTypeText", "Hash"),
+            );
         });
 
         Object.values(data["AvatarPropertyConfig"]).forEach(s => {

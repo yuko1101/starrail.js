@@ -20,7 +20,7 @@ class CharacterStats {
     /**  */
     readonly skillTreeNodesStats: StatList;
     /**  */
-    readonly overallStats: StatList;
+    readonly overallStats: OverallStatList;
 
     /**
      * @param character

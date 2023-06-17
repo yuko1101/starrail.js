@@ -102,6 +102,7 @@ export class StatPropertyValue {
 
 }
 
+// Object.entries(data).map(l => `|${l[0]}|${l[1]["isPercent"]}|${l[1]["defaultValue"]}|${l[1]["comment"] ?? ""}|`).join("\n");
 /** @constant */
 export const statPropertyTypes = {
     "MaxHP": { "isPercent": false, "defaultValue": 0 },
@@ -159,7 +160,65 @@ export const statPropertyTypes = {
     "SpeedDelta": { "isPercent": false, "defaultValue": 0 },
 } as const;
 
-/** @typedef */
+/**
+ * @typedef
+ * @example
+ * |StatPropertyType|isPercent|defaultValue|Comment|
+ * |---|---|---|---|
+ * |MaxHP|false|0||
+ * |Attack|false|0||
+ * |Defence|false|0||
+ * |Speed|false|0||
+ * |CriticalChance|true|0|unknown, but used, likely percent|
+ * |CriticalDamage|true|0|unknown, but used, likely percent|
+ * |BreakDamageAddedRatio|true|0|unknown, not used, likely percent|
+ * |BreakDamageAddedRatioBase|true|0||
+ * |HealRatio|true|0|unknown, not used, likely percent|
+ * |MaxSP|false|0||
+ * |SPRatio|true|0|unknown, not used, likely percent|
+ * |StatusProbability|true|0|unknown, only used in inventory sort, likely percent|
+ * |StatusResistance|true|0|unknown, only used in inventory sort, likely percent|
+ * |CriticalChanceBase|true|0||
+ * |CriticalDamageBase|true|0||
+ * |HealRatioBase|true|0||
+ * |StanceBreakAddedRatio|true|0|unknown, not used, likely percent|
+ * |SPRatioBase|true|1||
+ * |StatusProbabilityBase|true|0||
+ * |StatusResistanceBase|true|0||
+ * |PhysicalAddedRatio|true|0||
+ * |PhysicalResistance|true|0||
+ * |FireAddedRatio|true|0||
+ * |FireResistance|true|0||
+ * |IceAddedRatio|true|0||
+ * |IceResistance|true|0||
+ * |ThunderAddedRatio|true|0||
+ * |ThunderResistance|true|0||
+ * |WindAddedRatio|true|0||
+ * |WindResistance|true|0||
+ * |QuantumAddedRatio|true|0||
+ * |QuantumResistance|true|0||
+ * |ImaginaryAddedRatio|true|0||
+ * |ImaginaryResistance|true|0||
+ * |BaseHP|false|0||
+ * |HPDelta|false|0||
+ * |HPAddedRatio|true|0||
+ * |BaseAttack|false|0||
+ * |AttackDelta|false|0||
+ * |AttackAddedRatio|true|0||
+ * |BaseDefence|false|0||
+ * |DefenceDelta|false|0||
+ * |DefenceAddedRatio|true|0||
+ * |BaseSpeed|false|0||
+ * |HealTakenRatio|true|0|unknown, not used, likely percent|
+ * |PhysicalResistanceDelta|false|0|unknown, not used, likely flat|
+ * |FireResistanceDelta|false|0|unknown, not used, likely flat|
+ * |IceResistanceDelta|false|0|unknown, not used, likely flat|
+ * |ThunderResistanceDelta|false|0|unknown, not used, likely flat|
+ * |WindResistanceDelta|false|0|unknown, not used, likely flat|
+ * |QuantumResistanceDelta|false|0|unknown, not used, likely flat|
+ * |ImaginaryResistanceDelta|false|0|unknown, not used, likely flat|
+ * |SpeedDelta|false|0||
+ */
 export type StatPropertyType = keyof typeof statPropertyTypes;
 
 /** @constant */
@@ -170,6 +229,10 @@ export const otherStatPropertyTypes = {
 /**
  * StatPropertyTypes which do not exist in AvatarPropertyConfig.json
  * @typedef
+ * @example
+ * |OtherStatPropertyType|isPercent|defaultValue|Comment|
+ * |---|---|---|---|
+ * |SpeedAddedRatio|true|0||
  */
 export type OtherStatPropertyType = keyof typeof otherStatPropertyTypes;
 

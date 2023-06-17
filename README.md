@@ -113,6 +113,29 @@ client.cachedAssetsManager.activateAutoCacheUpdater({
 // client.cachedAssetsManager.deactivateAutoCacheUpdater();
 ```
 
+# Where is the image file for ImageAssets?
+As far as I know, there is no cdn for starrail. So, this library cannot provide urls of images and ImageAssets#url is always null. But **you can extract image files from StarRail Game Data** with HoyoStudio or something else.
+
+If you would like ImageAssets#url to show the paths to your extracted images, you can use `imageBaseUrls` option.
+```js
+const { StarRail } = require("starrail.js");
+const client = new StarRail({
+    imageBaseUrls: [
+        {
+            regexList: [/.*/], // for all images
+            /*  
+              "LOWER_CASE" if the names of folders in your extracted directory are in lowercase. e.g. "spriteoutput/itemicon/relicicons/IconRelic_101_1.png"
+              "UPPER_CAMEL_CASE" if the names of folders in your extracted directory are in upper camel case. e.g. "SpriteOutput/ItemIcon/RelicIcons/IconRelic_101_1.png"
+              "NONE" if your extracted files are not grouped in folders. e.g. "IconRelic_101_1.png"
+            */
+            filePath: "LOWER_CASE",
+            priority: 10,
+            url: "Your directory path to assets/asbres", // path to directory of extracted files
+        }
+    ]
+});
+```
+
 # How to use
 
 ## Fetching Player Data

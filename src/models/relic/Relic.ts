@@ -74,7 +74,7 @@ export class RelicMainStat extends StatPropertyValue {
      */
     constructor(mainStatData: RelicMainStatData, level: number) {
         const value = mainStatData.baseValue + mainStatData.levelValue * level;
-        super(mainStatData.statProperty.statPropertyType, value, mainStatData.statProperty.client);
+        super(mainStatData.statProperty.type, value, mainStatData.statProperty.client);
 
         this.mainStatData = mainStatData;
         this.level = level;
@@ -104,7 +104,7 @@ export class RelicSubStat extends StatPropertyValue {
      */
     constructor(subStatData: RelicSubStatData, count: number, steps: number) {
         const value = subStatData.baseValue * count + subStatData.stepValue * steps;
-        super(subStatData.statProperty.statPropertyType, value, subStatData.statProperty.client);
+        super(subStatData.statProperty.type, value, subStatData.statProperty.client);
 
         this.subStatData = subStatData;
         this.count = count;

@@ -1,3 +1,5 @@
+# 0.4.2
+- Renamed StatProperty#statPropertyType to StatProperty#type.
 # 0.4.1
 - Changed type of CharacterStats#overallStats to OverlayStatList. (forgot updating)
 # 0.4.0

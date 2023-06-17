@@ -9,7 +9,7 @@ import TextAssets from "./assets/TextAssets";
  */
 class StatProperty {
     /**  */
-    readonly statPropertyType: StatPropertyType;
+    readonly type: StatPropertyType;
     /**  */
     readonly client: StarRail;
 
@@ -35,15 +35,15 @@ class StatProperty {
     readonly _data: JsonObject;
 
     /**
-     * @param statPropertyType
+     * @param type
      * @param client
      */
-    constructor(statPropertyType: StatPropertyType, client: StarRail) {
-        this.statPropertyType = statPropertyType;
+    constructor(type: StatPropertyType, client: StarRail) {
+        this.type = type;
         this.client = client;
 
-        const _data = client.cachedAssetsManager.getStarRailCacheData("AvatarPropertyConfig")[this.statPropertyType];
-        if (!_data) throw new AssetsNotFoundError("StatProperty", this.statPropertyType);
+        const _data = client.cachedAssetsManager.getStarRailCacheData("AvatarPropertyConfig")[this.type];
+        if (!_data) throw new AssetsNotFoundError("StatProperty", this.type);
         this._data = _data;
 
         const json = new JsonReader(this._data);
@@ -60,7 +60,7 @@ class StatProperty {
 
         this.icon = new ImageAssets(json.getAsString("IconPath"), this.client);
 
-        this.isPercent = statPropertyTypes[this.statPropertyType].isPercent;
+        this.isPercent = statPropertyTypes[this.type].isPercent;
     }
 
     /**  */
@@ -74,7 +74,7 @@ export class StatPropertyValue {
     readonly client: StarRail;
     /**  */
     readonly type: StatPropertyType | OtherStatPropertyType;
-    /** This will be null if type of provided `statPropertyType` is [OtherStatPropertyType](OtherStatPropertyType) */
+    /** This will be null if type of provided `type` is [OtherStatPropertyType](OtherStatPropertyType) */
     readonly statProperty: StatProperty | null;
     /**  */
     readonly isPercent: boolean;
@@ -82,15 +82,15 @@ export class StatPropertyValue {
     readonly value: number;
 
     /**
-     * @param statPropertyType
+     * @param type
      * @param value
      * @param client
      */
-    constructor(statPropertyType: StatPropertyType | OtherStatPropertyType, value: number, client: StarRail) {
+    constructor(type: StatPropertyType | OtherStatPropertyType, value: number, client: StarRail) {
         this.client = client;
-        this.type = statPropertyType;
-        this.statProperty = isStatPropertyType(statPropertyType) ? new StatProperty(statPropertyType, this.client) : null;
-        this.isPercent = isStatPropertyType(statPropertyType) ? statPropertyTypes[statPropertyType].isPercent : otherStatPropertyTypes[statPropertyType].isPercent;
+        this.type = type;
+        this.statProperty = isStatPropertyType(type) ? new StatProperty(type, this.client) : null;
+        this.isPercent = isStatPropertyType(type) ? statPropertyTypes[type].isPercent : otherStatPropertyTypes[type].isPercent;
         this.value = value;
     }
 

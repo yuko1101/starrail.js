@@ -5,8 +5,9 @@ import Skill from "./Skill";
 import TextAssets from "../../assets/TextAssets";
 import { getStableHash } from "../../../utils/hash_utils";
 import ImageAssets from "../../assets/ImageAssets";
-import type LeveledSkillTreeNode from "./LeveledSkillTreeNode";
 
+// avoid circular references
+import type LeveledSkillTreeNode from "./LeveledSkillTreeNode";
 let LeveledSkillTreeNodeClass: typeof LeveledSkillTreeNode;
 import("./LeveledSkillTreeNode").then(c => LeveledSkillTreeNodeClass = c.default);
 
@@ -37,8 +38,9 @@ class SkillTreeNode {
     /**
      * @param id
      * @param client
+     * @param nodeIndexToUse
      */
-    constructor(id: number, client: StarRail) {
+    constructor(id: number, client: StarRail, nodeIndexToUse = 0) {
         this.id = id;
         this.client = client;
 
@@ -46,7 +48,7 @@ class SkillTreeNode {
         if (!_data) throw new AssetsNotFoundError("SkillTreeNode", this.id);
         this._nodesData = Object.values(_data) as JsonObject[];
 
-        const json = new JsonReader(this._nodesData[0]);
+        const json = new JsonReader(this._nodesData[nodeIndexToUse]);
 
         this.maxLevel = json.getAsNumber("MaxLevel");
         this.isUnlockedByDefault = json.getAsBooleanWithDefault(false, "DefaultUnlock");

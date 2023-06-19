@@ -40,21 +40,22 @@ class Skill {
     /** Available only when [attackType](#attackType) is "Ultra" */
     readonly ultraSkillIcon: ImageAssets;
 
-    readonly _data: JsonObject[];
+    readonly _skillsData: JsonObject[];
 
     /**
      * @param id
      * @param client
+     * @param skillIndexToUse
      */
-    constructor(id: number, client: StarRail) {
+    constructor(id: number, client: StarRail, skillIndexToUse = 0) {
         this.id = id;
         this.client = client;
 
         const _data: JsonObject | undefined = client.cachedAssetsManager.getStarRailCacheData("AvatarSkillConfig")[this.id];
         if (!_data) throw new AssetsNotFoundError("Skill", this.id);
-        this._data = Object.values(_data) as JsonObject[];
+        this._skillsData = Object.values(_data) as JsonObject[];
 
-        const json = new JsonReader(this._data[0]);
+        const json = new JsonReader(this._skillsData[skillIndexToUse]);
 
         this.name = new TextAssets(json.getAsNumber("SkillName", "Hash"), this.client);
         this.tag = new TextAssets(json.getAsNumber("SkillTag", "Hash"), this.client);
@@ -76,7 +77,7 @@ class Skill {
      * @param level
      */
     getSkillByLevel(level: number): LeveledSkill {
-        return new LeveledSkill(this._data[level - 1], this.client);
+        return new LeveledSkill(this._skillsData[level - 1], this.client);
     }
 }
 

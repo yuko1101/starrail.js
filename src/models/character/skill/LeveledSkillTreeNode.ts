@@ -24,11 +24,12 @@ class LeveledSkillTreeNode extends SkillTreeNode {
     constructor(data: JsonObject, client: StarRail) {
         const json = new JsonReader(data);
         const id = json.getAsNumber("PointID");
-        super(id, client);
+        const level = json.getAsNumber("Level");
+        super(id, client, level - 1);
 
         this._data = data;
 
-        this.level = json.getAsNumber("Level");
+        this.level = level;
         this.characterId = json.getAsNumber("AvatarID");
 
         this.stats = json.get("StatusAddList").mapArray((_, s) => new StatPropertyValue(s.getAsString("PropertyType") as StatPropertyType, s.getAsNumber("Value", "Value"), this.client));

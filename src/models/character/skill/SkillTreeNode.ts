@@ -1,11 +1,14 @@
 import { JsonObject, JsonReader } from "config_file.js";
 import StarRail from "../../../client/StarRail";
 import AssetsNotFoundError from "../../../errors/AssetsNotFoundError";
-import LeveledSkillTreeNode from "./LeveledSkillTreeNode";
 import Skill from "./Skill";
 import TextAssets from "../../assets/TextAssets";
 import { getStableHash } from "../../../utils/hash_utils";
 import ImageAssets from "../../assets/ImageAssets";
+import type LeveledSkillTreeNode from "./LeveledSkillTreeNode";
+
+let LeveledSkillTreeNodeClass: typeof LeveledSkillTreeNode;
+import("./LeveledSkillTreeNode").then(c => LeveledSkillTreeNodeClass = c.default);
 
 /**
  * @en SkillTreeNode
@@ -26,8 +29,10 @@ class SkillTreeNode {
     readonly name: TextAssets;
     /**  */
     readonly icon: ImageAssets;
+    /**  */
+    readonly previousNodeIds: number[];
 
-    readonly _data: JsonObject[];
+    readonly _nodesData: JsonObject[];
 
     /**
      * @param id
@@ -39,9 +44,9 @@ class SkillTreeNode {
 
         const _data: JsonObject | undefined = client.cachedAssetsManager.getStarRailCacheData("AvatarSkillTreeConfig")[this.id];
         if (!_data) throw new AssetsNotFoundError("SkillTreeNode", this.id);
-        this._data = Object.values(_data) as JsonObject[];
+        this._nodesData = Object.values(_data) as JsonObject[];
 
-        const json = new JsonReader(this._data[0]);
+        const json = new JsonReader(this._nodesData[0]);
 
         this.maxLevel = json.getAsNumber("MaxLevel");
         this.isUnlockedByDefault = json.getAsBooleanWithDefault(false, "DefaultUnlock");
@@ -52,13 +57,23 @@ class SkillTreeNode {
         this.name = this.levelUpSkills.length > 0 ? this.levelUpSkills[0].name : new TextAssets(getStableHash(json.getAsString("PointName")), this.client);
 
         this.icon = new ImageAssets(json.getAsString("IconPath"), this.client);
+
+        this.previousNodeIds = json.get("PrePoint").mapArray((_, nodeId) => nodeId.getAsNumber());
     }
 
     /**
      * @param level
      */
     getSkillTreeNodeByLevel(level: number): LeveledSkillTreeNode {
-        return new LeveledSkillTreeNode(this._data[level - 1], this.client);
+        return new LeveledSkillTreeNodeClass(this._nodesData[level - 1], this.client);
+    }
+
+    /**
+     * As of HSR ver1.1, a node cannot have two or more previous node.
+     * In other words, this method returns an empty array or an array with only one element.
+     */
+    getPreviousNodes(): SkillTreeNode[] {
+        return this.previousNodeIds.map(nodeId => new SkillTreeNode(nodeId, this.client));
     }
 }
 

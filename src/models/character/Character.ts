@@ -3,8 +3,7 @@ import StarRail from "../../client/StarRail";
 import CharacterData from "./CharacterData";
 import LightCone from "../light_cone/LightCone";
 import Relic from "../relic/Relic";
-import SkillTreeNode from "./skill/SkillTreeNode";
-import LeveledSkillTreeNode from "./skill/LeveledSkillTreeNode";
+import SkillTreeNode, { LeveledSkillTreeNode } from "./skill/SkillTreeNode";
 import { StatPropertyValue } from "../StatProperty";
 import CharacterStats from "./CharacterStats";
 

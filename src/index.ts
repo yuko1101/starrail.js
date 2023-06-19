@@ -8,8 +8,8 @@ import RequestError from "./errors/RequestError";
 import UserNotFoundError from "./errors/UserNotFoundError";
 import ImageAssets from "./models/assets/ImageAssets";
 import TextAssets from "./models/assets/TextAssets";
-import LeveledSkill from "./models/character/skill/LeveledSkill";
-import Skill from "./models/character/skill/Skill";
+import Skill, { LeveledSkill } from "./models/character/skill/Skill";
+import SkillTreeNode, { LeveledSkillTreeNode } from "./models/character/skill/SkillTreeNode";
 import Character from "./models/character/Character";
 import CharacterData from "./models/character/CharacterData";
 import CharacterStats, { StatList, OverallStatList } from "./models/character/CharacterStats";
@@ -43,8 +43,10 @@ export {
     UserNotFoundError,
     ImageAssets,
     TextAssets,
-    LeveledSkill,
     Skill,
+    LeveledSkill,
+    SkillTreeNode,
+    LeveledSkillTreeNode,
     Character,
     CharacterData,
     CharacterStats,

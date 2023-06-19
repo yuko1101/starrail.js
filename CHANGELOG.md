@@ -1,6 +1,7 @@
 # 0.4.3
 - Added SkillTreeNode#previousNodeIds and SkillTreeNode#getPreviousNodes().
 - Made LeveledSkillTreeNode extend SkillTreeNode.
+- Made LeveledSkill extend Skill.
 # 0.4.2
 - Renamed StatProperty#statPropertyType to StatProperty#type.
 - Renamed typedef RelicType to RelicTypeId, and added RelicType class.

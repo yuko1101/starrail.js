@@ -5,11 +5,7 @@ import Skill from "./Skill";
 import TextAssets from "../../assets/TextAssets";
 import { getStableHash } from "../../../utils/hash_utils";
 import ImageAssets from "../../assets/ImageAssets";
-
-// avoid circular references
-import type LeveledSkillTreeNode from "./LeveledSkillTreeNode";
-let LeveledSkillTreeNodeClass: typeof LeveledSkillTreeNode;
-import("./LeveledSkillTreeNode").then(c => LeveledSkillTreeNodeClass = c.default);
+import { StatPropertyType, StatPropertyValue } from "../../StatProperty";
 
 /**
  * @en SkillTreeNode
@@ -67,7 +63,7 @@ class SkillTreeNode {
      * @param level
      */
     getSkillTreeNodeByLevel(level: number): LeveledSkillTreeNode {
-        return new LeveledSkillTreeNodeClass(this._nodesData[level - 1], this.client);
+        return new LeveledSkillTreeNode(this._nodesData[level - 1], this.client);
     }
 
     /**
@@ -80,3 +76,36 @@ class SkillTreeNode {
 }
 
 export default SkillTreeNode;
+
+/**
+ * @en LeveledSkillTreeNode
+ * @extends {SkillTreeNode}
+ */
+export class LeveledSkillTreeNode extends SkillTreeNode {
+    /**  */
+    readonly level: number;
+    /**  */
+    readonly characterId: number;
+    /**  */
+    readonly stats: StatPropertyValue[];
+
+    readonly _data: JsonObject;
+
+    /**
+     * @param data
+     * @param client
+     */
+    constructor(data: JsonObject, client: StarRail) {
+        const json = new JsonReader(data);
+        const id = json.getAsNumber("PointID");
+        const level = json.getAsNumber("Level");
+        super(id, client, level - 1);
+
+        this._data = data;
+
+        this.level = level;
+        this.characterId = json.getAsNumber("AvatarID");
+
+        this.stats = json.get("StatusAddList").mapArray((_, s) => new StatPropertyValue(s.getAsString("PropertyType") as StatPropertyType, s.getAsNumber("Value", "Value"), this.client));
+    }
+}

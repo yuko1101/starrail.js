@@ -2,7 +2,7 @@
 **This version includes Breaking Changes**
 - Renamed Character#skills to skillTreeNodes.
 - Added Character#skills whose type is LeveledSkill[].
-Changed type of LeveledSkill#level to SkillLevel.
+- Changed type of LeveledSkill#level to SkillLevel.
 - Changed type of User#icon to UserIcon.
 - Removed User#iconCharacter. (Use `User#icon.characterData` instead.)
 - Renamed AttackType to SkillType and added "Talent".

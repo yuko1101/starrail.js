@@ -9,6 +9,7 @@ import UserNotFoundError from "./errors/UserNotFoundError";
 import ImageAssets from "./models/assets/ImageAssets";
 import TextAssets from "./models/assets/TextAssets";
 import Skill, { LeveledSkill } from "./models/character/skill/Skill";
+import SkillLevel from "./models/character/skill/SkillLevel";
 import SkillTreeNode, { LeveledSkillTreeNode } from "./models/character/skill/SkillTreeNode";
 import Character from "./models/character/Character";
 import CharacterData from "./models/character/CharacterData";
@@ -45,6 +46,7 @@ export {
     TextAssets,
     Skill,
     LeveledSkill,
+    SkillLevel,
     SkillTreeNode,
     LeveledSkillTreeNode,
     Character,
@@ -94,6 +96,7 @@ export { sumStats } from "./models/character/CharacterStats";
 export { isStatPropertyType } from "./models/StatProperty";
 export { fetchJSON } from "./utils/axios_utils";
 export { getStableHash } from "./utils/hash_utils";
+export { nonNullable } from "./utils/ts_utils";
 
 // constants
 export { combatTypeIconColors } from "./models/CombatType";

@@ -1,3 +1,8 @@
+# 0.5.0
+**This version includes Breaking Changes**
+- Renamed Character#skills to skillTreeNodes.
+- Added Character#skills whose type is LeveledSkill[].
+Changed type of LeveledSkill#level to SkillLevel.
 # 0.4.3
 - Added SkillTreeNode#previousNodeIds and SkillTreeNode#getPreviousNodes().
 - Made LeveledSkillTreeNode extend SkillTreeNode.

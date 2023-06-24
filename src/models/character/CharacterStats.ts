@@ -32,7 +32,7 @@ class CharacterStats {
         const relicSetsStatProperties: StatPropertyValue[] = RelicSet.getActiveSetBonus(character.relics).flatMap(set => set.activeBonus).flatMap(bonus => bonus.stats);
         const lightConeStatProperties: StatPropertyValue[] = [...(character.lightCone?.basicStats ?? []), ...(character.lightCone?.extraStats ?? [])];
         const characterStatProperties: StatPropertyValue[] = character.basicStats;
-        const skillTreeNodesStatProperties: StatPropertyValue[] = character.skills.flatMap(node => node.stats);
+        const skillTreeNodesStatProperties: StatPropertyValue[] = character.skillTreeNodes.flatMap(node => node.stats);
 
         const relicsStats = sumStats(relicsStatProperties, client);
         this.relicsStats = new StatList(relicsStats, character.characterData.combatType.id, client);

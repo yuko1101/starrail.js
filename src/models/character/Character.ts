@@ -6,6 +6,9 @@ import Relic from "../relic/Relic";
 import SkillTreeNode, { LeveledSkillTreeNode } from "./skill/SkillTreeNode";
 import { StatPropertyValue } from "../StatProperty";
 import CharacterStats from "./CharacterStats";
+import { LeveledSkill } from "./skill/Skill";
+import SkillLevel from "./skill/SkillLevel";
+import { nonNullable } from "../../utils/ts_utils";
 
 /**
  * @en Character
@@ -29,7 +32,9 @@ class Character {
     /**  */
     readonly eidolons: number;
     /**  */
-    readonly skills: LeveledSkillTreeNode[];
+    readonly skillTreeNodes: LeveledSkillTreeNode[];
+    /**  */
+    readonly skills: LeveledSkill[];
     /**  */
     readonly basicStats: StatPropertyValue[];
     /**  */
@@ -57,7 +62,21 @@ class Character {
         this.ascension = json.getAsNumberWithDefault(0, "promotion");
         this.eidolons = json.getAsNumberWithDefault(0, "rank");
 
-        this.skills = json.get("skillTreeList").mapArray((_, skill) => new SkillTreeNode(skill.getAsNumber("pointId"), this.client).getSkillTreeNodeByLevel(skill.getAsNumber("level")));
+        this.skillTreeNodes = json.get("skillTreeList").mapArray((_, skill) => new SkillTreeNode(skill.getAsNumber("pointId"), this.client).getSkillTreeNodeByLevel(skill.getAsNumber("level")));
+
+        const unlockedEidolons = this.characterData.eidolons.slice(0, this.eidolons);
+        const leveledSkillTreeNodesWithAllUnlockedLevels = this.skillTreeNodes.flatMap(node => [...[...Array(node.level - 1).keys()].map(i => node.getSkillTreeNodeByLevel(i + 1)), node]);
+        this.skills = this.characterData.skills.map(skill => {
+            const levelUpByEidolons = unlockedEidolons.reduce<number>((levels, eidolon) => levels + (eidolon.skillsLevelUp[skill.id]?.levelUp ?? 0), 0);
+
+            const levelUpBySkillTree = leveledSkillTreeNodesWithAllUnlockedLevels.reduce<number>((level, nodes) => level + Number(nodes.levelUpSkills.some(s => s.id === skill.id)), 0);
+
+            const level = new SkillLevel(levelUpBySkillTree, levelUpByEidolons);
+
+            // return null mostly for MazeNormal
+            if (level.value === 0) return null;
+            return skill.getSkillByLevel(level);
+        }).filter(nonNullable);
 
         this.basicStats = [
             ...this.characterData.getStatsByLevel(this.ascension, this.level),

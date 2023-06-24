@@ -4,6 +4,7 @@ import AssetsNotFoundError from "../../errors/AssetsNotFoundError";
 import ImageAssets from "../assets/ImageAssets";
 import TextAssets from "../assets/TextAssets";
 import { getStableHash } from "../../utils/hash_utils";
+import Skill from "./skill/Skill";
 
 /**
  * @en Eidolon
@@ -24,6 +25,8 @@ class Eidolon {
     readonly name: TextAssets;
     /**  */
     readonly description: TextAssets;
+    /**  */
+    readonly skillsLevelUp: { [skillId: string]: { skill: Skill, levelUp: number } };
 
     readonly _data: JsonObject;
 
@@ -48,6 +51,8 @@ class Eidolon {
         this.name = new TextAssets(getStableHash(json.getAsString("Name")), this.client);
         // TODO: replace placeholders with numbers in Param
         this.description = new TextAssets(getStableHash(json.getAsString("Desc")), this.client);
+
+        this.skillsLevelUp = Object.fromEntries(json.get("SkillAddLevelList").mapObject((skillId, levelAdd) => [skillId, { skill: new Skill(Number(skillId), this.client), levelUp: levelAdd.getAsNumber() }]));
     }
 }
 

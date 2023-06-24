@@ -4,6 +4,7 @@ import TextAssets from "../../assets/TextAssets";
 import AssetsNotFoundError from "../../../errors/AssetsNotFoundError";
 import ImageAssets from "../../assets/ImageAssets";
 import CombatType, { CombatTypeId } from "../../CombatType";
+import SkillLevel from "./SkillLevel";
 
 /** @typedef */
 export type AttackType = "Normal" | "Ultra" | "MazeNormal" | "Maze" | "BPSkill";
@@ -75,8 +76,8 @@ class Skill {
     /**
      * @param level
      */
-    getSkillByLevel(level: number): LeveledSkill {
-        return new LeveledSkill(this._skillsData[level - 1], this.client);
+    getSkillByLevel(level: SkillLevel): LeveledSkill {
+        return new LeveledSkill(this._skillsData[level.value - 1], level, this.client);
     }
 }
 
@@ -88,7 +89,7 @@ export default Skill;
  */
 export class LeveledSkill extends Skill {
     /**  */
-    readonly level: number;
+    readonly level: SkillLevel;
     /**  */
     readonly description: TextAssets;
     /**  */
@@ -100,11 +101,13 @@ export class LeveledSkill extends Skill {
      * @param data
      * @param client
      */
-    constructor(data: JsonObject, client: StarRail) {
+    constructor(data: JsonObject, level: SkillLevel, client: StarRail) {
         const json = new JsonReader(data);
         const id = json.getAsNumber("SkillID");
-        const level = json.getAsNumber("Level");
-        super(id, client, level - 1);
+        const totalLevel = json.getAsNumber("Level");
+        if (totalLevel !== level.value) throw new Error("data[\"Level\"] must be the same as `level.value`.");
+
+        super(id, client, totalLevel - 1);
 
         this._data = data;
 

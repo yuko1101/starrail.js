@@ -3,6 +3,8 @@
 - Renamed Character#skills to skillTreeNodes.
 - Added Character#skills whose type is LeveledSkill[].
 Changed type of LeveledSkill#level to SkillLevel.
+- Changed type of User#icon to UserIcon.
+- Removed User#iconCharacter. (Use `User#icon.characterData` instead.)
 # 0.4.3
 - Added SkillTreeNode#previousNodeIds and SkillTreeNode#getPreviousNodes().
 - Made LeveledSkillTreeNode extend SkillTreeNode.

@@ -54,8 +54,8 @@ const contents = [
     "RelicSetSkillConfig", // Relic Set Bonus
     "RelicBaseType", // Relic Types
     "AvatarPropertyConfig", // StatProperty
-    "AvatarPlayerIcon", // Character Icon for a player
-    "PlayerIcon", // Other Icon for a player
+    "ItemConfigAvatarPlayerIcon", // Character Icon for a player
+    "ItemPlayerCard", // Other Icon for a player
 ];
 
 const textMapWhiteList: number[] = [
@@ -547,6 +547,13 @@ class CachedAssetsManager {
                 json.getAsNumber("PropertyNameSkillTree", "Hash"),
                 json.getAsNumber("PropertyNameRelic", "Hash"),
                 json.getAsNumber("PropertyNameFilter", "Hash"),
+            );
+        });
+
+        [...Object.values(data["ItemConfigAvatarPlayerIcon"]), ...Object.values(data["ItemPlayerCard"])].forEach(i => {
+            const json = new JsonReader(i);
+            push(
+                json.getAsNumber("ItemName", "Hash"),
             );
         });
 

@@ -1,9 +1,7 @@
 import { JsonObject, JsonReader } from "config_file.js";
 import StarRail from "../client/StarRail";
-import CharacterData from "./character/CharacterData";
-import ImageAssets from "./assets/ImageAssets";
-import AssetsNotFoundError from "../errors/AssetsNotFoundError";
 import Character from "./character/Character";
+import UserIcon from "./UserIcon";
 
 /** @typedef */
 export interface Birthday {
@@ -25,12 +23,7 @@ class User {
     /**  */
     readonly signature: string | null;
     /**  */
-    readonly icon: ImageAssets;
-    /**
-     * The character used as the icon for the user
-     * This will be null if the user is using non-character icon.
-     */
-    readonly iconCharacter: CharacterData | null;
+    readonly icon: UserIcon;
     /** Trailblaze level */
     readonly level: number;
     /** World level */
@@ -70,20 +63,7 @@ class User {
         this.nickname = detailInfo.getAsString("nickname");
         this.signature = detailInfo.getAsStringWithDefault(null, "signature");
 
-        // head icon ids can be found in PlayerIcon.json, ItemPlayerCard.json, AvatarPlayerIcon.json, or ItemConfigAvatarPlayerIcon.json
-        const headIconId = detailInfo.getAsNumber("headIcon");
-        let headIcon = this.client.cachedAssetsManager.getStarRailCacheData("AvatarPlayerIcon")[headIconId];
-        const isCharacterHeadIcon = !!headIcon;
-        if (!headIcon) {
-            const otherHeadIcon = this.client.cachedAssetsManager.getStarRailCacheData("PlayerIcon")[headIconId];
-            if (!otherHeadIcon) throw new AssetsNotFoundError("HeadIcon", headIconId);
-            headIcon = otherHeadIcon;
-        }
-        const headIconJson = new JsonReader(headIcon);
-
-        this.icon = new ImageAssets(headIconJson.getAsString("ImagePath"), this.client);
-        this.iconCharacter = isCharacterHeadIcon ? new CharacterData(headIconJson.getAsNumber("AvatarID"), this.client) : null;
-
+        this.icon = new UserIcon(detailInfo.getAsNumber("headIcon"), this.client);
 
         this.level = detailInfo.getAsNumber("level");
         this.equilibriumLevel = detailInfo.getAsNumberWithDefault(0, "worldLevel");

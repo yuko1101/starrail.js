@@ -31,6 +31,7 @@ import CombatType from "./models/CombatType";
 import Path from "./models/Path";
 import StatProperty, { StatPropertyValue } from "./models/StatProperty";
 import User from "./models/User";
+import UserIcon from "./models/UserIcon";
 
 // classes
 export {
@@ -74,6 +75,7 @@ export {
     StatProperty,
     StatPropertyValue,
     User,
+    UserIcon,
 };
 
 // typedefs

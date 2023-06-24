@@ -82,7 +82,7 @@ export {
 export { LanguageCode, LanguageMap, NullableLanguageMap } from "./client/CachedAssetsManager";
 export { ClientOptions } from "./client/StarRail";
 export { ImageBaseUrl } from "./models/assets/ImageAssets";
-export { AttackType, EffectType } from "./models/character/skill/Skill";
+export { SkillType, EffectType } from "./models/character/skill/Skill";
 export { LightConeLevel } from "./models/light_cone/LightConeExpType";
 export { RelicLevel } from "./models/relic/RelicExpType";
 export { RelicMainStatData } from "./models/relic/RelicMainStatGroup";

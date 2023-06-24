@@ -7,7 +7,7 @@ import CombatType, { CombatTypeId } from "../../CombatType";
 import SkillLevel from "./SkillLevel";
 
 /** @typedef */
-export type AttackType = "Normal" | "Ultra" | "MazeNormal" | "Maze" | "BPSkill";
+export type SkillType = "Normal" | "Ultra" | "MazeNormal" | "Maze" | "BPSkill" | "Talent";
 
 /** @typedef */
 export type EffectType = "SingleAttack" | "AoEAttack" | "MazeAttack" | "Enhance" | "Blast" | "Impair" | "Bounce" | "Support" | "Defence" | "Restore";
@@ -24,20 +24,20 @@ class Skill {
     /**  */
     readonly name: TextAssets;
     /**  */
-    readonly tag: TextAssets;
+    readonly effectTypeText: TextAssets;
     /**  */
-    readonly skillTypeDescription: TextAssets;
-    /**  */
-    readonly attackType: AttackType | null;
+    readonly skillTypeText: TextAssets;
     /**  */
     readonly combatType: CombatType | null;
+    /**  */
+    readonly skillType: SkillType;
     /**  */
     readonly effectType: EffectType;
     /**  */
     readonly maxLevel: number;
     /**  */
     readonly skillIcon: ImageAssets;
-    /** Available only when [attackType](#attackType) is "Ultra" */
+    /** Available only when [skillType](#skillType) is "Ultra" */
     readonly ultraSkillIcon: ImageAssets;
 
     readonly _skillsData: JsonObject[];
@@ -58,13 +58,15 @@ class Skill {
         const json = new JsonReader(this._skillsData[skillIndexToUse]);
 
         this.name = new TextAssets(json.getAsNumber("SkillName", "Hash"), this.client);
-        this.tag = new TextAssets(json.getAsNumber("SkillTag", "Hash"), this.client);
-        this.skillTypeDescription = new TextAssets(json.getAsNumber("SkillTypeDesc", "Hash"), this.client);
 
-        this.attackType = json.getAsStringWithDefault(null, "AttackType") as AttackType | null;
         const combatTypeId = json.getAsStringWithDefault(undefined, "StanceDamageType") as CombatTypeId | undefined;
         this.combatType = combatTypeId ? new CombatType(combatTypeId, this.client) : null;
+
+        this.skillType = json.getAsStringWithDefault("Talent", "AttackType") as SkillType;
+        this.skillTypeText = new TextAssets(json.getAsNumber("SkillTypeDesc", "Hash"), this.client);
+
         this.effectType = json.getAsString("SkillEffect") as EffectType;
+        this.effectTypeText = new TextAssets(json.getAsNumber("SkillTag", "Hash"), this.client);
 
         this.maxLevel = json.getAsNumber("MaxLevel");
 

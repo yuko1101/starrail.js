@@ -5,6 +5,10 @@
 Changed type of LeveledSkill#level to SkillLevel.
 - Changed type of User#icon to UserIcon.
 - Removed User#iconCharacter. (Use `User#icon.characterData` instead.)
+- Renamed AttackType to SkillType and added "Talent".
+- Renamed Skill#attackType to skillType and make non-nullable.
+- Renamed Skill#skillTypeDescription to skillTypeText.
+- Renamed Skill#tag to effectTypeText.
 # 0.4.3
 - Added SkillTreeNode#previousNodeIds and SkillTreeNode#getPreviousNodes().
 - Made LeveledSkillTreeNode extend SkillTreeNode.

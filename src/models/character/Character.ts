@@ -69,12 +69,11 @@ class Character {
         this.skills = this.characterData.skills.map(skill => {
             const levelUpByEidolons = unlockedEidolons.reduce<number>((levels, eidolon) => levels + (eidolon.skillsLevelUp[skill.id]?.levelUp ?? 0), 0);
 
-            const levelUpBySkillTree = leveledSkillTreeNodesWithAllUnlockedLevels.reduce<number>((level, nodes) => level + Number(nodes.levelUpSkills.some(s => s.id === skill.id)), 0);
+            // set min level to 1, mostly for "MazeNormal" skills.
+            const levelUpBySkillTree = leveledSkillTreeNodesWithAllUnlockedLevels.reduce<number>((level, nodes) => level + Number(nodes.levelUpSkills.some(s => s.id === skill.id)), 0) || 1;
 
             const level = new SkillLevel(levelUpBySkillTree, levelUpByEidolons);
 
-            // return null mostly for MazeNormal
-            if (level.value === 0) return null;
             return skill.getSkillByLevel(level);
         }).filter(nonNullable);
 

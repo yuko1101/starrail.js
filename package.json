@@ -1,6 +1,6 @@
 {
   "name": "starrail.js",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "A nodejs library for Star Rail.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

@@ -74,7 +74,7 @@ class Character {
         this.skills = this.characterData.skills.map(skill => {
             const skillNode = this.skillTreeNodes.find(node => node.levelUpSkills.some(s => s.id === skill.id));
 
-            // set default level (1, 0), for "MazeNormal" and "Maze" skills.
+            // set default level to (1, 0) for "MazeNormal" skills.
             const level = skillNode?.level ?? new SkillLevel(1, 0);
 
             return skill.getSkillByLevel(level);

@@ -1,4 +1,4 @@
-# 0.5.1
+# 0.6.0
 - Created DynamicTextAssets class for TextAssets which has placeholders.
 - Added LeveledSkill#paramList and LeveledSkill#simpleParamList.
 - Added LeveledSkillTreeNode#paramList.

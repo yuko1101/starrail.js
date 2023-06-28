@@ -472,6 +472,8 @@ class CachedAssetsManager {
                 const json = new JsonReader(l);
                 const name = json.getAsString("PointName");
                 if (name !== "") push(getStableHash(name));
+                const description = json.getAsString("PointDesc");
+                if (description !== "") push(getStableHash(description));
             });
         });
 

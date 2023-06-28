@@ -6,6 +6,8 @@ import TextAssets from "../../assets/TextAssets";
 import { getStableHash } from "../../../utils/hash_utils";
 import ImageAssets from "../../assets/ImageAssets";
 import { StatPropertyType, StatPropertyValue } from "../../StatProperty";
+import SkillLevel from "./SkillLevel";
+import DynamicTextAssets from "../../assets/DynamicTextAssets";
 
 /**
  * @en SkillTreeNode
@@ -62,8 +64,8 @@ class SkillTreeNode {
     /**
      * @param level
      */
-    getSkillTreeNodeByLevel(level: number): LeveledSkillTreeNode {
-        return new LeveledSkillTreeNode(this._nodesData[level - 1], this.client);
+    getSkillTreeNodeByLevel(level: SkillLevel): LeveledSkillTreeNode {
+        return new LeveledSkillTreeNode(this._nodesData[level.value - 1], level, this.client);
     }
 
     /**
@@ -83,13 +85,15 @@ export default SkillTreeNode;
  */
 export class LeveledSkillTreeNode extends SkillTreeNode {
     /**  */
-    readonly level: number;
+    readonly level: SkillLevel;
     /**  */
     readonly characterId: number;
     /**  */
     readonly stats: StatPropertyValue[];
     /**  */
     readonly paramList: number[];
+    /**  */
+    readonly description: DynamicTextAssets;
 
     readonly _data: JsonObject;
 
@@ -97,11 +101,10 @@ export class LeveledSkillTreeNode extends SkillTreeNode {
      * @param data
      * @param client
      */
-    constructor(data: JsonObject, client: StarRail) {
+    constructor(data: JsonObject, level: SkillLevel, client: StarRail) {
         const json = new JsonReader(data);
         const id = json.getAsNumber("PointID");
-        const level = json.getAsNumber("Level");
-        super(id, client, level - 1);
+        super(id, client, level.value - 1);
 
         this._data = data;
 
@@ -112,6 +115,6 @@ export class LeveledSkillTreeNode extends SkillTreeNode {
 
         this.paramList = this.paramList = json.get("ParamList").mapArray((_, v) => v.getAsNumber("Value"));
 
-        // TODO: add description
+        this.description = this.levelUpSkills.length > 0 ? this.levelUpSkills[0].getSkillByLevel(level).description : new DynamicTextAssets(getStableHash(json.getAsString("PointDesc")), { paramList: this.paramList }, this.client);
     }
 }

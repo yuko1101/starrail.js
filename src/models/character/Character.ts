@@ -62,17 +62,20 @@ class Character {
         this.ascension = json.getAsNumberWithDefault(0, "promotion");
         this.eidolons = json.getAsNumberWithDefault(0, "rank");
 
-        this.skillTreeNodes = json.get("skillTreeList").mapArray((_, skill) => new SkillTreeNode(skill.getAsNumber("pointId"), this.client).getSkillTreeNodeByLevel(skill.getAsNumber("level")));
-
         const unlockedEidolons = this.characterData.eidolons.slice(0, this.eidolons);
-        const leveledSkillTreeNodesWithAllUnlockedLevels = this.skillTreeNodes.flatMap(node => [...[...Array(node.level - 1).keys()].map(i => node.getSkillTreeNodeByLevel(i + 1)), node]);
+
+        this.skillTreeNodes = json.get("skillTreeList").mapArray((_, skill) => {
+            const node = new SkillTreeNode(skill.getAsNumber("pointId"), this.client);
+            const levelUpByEidolons = node.levelUpSkills.length > 0 ? unlockedEidolons.reduce<number>((levels, eidolon) => levels + (eidolon.skillsLevelUp[node.levelUpSkills[0].id]?.levelUp ?? 0), 0) : 0;
+            const level = new SkillLevel(skill.getAsNumber("level"), levelUpByEidolons);
+            return node.getSkillTreeNodeByLevel(level);
+        });
+
         this.skills = this.characterData.skills.map(skill => {
-            const levelUpByEidolons = unlockedEidolons.reduce<number>((levels, eidolon) => levels + (eidolon.skillsLevelUp[skill.id]?.levelUp ?? 0), 0);
+            const skillNode = this.skillTreeNodes.find(node => node.levelUpSkills.some(s => s.id === skill.id));
 
-            // set min level to 1, mostly for "MazeNormal" skills.
-            const levelUpBySkillTree = leveledSkillTreeNodesWithAllUnlockedLevels.reduce<number>((level, nodes) => level + Number(nodes.levelUpSkills.some(s => s.id === skill.id)), 0) || 1;
-
-            const level = new SkillLevel(levelUpBySkillTree, levelUpByEidolons);
+            // set default level (1, 0), for "MazeNormal" and "Maze" skills.
+            const level = skillNode?.level ?? new SkillLevel(1, 0);
 
             return skill.getSkillByLevel(level);
         }).filter(nonNullable);

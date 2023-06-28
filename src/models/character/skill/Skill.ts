@@ -98,9 +98,9 @@ export class LeveledSkill extends Skill {
     /**  */
     readonly simpleParamList: number[];
     /**  */
-    readonly description: TextAssets;
+    readonly description: DynamicTextAssets;
     /**  */
-    readonly simpleDescription: TextAssets;
+    readonly simpleDescription: DynamicTextAssets;
 
     readonly _data: JsonObject;
 

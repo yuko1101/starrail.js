@@ -53,7 +53,11 @@ class DynamicTextAssets extends TextAssets {
                 const value = paramList[paramIndex] * (isPercent ? 100 : 1);
 
                 const fix: number | null = valueType === "i" ? 0 : null;
-                if (fix === null) throw new Error(`Unknown valueType ${valueType} in DynamicTextAssets.`);
+                if (fix === null) {
+                    // TODO: remove this
+                    console.error(`Unknown valueType ${valueType} in DynamicTextAssets.`);
+                    throw new Error(`Unknown valueType ${valueType} in DynamicTextAssets.`);
+                }
                 const fixedValue = value.toFixed(fix);
 
                 return fixedValue + percent;
@@ -72,7 +76,6 @@ class DynamicTextAssets extends TextAssets {
         try {
             return this.getReplacedText(replaceWith, lang);
         } catch (e) {
-            console.log(e);
             return null;
         }
     }

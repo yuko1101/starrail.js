@@ -21,7 +21,7 @@ class LightConeSuperimposition {
     /**  */
     readonly name: TextAssets;
     /**  */
-    readonly description: TextAssets;
+    readonly description: DynamicTextAssets;
     /**  */
     readonly stats: StatPropertyValue[];
 

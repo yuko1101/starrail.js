@@ -1,3 +1,7 @@
+# 0.5.1
+- Created DynamicTextAssets class for TextAssets which has placeholders.
+- Added LeveledSkill#paramList and LeveledSkill#simpleParamList.
+- Added LeveledSkillTreeNode#paramList.
 # 0.5.0
 **This version includes Breaking Changes**
 - Renamed Character#skills to skillTreeNodes.

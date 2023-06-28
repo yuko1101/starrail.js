@@ -6,6 +6,7 @@ import InvalidUidFormatError from "./errors/InvalidUidFormatError";
 import MihomoError from "./errors/MihomoError";
 import RequestError from "./errors/RequestError";
 import UserNotFoundError from "./errors/UserNotFoundError";
+import DynamicTextAssets from "./models/assets/DynamicTextAssets";
 import ImageAssets from "./models/assets/ImageAssets";
 import TextAssets from "./models/assets/TextAssets";
 import Skill, { LeveledSkill } from "./models/character/skill/Skill";
@@ -43,6 +44,7 @@ export {
     MihomoError,
     RequestError,
     UserNotFoundError,
+    DynamicTextAssets,
     ImageAssets,
     TextAssets,
     Skill,
@@ -81,6 +83,7 @@ export {
 // typedefs
 export { LanguageCode, LanguageMap, NullableLanguageMap } from "./client/CachedAssetsManager";
 export { ClientOptions } from "./client/StarRail";
+export { DynamicData } from "./models/assets/DynamicTextAssets";
 export { ImageBaseUrl } from "./models/assets/ImageAssets";
 export { SkillType, EffectType } from "./models/character/skill/Skill";
 export { LightConeLevel } from "./models/light_cone/LightConeExpType";

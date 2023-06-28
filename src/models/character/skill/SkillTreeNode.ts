@@ -88,6 +88,8 @@ export class LeveledSkillTreeNode extends SkillTreeNode {
     readonly characterId: number;
     /**  */
     readonly stats: StatPropertyValue[];
+    /**  */
+    readonly paramList: number[];
 
     readonly _data: JsonObject;
 
@@ -107,5 +109,9 @@ export class LeveledSkillTreeNode extends SkillTreeNode {
         this.characterId = json.getAsNumber("AvatarID");
 
         this.stats = json.get("StatusAddList").mapArray((_, s) => new StatPropertyValue(s.getAsString("PropertyType") as StatPropertyType, s.getAsNumber("Value", "Value"), this.client));
+
+        this.paramList = this.paramList = json.get("ParamList").mapArray((_, v) => v.getAsNumber("Value"));
+
+        // TODO: add description
     }
 }

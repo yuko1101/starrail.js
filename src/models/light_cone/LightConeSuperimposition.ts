@@ -3,6 +3,7 @@ import StarRail from "../../client/StarRail";
 import AssetsNotFoundError from "../../errors/AssetsNotFoundError";
 import TextAssets from "../assets/TextAssets";
 import StatProperty, { StatPropertyType, StatPropertyValue } from "../StatProperty";
+import DynamicTextAssets from "../assets/DynamicTextAssets";
 
 /**
  * @en LightConeSuperimposition
@@ -16,11 +17,11 @@ class LightConeSuperimposition {
     readonly client: StarRail;
 
     /**  */
+    readonly paramList: number[];
+    /**  */
     readonly name: TextAssets;
     /**  */
     readonly description: TextAssets;
-    /**  */
-    readonly paramList: number[];
     /**  */
     readonly stats: StatPropertyValue[];
 
@@ -41,11 +42,10 @@ class LightConeSuperimposition {
 
         const json = new JsonReader(this._data);
 
-        this.name = new TextAssets(json.getAsNumber("SkillName", "Hash"), this.client);
-        // TODO: replace placeholders with numbers from paramList
-        this.description = new TextAssets(json.getAsNumber("SkillDesc", "Hash"), this.client);
-
         this.paramList = json.get("ParamList").mapArray((_, v) => v.getAsNumber("Value"));
+
+        this.name = new TextAssets(json.getAsNumber("SkillName", "Hash"), this.client);
+        this.description = new DynamicTextAssets(json.getAsNumber("SkillDesc", "Hash"), { paramList: this.paramList }, this.client);
 
         this.stats = json.get("AbilityProperty").mapArray((_, prop) => {
             if (prop.getAsString("PropertyType") === "AllDamageTypeAddedRatio") {

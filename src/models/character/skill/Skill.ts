@@ -5,6 +5,7 @@ import AssetsNotFoundError from "../../../errors/AssetsNotFoundError";
 import ImageAssets from "../../assets/ImageAssets";
 import CombatType, { CombatTypeId } from "../../CombatType";
 import SkillLevel from "./SkillLevel";
+import DynamicTextAssets from "../../assets/DynamicTextAssets";
 
 /** @typedef */
 export type SkillType = "Normal" | "Ultra" | "MazeNormal" | "Maze" | "BPSkill" | "Talent";
@@ -93,6 +94,10 @@ export class LeveledSkill extends Skill {
     /**  */
     readonly level: SkillLevel;
     /**  */
+    readonly paramList: number[];
+    /**  */
+    readonly simpleParamList: number[];
+    /**  */
     readonly description: TextAssets;
     /**  */
     readonly simpleDescription: TextAssets;
@@ -115,7 +120,10 @@ export class LeveledSkill extends Skill {
 
         this.level = level;
 
-        this.description = new TextAssets(json.getAsNumber("SkillDesc", "Hash"), this.client);
-        this.simpleDescription = new TextAssets(json.getAsNumber("SimpleSkillDesc", "Hash"), this.client);
+        this.paramList = json.get("ParamList").mapArray((_, v) => v.getAsNumber("Value"));
+        this.simpleParamList = json.get("SimpleParamList").mapArray((_, v) => v.getAsNumber("Value"));
+
+        this.description = new DynamicTextAssets(json.getAsNumber("SkillDesc", "Hash"), { paramList: this.paramList }, this.client);
+        this.simpleDescription = new DynamicTextAssets(json.getAsNumber("SimpleSkillDesc", "Hash"), { paramList: this.simpleParamList }, this.client);
     }
 }

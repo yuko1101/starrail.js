@@ -80,11 +80,7 @@ export default TextAssets;
 
 function isTextFormatted(text: string | null) {
     if (text === null) return false;
-    return hasTextPlaceholder(text) || /<.+>/.test(text);
-}
-
-function hasTextPlaceholder(text: string) {
-    return /\{([^#]+)#([^}]+)\}/.test(text);
+    return /<.+>/.test(text);
 }
 
 class FormattedText {
@@ -92,15 +88,6 @@ class FormattedText {
 
     constructor(text: string) {
         this.text = text;
-    }
-
-    hasPlaceholder() {
-        return hasTextPlaceholder(this.text);
-    }
-
-    replacePlaceholder(placeholderMap: { [s: string]: boolean; }): FormattedText {
-        const replaced = this.text.replace(/\{([^#]+)#([^}]+)\}/g, (_, $1, $2) => placeholderMap[$1] ? $2 : "");
-        return new FormattedText(replaced);
     }
 
     /**

@@ -46,13 +46,16 @@ class DynamicTextAssets extends TextAssets {
 
         const paramList = data.paramList;
         if (paramList) {
-            text = text.replace(/<unbreak>#(\d+)\[(.)\](%?)<\/unbreak>/g, (_, paramIndexText, valueType, percent) => {
+            text = text.replace(/<unbreak>#(\d+)\[(.+?)\](%?)<\/unbreak>/g, (_, paramIndexText, valueType, percent) => {
                 const paramIndex = parseInt(paramIndexText) - 1;
                 const isPercent = percent === "%";
 
                 const value = paramList[paramIndex] * (isPercent ? 100 : 1);
 
-                const fix: number | null = valueType === "i" ? 0 : null;
+                const fix: number | null =
+                    valueType === "i" ? 0
+                        : /^f\d+$/.test(valueType) ? Number(valueType.replace("f", ""))
+                            : null;
                 if (fix === null) {
                     // TODO: remove this
                     console.error(`Unknown valueType ${valueType} in DynamicTextAssets.`);

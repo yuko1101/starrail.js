@@ -3,6 +3,7 @@ import StarRail from "../client/StarRail";
 import AssetsNotFoundError from "../errors/AssetsNotFoundError";
 import ImageAssets from "./assets/ImageAssets";
 import TextAssets from "./assets/TextAssets";
+import DynamicTextAssets from "./assets/DynamicTextAssets";
 
 /**
  * @en StatProperty
@@ -74,12 +75,14 @@ export class StatPropertyValue {
     readonly client: StarRail;
     /**  */
     readonly type: StatPropertyType | OtherStatPropertyType;
-    /** This will be null if type of provided `type` is [OtherStatPropertyType](OtherStatPropertyType) */
+    /** This will be null if type of provided `type` is [OtherStatPropertyType](OtherStatPropertyType). */
     readonly statProperty: StatProperty | null;
     /**  */
     readonly isPercent: boolean;
     /**  */
     readonly value: number;
+    /** This will be null if [statProperty](#statProperty) is null. */
+    readonly nameSkillTree: DynamicTextAssets | null;
 
     /**
      * @param type
@@ -92,6 +95,8 @@ export class StatPropertyValue {
         this.statProperty = isStatPropertyType(type) ? new StatProperty(type, this.client) : null;
         this.isPercent = isStatPropertyType(type) ? statPropertyTypes[type].isPercent : otherStatPropertyTypes[type].isPercent;
         this.value = value;
+
+        this.nameSkillTree = this.statProperty ? new DynamicTextAssets(this.statProperty.nameSkillTree.id, { paramList: [value] }, this.client) : null;
     }
 
     /**  */

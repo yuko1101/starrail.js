@@ -115,6 +115,7 @@ export class LeveledSkillTreeNode extends SkillTreeNode {
 
         this.paramList = this.paramList = json.get("ParamList").mapArray((_, v) => v.getAsNumber("Value"));
 
-        this.description = this.levelUpSkills.length > 0 ? this.levelUpSkills[0].getSkillByLevel(level).description : new DynamicTextAssets(getStableHash(json.getAsString("PointDesc")), { paramList: this.paramList }, this.client);
+        this.description = this.levelUpSkills.length > 0 ? this.levelUpSkills[0].getSkillByLevel(level).description
+            : this.stats[0]?.nameSkillTree ?? new DynamicTextAssets(getStableHash(json.getAsString("PointDesc")), { paramList: this.paramList }, this.client);
     }
 }

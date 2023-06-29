@@ -40,17 +40,17 @@ class DynamicTextAssets extends TextAssets {
      * @param lang
      * @throws AssetsNotFoundError
      */
-    getReplacedText(replaceWith: (keyof DynamicData)[] = [], lang?: LanguageCode): string {
-        const data = replaceWith.length === 0 ? this.dynamicData : Object.fromEntries(Object.entries(this.dynamicData).filter(([key]) => replaceWith.includes(key as keyof DynamicData))) as Partial<DynamicData>;
-        let text = this.get(lang);
+    getReplacedData(replaceWith: (keyof DynamicData)[] = [], lang?: LanguageCode): { text: string, usedParamIndices: number[] } {
+        const usedParamIndices: number[] = [];
 
-        const paramList = data.paramList;
-        if (paramList) {
+        let text = this.get(lang);
+        if (replaceWith.includes("paramList")) {
             text = text.replace(/<unbreak>#(\d+)\[(.+?)\](%?)<\/unbreak>/g, (_, paramIndexText, valueType, percent) => {
                 const paramIndex = parseInt(paramIndexText) - 1;
                 const isPercent = percent === "%";
 
-                const value = paramList[paramIndex] * (isPercent ? 100 : 1);
+                const value = this.dynamicData.paramList[paramIndex] * (isPercent ? 100 : 1);
+                usedParamIndices.push(paramIndex);
 
                 const fix: number | null =
                     valueType === "i" ? 0
@@ -67,7 +67,29 @@ class DynamicTextAssets extends TextAssets {
             });
         }
 
-        return text;
+        return { text, usedParamIndices };
+    }
+
+    /**
+     * @param replaceWith
+     * @param lang
+     * @returns null instead of throwing AssetsNotFoundError.
+     */
+    getNullableReplacedData(replaceWith: (keyof DynamicData)[] = [], lang?: LanguageCode): { text: string, usedParamIndices: number[] } | null {
+        try {
+            return this.getReplacedData(replaceWith, lang);
+        } catch (e) {
+            return null;
+        }
+    }
+
+    /**
+     * @param replaceWith
+     * @param lang
+     * @throws AssetsNotFoundError
+     */
+    getReplacedText(replaceWith: (keyof DynamicData)[] = [], lang?: LanguageCode): string {
+        return this.getReplacedData(replaceWith, lang).text;
     }
 
     /**

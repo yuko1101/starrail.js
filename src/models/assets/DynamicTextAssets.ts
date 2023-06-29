@@ -41,10 +41,14 @@ class DynamicTextAssets extends TextAssets {
      * @throws AssetsNotFoundError
      */
     getReplacedData(replaceWith: (keyof DynamicData)[] = [], lang?: LanguageCode): { text: string, usedParamIndices: number[] } {
+        function isEnabled(key: keyof DynamicData) {
+            return replaceWith.length === 0 || replaceWith.includes(key);
+        }
+
         const usedParamIndices: number[] = [];
 
         let text = this.get(lang);
-        if (replaceWith.includes("paramList")) {
+        if (isEnabled("paramList")) {
             text = text.replace(/<unbreak>#(\d+)\[(.+?)\](%?)<\/unbreak>/g, (_, paramIndexText, valueType, percent) => {
                 const paramIndex = parseInt(paramIndexText) - 1;
                 const isPercent = percent === "%";

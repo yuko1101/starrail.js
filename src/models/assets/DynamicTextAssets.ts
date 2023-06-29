@@ -18,7 +18,7 @@ const defaultDynamicData: DynamicData = {
  */
 class DynamicTextAssets extends TextAssets {
     /**  */
-    dynamicData: DynamicData;
+    readonly dynamicData: DynamicData;
 
     readonly _dynamicTest: string | null;
 

@@ -1,3 +1,5 @@
+# 0.6.1
+- Added User#platform.
 # 0.6.0
 - Created DynamicTextAssets class for TextAssets which has placeholders.
 - Added LeveledSkill#paramList and LeveledSkill#simpleParamList.

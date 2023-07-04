@@ -1,4 +1,5 @@
 # 0.6.1
+- Added User#platform.
 - Made DynamicTextAssets#dynamicData readonly.
 - Added DynamicTextAssets#getReplaceData() and DynamicTextAssets#getNullableReplacedData().
 # 0.6.0

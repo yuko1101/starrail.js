@@ -166,6 +166,10 @@ class CachedAssetsManager {
      * @param options.ghproxy Whether to use ghproxy.com
      */
     async fetchAllContents(options: { useRawStarRailData?: boolean, ghproxy?: boolean }): Promise<void> {
+        if (this._isFetching) {
+            throw new Error("You are already fetching assets.");
+        }
+
         options = bindOptions({
             useRawStarRailData: false,
         }, options);

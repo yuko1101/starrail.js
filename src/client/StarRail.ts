@@ -109,6 +109,10 @@ class StarRail {
     _getStarRailCharacterBuild(data: JsonObject, username: string, hash: string): StarRailCharacterBuild {
         return new StarRailCharacterBuild(data, this, username, hash);
     }
+
+    _getUser(data: JsonObject): User {
+        return new User(data, this);
+    }
 }
 
 export default StarRail;

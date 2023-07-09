@@ -101,8 +101,13 @@ export class StatPropertyValue {
 
     /**  */
     public get valueText(): string {
-        if (this.isPercent) return (this.value * 100).toFixed(1) + "%";
-        return this.value.toFixed(0);
+        if (this.isPercent) {
+            let valueString = (this.value * 100).toString();
+            if (!valueString.includes(".")) valueString += ".0";
+            valueString = valueString.slice(0, valueString.indexOf(".") + 2);
+            return valueString + "%";
+        }
+        return Math.floor(this.value).toString();
     }
 
 }

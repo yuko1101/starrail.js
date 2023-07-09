@@ -1,3 +1,6 @@
+# 0.7.0
+- Added integration with [enka-network-api](https://github.com/yuko1101/enka-network-api).
+    - StarRail character builds (including saved builds in Enka.Network).
 # 0.6.1
 - Added User#platform.
 - Made DynamicTextAssets#dynamicData readonly.

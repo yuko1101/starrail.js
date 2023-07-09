@@ -1,4 +1,4 @@
-import { JsonReader, bindOptions } from "config_file.js";
+import { JsonObject, JsonReader, bindOptions } from "config_file.js";
 import CachedAssetsManager, { LanguageCode } from "./CachedAssetsManager";
 import CharacterData from "../models/character/CharacterData";
 import { ImageBaseUrl } from "../models/assets/ImageAssets";
@@ -10,6 +10,7 @@ import User from "../models/User";
 import InvalidUidFormatError from "../errors/InvalidUidFormatError";
 import UserNotFoundError from "../errors/UserNotFoundError";
 import MihomoError from "../errors/MihomoError";
+import StarRailCharacterBuild from "../models/enka/StarRailCharacterBuild";
 
 const defaultImageBaseUrls: ImageBaseUrl[] = [];
 
@@ -102,6 +103,11 @@ class StarRail {
      */
     getAllRelics(): RelicData[] {
         return new JsonReader(this.cachedAssetsManager.getStarRailCacheData("RelicConfig")).mapObject((_, relic) => new RelicData(relic.getAsNumber("ID"), this));
+    }
+
+
+    _getStarRailCharacterBuild(data: JsonObject, username: string, hash: string): StarRailCharacterBuild {
+        return new StarRailCharacterBuild(data, this, username, hash);
     }
 }
 

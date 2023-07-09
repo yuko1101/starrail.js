@@ -16,6 +16,7 @@ import Character from "./models/character/Character";
 import CharacterData from "./models/character/CharacterData";
 import CharacterStats, { StatList, OverallStatList } from "./models/character/CharacterStats";
 import Eidolon from "./models/character/Eidolon";
+import StarRailCharacterBuild from "./models/enka/StarRailCharacterBuild";
 import LightCone from "./models/light_cone/LightCone";
 import LightConeData from "./models/light_cone/LightConeData";
 import LightConeExpType from "./models/light_cone/LightConeExpType";
@@ -58,6 +59,7 @@ export {
     StatList,
     OverallStatList,
     Eidolon,
+    StarRailCharacterBuild,
     LightCone,
     LightConeData,
     LightConeExpType,

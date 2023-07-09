@@ -3,6 +3,16 @@ import StarRail from "../../client/StarRail";
 import Character from "../character/Character";
 
 /**
+ * @typedef
+ * @example
+ * |hoyoType|Game Name|
+ * |---|---|
+ * |0|Genshin Impact|
+ * |1|Honkai: Star Rail|
+ */
+export type HoyoType = number;
+
+/**
  * @en StarRailCharacterBuild
  */
 class StarRailCharacterBuild {
@@ -23,6 +33,8 @@ class StarRailCharacterBuild {
     readonly isPublic: boolean;
     /**  */
     readonly character: Character;
+    /**  */
+    readonly hoyoType: HoyoType;
     /**  */
     readonly url: string;
 
@@ -55,6 +67,8 @@ class StarRailCharacterBuild {
         this.isPublic = json.getAsBoolean("public");
 
         this.character = new Character(json.getAsJsonObject("avatar_data"), client);
+
+        this.hoyoType = json.getAsNumber("hoyo_type");
 
         this.url = `https://enka.network/u/${this.enkaUserInfo.username}/${this.enkaUserInfo.hash}/${this.character.characterData.id}/${this.id}`;
     }

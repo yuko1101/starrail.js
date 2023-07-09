@@ -88,6 +88,7 @@ export { ClientOptions } from "./client/StarRail";
 export { DynamicData } from "./models/assets/DynamicTextAssets";
 export { ImageBaseUrl } from "./models/assets/ImageAssets";
 export { SkillType, EffectType } from "./models/character/skill/Skill";
+export { HoyoType } from "./models/enka/StarRailCharacterBuild";
 export { LightConeLevel } from "./models/light_cone/LightConeExpType";
 export { RelicLevel } from "./models/relic/RelicExpType";
 export { RelicMainStatData } from "./models/relic/RelicMainStatGroup";

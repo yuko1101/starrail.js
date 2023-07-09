@@ -47,7 +47,7 @@ class User {
     /**  */
     readonly simulatedUniverse: number;
     /**  */
-    readonly supportCharacter: Character;
+    readonly supportCharacter: Character | null;
     /** Characters on the user's display */
     readonly starfaringCompanions: Character[];
 
@@ -87,7 +87,7 @@ class User {
         this.simulatedUniverse = recordInfo.getAsNumberWithDefault(0, "maxRogueChallengeScore");
 
 
-        this.supportCharacter = new Character(detailInfo.getAsJsonObject("assistAvatarDetail"), this.client);
+        this.supportCharacter = detailInfo.has("assistAvatarDetail") ? new Character(detailInfo.getAsJsonObject("assistAvatarDetail"), this.client) : null;
         this.starfaringCompanions = detailInfo.getAsJsonArrayWithDefault([], "avatarDetailList").map(c => new Character(c as JsonObject, this.client));
 
     }

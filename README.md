@@ -157,7 +157,7 @@ const { StarRail } = require("starrail.js");
 const client = new StarRail();
 
 const characters = client.getAllCharacters();
-// print character names with language "en"
+// print character names in language "en"
 console.log(characters.map(c => c.name.get("en")));
 ```
 
@@ -168,7 +168,7 @@ const { StarRail } = require("starrail.js");
 const client = new StarRail();
 
 const lightCones = client.getAllLightCones();
-// print light cone names with language "jp"
+// print light cone names in language "jp"
 console.log(lightCones.map(w => w.name.get("jp")));
 ```
 

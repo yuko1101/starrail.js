@@ -134,12 +134,11 @@ class CachedAssetsManager {
         }
     }
 
-    /** Obtains a text map for a specific language, and if `store` is true, stores the data as a json file. */
-    async fetchLanguageData(lang: LanguageCode, store = true): Promise<{ [key: string]: string }> {
+    /** Obtains a text map for a specific language. */
+    async fetchLanguageData(lang: LanguageCode): Promise<{ [key: string]: string }> {
         await this.cacheDirectorySetup();
         const url = `${contentBaseUrl}/TextMap/TextMap${(lang === "chs" ? "cn" : lang).toUpperCase()}.json`;
         const json = (await fetchJSON(url, this.client)).data;
-        if (store) fs.writeFileSync(path.resolve(this.cacheDirectoryPath, "langs", `${lang}.json`), JSON.stringify(json));
         return json;
     }
 
@@ -217,7 +216,7 @@ class CachedAssetsManager {
             for (const lang of languages) {
                 langPromises.push(
                     (async () => {
-                        const data = await this.fetchLanguageData(lang, false);
+                        const data = await this.fetchLanguageData(lang);
                         if (this.client.options.showFetchCacheLog) {
                             console.info(`Downloaded langs/${lang}.json`);
                         }

@@ -37,7 +37,7 @@ class ImageAssets {
 
         this.imageBaseUrl = [...client.options.imageBaseUrls].sort((a, b) => b.priority - a.priority).find(url => url.regexList.some(regex => regex.test(this.path))) ?? null;
 
-        this.url = (this.path === "" || this.imageBaseUrl == null) ? "" : `${this.imageBaseUrl.url}/${convertPathForImageBaseUrl(this.imageBaseUrl, this.path)}.png`;
+        this.url = (this.path === "" || this.imageBaseUrl == null) ? "" : `${this.imageBaseUrl.url}/${convertPathForImageBaseUrl(this.imageBaseUrl, this.path)}`;
 
         this.isAvailable = this.url !== null && this.url !== undefined && this.url !== "";
     }

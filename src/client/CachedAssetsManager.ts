@@ -137,7 +137,7 @@ class CachedAssetsManager {
     /** Obtains a text map for a specific language. */
     async fetchLanguageData(lang: LanguageCode): Promise<{ [key: string]: string }> {
         await this.cacheDirectorySetup();
-        const url = `${contentBaseUrl}/TextMap/TextMap${(lang === "chs" ? "cn" : lang).toUpperCase()}.json`;
+        const url = `${contentBaseUrl}/TextMap/TextMap${lang.toUpperCase()}.json`;
         const json = (await fetchJSON(url, this.client)).data;
         return json;
     }

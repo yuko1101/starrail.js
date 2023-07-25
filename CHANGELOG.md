@@ -1,3 +1,8 @@
+# 0.7.2
+- Fixed TextMapCN.json cannot be fetched after Honkai: Star Rail v1.2.
+# 0.7.1
+- Added enka.network cdn to default cdns.
+- Fixed ImageAssets#url was incorrect.
 # 0.7.0
 - Added integration with [enka-network-api](https://github.com/yuko1101/enka-network-api).
     - Supported StarRail EnkaUser.

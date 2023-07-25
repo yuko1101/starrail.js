@@ -12,7 +12,14 @@ import UserNotFoundError from "../errors/UserNotFoundError";
 import MihomoError from "../errors/MihomoError";
 import StarRailCharacterBuild from "../models/enka/StarRailCharacterBuild";
 
-const defaultImageBaseUrls: ImageBaseUrl[] = [];
+const defaultImageBaseUrls: ImageBaseUrl[] = [
+    {
+        filePath: "UPPER_CAMEL_CASE",
+        priority: 5,
+        regexList: [/.*/],
+        url: "https://enka.network/ui/hsr",
+    },
+];
 
 /** @typedef */
 export interface ClientOptions {

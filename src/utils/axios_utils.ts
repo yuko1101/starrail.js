@@ -1,8 +1,6 @@
-import { Axios, AxiosResponse, AxiosRequestConfig } from "axios";
+import axios, { AxiosResponse, AxiosRequestConfig } from "axios";
 import StarRail from "../client/StarRail";
 import { JsonObject } from "config_file.js";
-
-const axios = new Axios({});
 
 /**
  * @param url

@@ -1,3 +1,5 @@
+# 0.7.3
+- Added ClientOptions#githubToken for less rate-limited requests to github rest api.
 # 0.7.2
 - Fixed TextMapCN.json cannot be fetched after Honkai: Star Rail v1.2.
 # 0.7.1

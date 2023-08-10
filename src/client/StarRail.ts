@@ -29,6 +29,7 @@ export interface ClientOptions {
     timeout: number,
     defaultLanguage: LanguageCode,
     imageBaseUrls: ImageBaseUrl[],
+    githubToken: string | null,
 }
 
 /**
@@ -52,6 +53,7 @@ class StarRail {
             timeout: 3000,
             defaultLanguage: "en",
             imageBaseUrls: [...defaultImageBaseUrls],
+            githubToken: null,
         }, options) as unknown as ClientOptions;
 
         this.cachedAssetsManager = new CachedAssetsManager(this);

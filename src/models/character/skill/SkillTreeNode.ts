@@ -19,6 +19,8 @@ class SkillTreeNode {
     readonly client: StarRail;
 
     /**  */
+    readonly characterId: number;
+    /**  */
     readonly maxLevel: number;
     /**  */
     readonly isUnlockedByDefault: boolean;
@@ -48,6 +50,8 @@ class SkillTreeNode {
 
         const json = new JsonReader(this._nodesData[nodeIndexToUse]);
 
+        this.characterId = json.getAsNumber("AvatarID");
+
         this.maxLevel = json.getAsNumber("MaxLevel");
         this.isUnlockedByDefault = json.getAsBooleanWithDefault(false, "DefaultUnlock");
 
@@ -65,7 +69,7 @@ class SkillTreeNode {
      * @param level
      */
     getSkillTreeNodeByLevel(level: SkillLevel): LeveledSkillTreeNode {
-        return new LeveledSkillTreeNode(this._nodesData[level.value - 1], level, this.client);
+        return new LeveledSkillTreeNode(this._nodesData[level.base - 1], level, this.client);
     }
 
     /**
@@ -87,8 +91,6 @@ export class LeveledSkillTreeNode extends SkillTreeNode {
     /**  */
     readonly level: SkillLevel;
     /**  */
-    readonly characterId: number;
-    /**  */
     readonly stats: StatPropertyValue[];
     /**  */
     readonly paramList: number[];
@@ -102,15 +104,15 @@ export class LeveledSkillTreeNode extends SkillTreeNode {
      * @param client
      */
     constructor(data: JsonObject, level: SkillLevel, client: StarRail) {
+        // skill tree node data with base level
         const json = new JsonReader(data);
         const id = json.getAsNumber("PointID");
-        super(id, client, level.value - 1);
-
+        super(id, client, level.base - 1);
         this._data = data;
 
         this.level = level;
-        this.characterId = json.getAsNumber("AvatarID");
 
+        // since the skill that can have extra level does not have any stats, we can safely assume that we can use the base level skill to get the stats
         this.stats = json.get("StatusAddList").mapArray((_, s) => new StatPropertyValue(s.getAsString("PropertyType") as StatPropertyType, s.getAsNumber("Value", "Value"), this.client));
 
         this.paramList = this.paramList = json.get("ParamList").mapArray((_, v) => v.getAsNumber("Value"));

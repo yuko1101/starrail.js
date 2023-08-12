@@ -1,3 +1,5 @@
+# 0.7.4
+- Fixed a problem with parsing skills beyond their max level due to the addition of extra levels.
 # 0.7.3
 - Added ClientOptions#githubToken for less rate-limited requests to github rest api.
 # 0.7.2

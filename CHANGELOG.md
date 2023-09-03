@@ -1,3 +1,5 @@
+# 0.7.5
+- Updated npm scripts to make it easier to move cache directory.
 # 0.7.4
 - Fixed a problem with parsing skills beyond their max level due to the addition of extra levels.
 # 0.7.3

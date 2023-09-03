@@ -79,6 +79,7 @@ web_modules/
 
 # Caches
 /cache/
+/installed
 
 # dotenv environment variable files
 .env

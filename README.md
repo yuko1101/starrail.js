@@ -42,18 +42,18 @@ A Node.js library for Star Rail.
 
 Install starrail.js including Star Rail cache data.
 ```sh-session
-npm install starrail.js
+npm install starrail.js@latest
 ```
 <details>
     <summary>Install using ghproxy.com</summary>
     
-    npm install starrail.js --sr-ghproxy=true
+    npm install starrail.js@latest --sr-ghproxy=true
 </details>
 <br/>
 
 If you have already moved the cache to another folder, you can also install without downloading the cache.
 ```sh-session
-npm install starrail.js --sr-nocache=true
+npm install starrail.js@latest --sr-nocache=true
 ```
 
 ## About Star Rail Cache Data
@@ -91,7 +91,7 @@ client.cachedAssetsManager.fetchAllContents(); // returns promise
 
 Also, you can activate auto cache updater.
 
-When using the auto-cache updater, we recommend moving the cache directory directly under your project folder. (**DO NOT delete node_modules/starrail.js/cache when moving directory, just delete all folders/files in it.**)
+When using the auto-cache updater, we recommend moving the cache directory directly under your project folder.
 
 ```js
 const { StarRail } = require("starrail.js");

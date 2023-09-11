@@ -1,5 +1,7 @@
-# 0.7.5
+# 0.7.6
 - Added ClientOptions#apiBaseUrl for custom api base url such as `https://enka.network/api/uid`.
+# 0.7.5
+- Updated npm scripts to make it easier to move cache directory.
 # 0.7.4
 - Fixed a problem with parsing skills beyond their max level due to the addition of extra levels.
 # 0.7.3

@@ -30,6 +30,8 @@ export interface ClientOptions {
     defaultLanguage: LanguageCode,
     imageBaseUrls: ImageBaseUrl[],
     githubToken: string | null,
+    /** This will be used for fetching user data by uid. */
+    apiBaseUrl: string,
 }
 
 /**
@@ -54,6 +56,7 @@ class StarRail {
             defaultLanguage: "en",
             imageBaseUrls: [...defaultImageBaseUrls],
             githubToken: null,
+            apiBaseUrl: "https://api.mihomo.me/sr_info",
         }, options) as unknown as ClientOptions;
 
         this.cachedAssetsManager = new CachedAssetsManager(this);
@@ -67,7 +70,7 @@ class StarRail {
     async fetchUser(uid: number | string): Promise<User> {
         if (isNaN(Number(uid))) throw new Error("Parameter `uid` must be a number or a string number.");
 
-        const baseUrl = "https://api.mihomo.me/sr_info";
+        const baseUrl = this.options.apiBaseUrl;
         const url = `${baseUrl}/${uid}`;
 
         const response = await fetchJSON(url, this, true);

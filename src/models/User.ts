@@ -48,8 +48,10 @@ class User {
     readonly simulatedUniverse: number;
     /**  */
     readonly supportCharacter: Character | null;
-    /** Characters on the user's display */
+    /** Characters on the user's display. The same character as [supportCharacter](#supportCharacter) is omitted if you use Enka.Network API. */
     readonly starfaringCompanions: Character[];
+    /**  */
+    readonly enkaUserHash: string | null;
 
     readonly _data: JsonObject;
 
@@ -87,9 +89,30 @@ class User {
         this.simulatedUniverse = recordInfo.getAsNumberWithDefault(0, "maxRogueChallengeScore");
 
 
-        this.supportCharacter = detailInfo.has("assistAvatarDetail") ? new Character(detailInfo.getAsJsonObject("assistAvatarDetail"), this.client) : null;
         this.starfaringCompanions = detailInfo.getAsJsonArrayWithDefault([], "avatarDetailList").map(c => new Character(c as JsonObject, this.client));
+        this.supportCharacter = (() => {
+            if (detailInfo.has("assistAvatarDetail")) return new Character(detailInfo.getAsJsonObject("assistAvatarDetail"), this.client);
+            const fromStarfaringCompanions = this.starfaringCompanions.find(c => c._data["_assist"]);
+            if (fromStarfaringCompanions) {
+                this.starfaringCompanions.splice(this.starfaringCompanions.indexOf(fromStarfaringCompanions), 1);
+                return fromStarfaringCompanions;
+            }
 
+            return null;
+        })();
+
+        this.enkaUserHash = json.getAsStringWithDefault(null, "owner", "hash");
+
+    }
+
+    /**  */
+    getCharacters(): Character[] {
+        const characters = [...this.starfaringCompanions];
+        const supportCharacter = this.supportCharacter;
+        if (supportCharacter && characters.some(c => c.characterData.id === supportCharacter.characterData.id)) {
+            characters.push(supportCharacter);
+        }
+        return characters;
     }
 }
 

@@ -1,10 +1,10 @@
-import MihomoError from "./MihomoError";
+import APIError from "./APIError";
 
 /**
  * @en RequestError
- * @extends {MihomoError}
+ * @extends {APIError}
  */
-class RequestError extends MihomoError {
+class RequestError extends APIError {
     /** HTTP response status code */
     readonly statusCode: number;
     /** The message of the status code */

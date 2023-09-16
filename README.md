@@ -28,7 +28,7 @@
 
 ## About
 
-A Node.js library for Star Rail.
+A Node.js Enka.Network API wrapper for Honkai: Star Rail.
 
 ### Features
 - User Data and Character Stats by UID (with MiHoMo API).

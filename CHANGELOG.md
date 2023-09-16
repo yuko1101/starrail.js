@@ -1,3 +1,7 @@
+# 0.8.0
+- Fully supports Enka.Network API.
+- Added User#getCharacters().
+- Added User#enkaUserHash.
 # 0.7.6
 - Added ClientOptions#apiBaseUrl for custom api base url such as `https://enka.network/api/hsr/uid`.
 # 0.7.5

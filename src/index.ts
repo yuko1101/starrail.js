@@ -3,7 +3,7 @@ import ObjectKeysManager from "./client/ObjectKeysManager";
 import StarRail from "./client/StarRail";
 import AssetsNotFoundError from "./errors/AssetsNotFoundError";
 import InvalidUidFormatError from "./errors/InvalidUidFormatError";
-import MihomoError from "./errors/MihomoError";
+import APIError from "./errors/APIError";
 import RequestError from "./errors/RequestError";
 import UserNotFoundError from "./errors/UserNotFoundError";
 import DynamicTextAssets from "./models/assets/DynamicTextAssets";
@@ -42,7 +42,7 @@ export {
     StarRail,
     AssetsNotFoundError,
     InvalidUidFormatError,
-    MihomoError,
+    APIError as MihomoError,
     RequestError,
     UserNotFoundError,
     DynamicTextAssets,

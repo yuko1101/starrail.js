@@ -2,7 +2,7 @@
  * @en MihomoError
  * @extends {Error}
  */
-class MihomoError extends Error {
+class APIError extends Error {
     /**
      * @param message
      */
@@ -11,4 +11,4 @@ class MihomoError extends Error {
     }
 }
 
-export default MihomoError;
+export default APIError;

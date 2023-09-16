@@ -1,10 +1,10 @@
-import MihomoError from "./MihomoError";
+import APIError from "./APIError";
 
 /**
  * @en UserNotFoundError
- * @extends {MihomoError}
+ * @extends {APIError}
  */
-class UserNotFoundError extends MihomoError {
+class UserNotFoundError extends APIError {
     /**  */
     readonly uid: number;
 

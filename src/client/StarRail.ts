@@ -9,7 +9,7 @@ import RequestError from "../errors/RequestError";
 import User from "../models/User";
 import InvalidUidFormatError from "../errors/InvalidUidFormatError";
 import UserNotFoundError from "../errors/UserNotFoundError";
-import MihomoError from "../errors/MihomoError";
+import APIError from "../errors/APIError";
 import StarRailCharacterBuild from "../models/enka/StarRailCharacterBuild";
 
 const defaultImageBaseUrls: ImageBaseUrl[] = [
@@ -31,7 +31,7 @@ export interface ClientOptions {
     imageBaseUrls: ImageBaseUrl[],
     githubToken: string | null,
     /** This will be used for fetching user data by uid. */
-    apiBaseUrl: string,
+    apiBaseUrl: "https://enka.network/api/hsr/uid" | "https://api.mihomo.me/sr_info" | string,
 }
 
 /**
@@ -56,7 +56,7 @@ class StarRail {
             defaultLanguage: "en",
             imageBaseUrls: [...defaultImageBaseUrls],
             githubToken: null,
-            apiBaseUrl: "https://api.mihomo.me/sr_info",
+            apiBaseUrl: "https://enka.network/api/hsr/uid",
         }, options) as unknown as ClientOptions;
 
         this.cachedAssetsManager = new CachedAssetsManager(this);
@@ -65,7 +65,7 @@ class StarRail {
 
     /**
      * @param uid
-     * @throws {MihomoError}
+     * @throws {APIError}
      */
     async fetchUser(uid: number | string): Promise<User> {
         if (isNaN(Number(uid))) throw new Error("Parameter `uid` must be a number or a string number.");
@@ -87,7 +87,7 @@ class StarRail {
                 case 3612:
                     throw new UserNotFoundError(Number(uid));
                 default:
-                    throw new MihomoError(`Unknown error occurred. ErrorCode: ${response.data["retcode"]}`);
+                    throw new APIError(`Unknown error occurred. ErrorCode: ${response.data["retcode"]}`);
             }
         }
 

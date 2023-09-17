@@ -11,7 +11,7 @@ const config = {
   favicon: 'img/fire.ico',
 
   // Set the production url of your site here
-  url: 'https://your-docusaurus-test-site.com',
+  url: 'https://starrail.vercel.app',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
   baseUrl: process.env.npm_config_base_url ?? '/',
@@ -32,29 +32,29 @@ const config = {
     locales: ['en'],
   },
 
-  presets: [ 
-    [ 
-      'classic', 
-      /** @type {import('@docusaurus/preset-classic').Options} */ 
-      ({ 
-        docs: { 
-          sidebarPath: require.resolve('./sidebars.js'), 
-          remarkPlugins: [require("remark-breaks")], 
-        }, 
-        theme: { 
-          customCss: require.resolve('./src/css/custom.css'), 
-        }, 
-      }), 
-    ], 
+  presets: [
+    [
+      'classic',
+      /** @type {import('@docusaurus/preset-classic').Options} */
+      ({
+        docs: {
+          sidebarPath: require.resolve('./sidebars.js'),
+          remarkPlugins: [require("remark-breaks")],
+        },
+        theme: {
+          customCss: require.resolve('./src/css/custom.css'),
+        },
+      }),
+    ],
   ],
 
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
-      algolia: { 
-        appId: "5OZ5AOCZ1S", 
-        apiKey: "1005cc2a90f0c5835fff1ce2ae2f579c", 
-        indexName: "starrail", 
+      algolia: {
+        appId: "5OZ5AOCZ1S",
+        apiKey: "1005cc2a90f0c5835fff1ce2ae2f579c",
+        indexName: "starrail",
       },
       // Replace with your project's social card
       image: 'img/starrail-social-card.png',
@@ -113,7 +113,7 @@ const config = {
                 href: 'https://github.com/yuko1101/starrail.js/issues',
               },
               {
-                label: 'Pull requests',
+                label: 'Pull Requests',
                 href: 'https://github.com/yuko1101/starrail.js/pulls',
               },
             ],
@@ -126,7 +126,7 @@ const config = {
                 href: 'https://www.npmjs.com/package/starrail.js'
               },
               {
-                label: 'EnkaNetwork',
+                label: 'Enka.Network',
                 href: 'https://enka.network'
               }
             ],

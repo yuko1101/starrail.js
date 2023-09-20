@@ -31,7 +31,7 @@ export default function Home() {
   return (
     <Layout
       title={siteConfig.title}
-      description="A Node.js library for Star Rail">
+      description={siteConfig.tagline}>
       <HomepageHeader />
       <main>
         <HomepageFeatures />

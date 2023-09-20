@@ -7,7 +7,7 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'StarRail.js',
-  tagline: 'A Node.js library for Star Rail',
+  tagline: 'A Node.js Enka.Network API wrapper for Honkai: Star Rail',
   favicon: 'img/fire.ico',
 
   // Set the production url of your site here

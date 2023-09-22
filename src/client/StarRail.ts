@@ -5,12 +5,8 @@ import { ImageBaseUrl } from "../models/assets/ImageAssets";
 import LightConeData from "../models/light_cone/LightConeData";
 import RelicData from "../models/relic/RelicData";
 import { fetchJSON } from "../utils/axios_utils";
-import RequestError from "../errors/RequestError";
 import StarRailUser from "../models/StarRailUser";
-import InvalidUidFormatError from "../errors/InvalidUidFormatError";
-import UserNotFoundError from "../errors/UserNotFoundError";
-import APIError from "../errors/APIError";
-import { EnkaLibrary, EnkaSystem } from "enka-system";
+import { EnkaLibrary, EnkaSystem, InvalidUidFormatError, EnkaNetworkError, UserNotFoundError } from "enka-system";
 import StarRailCharacterBuild from "../models/enka/StarRailCharacterBuild";
 import { Overwrite } from "../utils/ts_utils";
 
@@ -94,7 +90,7 @@ class StarRail implements EnkaLibrary<StarRailUser, StarRailCharacterBuild> {
 
     /**
      * @param uid
-     * @throws {APIError}
+     * @throws {EnkaNetworkError}
      */
     async fetchUser(uid: number | string): Promise<StarRailUser> {
         if (isNaN(Number(uid))) throw new Error("Parameter `uid` must be a number or a string number.");
@@ -105,18 +101,25 @@ class StarRail implements EnkaLibrary<StarRailUser, StarRailCharacterBuild> {
         const response = await fetchJSON(url, this, true);
 
         if (response.status !== 200) {
-            switch (response.data["detail"]) {
-                case "Invalid uid":
+            switch (response.status) {
+                case 400:
                     throw new InvalidUidFormatError(Number(uid), response.status, response.statusText);
+                case 424:
+                    throw new EnkaNetworkError("Request to enka.network failed because it is under maintenance.", response.status, response.statusText);
+                case 429:
+                    throw new EnkaNetworkError("Rate Limit reached. You reached enka.network's rate limit. Please try again in a few minutes.", response.status, response.statusText);
+                case 404:
+                    throw new UserNotFoundError(`User with uid ${uid} was not found. Please check whether the uid is correct. If you find the uid is correct, it may be a internal server error.`, response.status, response.statusText);
                 default:
-                    throw new RequestError(`Request failed with unknown status code ${response.status} - ${response.statusText}\nError Detail: ${response.data["detail"]}\nRequest url: ${url}`, response.status, response.statusText);
+                    throw new EnkaNetworkError(`Request failed with unknown status code ${response.status} - ${response.statusText}\nError Detail: ${response.data["detail"]}\nRequest url: ${url}`, response.status, response.statusText);
             }
         } else if (response.data["retcode"]) {
+            // only for mihomo api
             switch (response.data["retcode"]) {
                 case 3612:
-                    throw new UserNotFoundError(Number(uid));
+                    throw new UserNotFoundError(`User with uid ${uid} was not found. Please check whether the uid is correct. If you find the uid is correct, it may be a internal server error.`, response.status, response.statusText);
                 default:
-                    throw new APIError(`Unknown error occurred. ErrorCode: ${response.data["retcode"]}`);
+                    throw new Error(`Unknown server error occurred. ErrorCode(retcode): ${response.data["retcode"]}`);
             }
         }
 

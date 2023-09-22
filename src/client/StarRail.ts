@@ -98,6 +98,7 @@ class StarRail implements EnkaLibrary<StarRailUser, StarRailCharacterBuild> {
         const baseUrl = this.options.apiBaseUrl;
         const url = `${baseUrl}/${uid}`;
 
+        // TODO: data caching
         const response = await fetchJSON(url, this, true);
 
         if (response.status !== 200) {

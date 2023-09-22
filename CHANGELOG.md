@@ -1,4 +1,5 @@
 # 1.0.0
+**This version includes Breaking Changes**
 - Fully supports Enka.Network API.
 - Added User#getCharacters().
 - Added User#enkaUserHash.

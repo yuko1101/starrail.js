@@ -31,7 +31,7 @@
 A Node.js Enka.Network API wrapper for Honkai: Star Rail.
 
 ### Features
-- User Data and Character Stats by UID (with MiHoMo API).
+- User Data and Character Stats by UID with Enka.Network API (or with MiHoMo API).
 - All Characters and All Light Cones Data.
 - Cache Updater for the new update of Honkai: Star Rail. (Update characters and light cones immediately.)
 

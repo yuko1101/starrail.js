@@ -1,21 +1,12 @@
 import { JsonObject, JsonReader } from "config_file.js";
+import { CharacterBuild, HoyoType } from "enka-system";
 import StarRail from "../../client/StarRail";
 import Character from "../character/Character";
 
 /**
- * @typedef
- * @example
- * |hoyoType|Game Name|
- * |---|---|
- * |0|Genshin Impact|
- * |1|Honkai: Star Rail|
+ * @extends {CharacterBuild}
  */
-export type HoyoType = number;
-
-/**
- * @en StarRailCharacterBuild
- */
-class StarRailCharacterBuild {
+class StarRailCharacterBuild extends CharacterBuild {
     /**  */
     readonly client: StarRail;
     /**  */
@@ -47,6 +38,7 @@ class StarRailCharacterBuild {
      * @param hash
      */
     constructor(data: JsonObject, client: StarRail, username: string, hash: string) {
+        super();
 
         this._data = data;
 
@@ -68,7 +60,7 @@ class StarRailCharacterBuild {
 
         this.character = new Character(json.getAsJsonObject("avatar_data"), client);
 
-        this.hoyoType = json.getAsNumber("hoyo_type");
+        this.hoyoType = json.getAsNumber("hoyo_type") as HoyoType;
 
         this.url = `https://enka.network/u/${this.enkaUserInfo.username}/${this.enkaUserInfo.hash}/${this.character.characterData.id}/${this.id}`;
     }

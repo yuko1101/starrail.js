@@ -1,4 +1,4 @@
-import { JsonObject, JsonReader, bindOptions } from "config_file.js";
+import { JsonReader, JsonObject, bindOptions, renameKeys } from "config_file.js";
 import CachedAssetsManager, { LanguageCode } from "./CachedAssetsManager";
 import CharacterData from "../models/character/CharacterData";
 import { ImageBaseUrl } from "../models/assets/ImageAssets";
@@ -6,11 +6,13 @@ import LightConeData from "../models/light_cone/LightConeData";
 import RelicData from "../models/relic/RelicData";
 import { fetchJSON } from "../utils/axios_utils";
 import RequestError from "../errors/RequestError";
-import User from "../models/User";
+import StarRailUser from "../models/StarRailUser";
 import InvalidUidFormatError from "../errors/InvalidUidFormatError";
 import UserNotFoundError from "../errors/UserNotFoundError";
 import APIError from "../errors/APIError";
+import { EnkaLibrary, EnkaSystem } from "enka-system";
 import StarRailCharacterBuild from "../models/enka/StarRailCharacterBuild";
+import { Overwrite } from "../utils/ts_utils";
 
 const defaultImageBaseUrls: ImageBaseUrl[] = [
     {
@@ -23,21 +25,45 @@ const defaultImageBaseUrls: ImageBaseUrl[] = [
 
 /** @typedef */
 export interface ClientOptions {
-    userAgent: string,
-    cacheDirectory: string | null,
-    showFetchCacheLog: boolean,
-    timeout: number,
-    defaultLanguage: LanguageCode,
-    imageBaseUrls: ImageBaseUrl[],
-    githubToken: string | null,
+    userAgent: string;
+    cacheDirectory: string | null;
+    showFetchCacheLog: boolean;
+    timeout: number;
+    defaultLanguage: LanguageCode;
+    imageBaseUrls: ImageBaseUrl[];
+    githubToken: string | null;
     /** This will be used for fetching user data by uid. */
-    apiBaseUrl: "https://enka.network/api/hsr/uid" | "https://api.mihomo.me/sr_info" | string,
+    apiBaseUrl: "https://enka.network/api/hsr/uid" | "https://api.mihomo.me/sr_info" | string;
+    readonly enkaSystem: EnkaSystem;
 }
+
+/** @constant */
+export const defaultClientOption: Overwrite<ClientOptions, { "enkaSystem": EnkaSystem | null }> = {
+    userAgent: "Mozilla/5.0",
+    cacheDirectory: null,
+    showFetchCacheLog: true,
+    timeout: 3000,
+    defaultLanguage: "en",
+    imageBaseUrls: [...defaultImageBaseUrls],
+    githubToken: null,
+    apiBaseUrl: "https://enka.network/api/hsr/uid",
+    enkaSystem: null,
+};
 
 /**
  * @en StarRail
  */
-class StarRail {
+class StarRail implements EnkaLibrary<StarRailUser, StarRailCharacterBuild> {
+    readonly hoyoType: 1;
+    getUser(data: JsonObject): StarRailUser {
+        const fixedData = renameKeys(data, { "player_info": "detailInfo" });
+        return new StarRailUser(fixedData, this);
+    }
+    getCharacterBuild(data: JsonObject, username: string, hash: string): StarRailCharacterBuild {
+        return new StarRailCharacterBuild(data, this, username, hash);
+    }
+
+
     /** The options the client was instantiated with */
     readonly options: ClientOptions;
 
@@ -48,16 +74,17 @@ class StarRail {
      * @param options
      */
     constructor(options: Partial<ClientOptions>) {
-        this.options = bindOptions({
-            userAgent: "Mozilla/5.0",
-            cacheDirectory: null,
-            showFetchCacheLog: true,
-            timeout: 3000,
-            defaultLanguage: "en",
-            imageBaseUrls: [...defaultImageBaseUrls],
-            githubToken: null,
-            apiBaseUrl: "https://enka.network/api/hsr/uid",
-        }, options) as unknown as ClientOptions;
+        this.hoyoType = 1;
+
+        const mergedOptions = bindOptions(defaultClientOption, options);
+        if (!mergedOptions.enkaSystem) {
+            if (EnkaSystem.instance.getLibrary(this.hoyoType)) {
+                mergedOptions.enkaSystem = new EnkaSystem();
+            } else {
+                mergedOptions.enkaSystem = EnkaSystem.instance;
+            }
+        }
+        this.options = mergedOptions as unknown as ClientOptions;
 
         this.cachedAssetsManager = new CachedAssetsManager(this);
     }
@@ -67,7 +94,7 @@ class StarRail {
      * @param uid
      * @throws {APIError}
      */
-    async fetchUser(uid: number | string): Promise<User> {
+    async fetchUser(uid: number | string): Promise<StarRailUser> {
         if (isNaN(Number(uid))) throw new Error("Parameter `uid` must be a number or a string number.");
 
         const baseUrl = this.options.apiBaseUrl;
@@ -91,7 +118,7 @@ class StarRail {
             }
         }
 
-        return new User({ ...response.data }, this);
+        return new StarRailUser({ ...response.data }, this);
     }
 
     /**
@@ -115,15 +142,6 @@ class StarRail {
      */
     getAllRelics(): RelicData[] {
         return new JsonReader(this.cachedAssetsManager.getStarRailCacheData("RelicConfig")).mapObject((_, relic) => new RelicData(relic.getAsNumber("ID"), this));
-    }
-
-
-    _getStarRailCharacterBuild(data: JsonObject, username: string, hash: string): StarRailCharacterBuild {
-        return new StarRailCharacterBuild(data, this, username, hash);
-    }
-
-    _getUser(data: JsonObject): User {
-        return new User(data, this);
     }
 }
 

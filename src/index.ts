@@ -32,7 +32,7 @@ import RelicType from "./models/relic/RelicType";
 import CombatType from "./models/CombatType";
 import Path from "./models/Path";
 import StatProperty, { StatPropertyValue } from "./models/StatProperty";
-import User from "./models/User";
+import StarRailUser from "./models/StarRailUser";
 import UserIcon from "./models/UserIcon";
 
 // classes
@@ -42,7 +42,7 @@ export {
     StarRail,
     AssetsNotFoundError,
     InvalidUidFormatError,
-    APIError as MihomoError,
+    APIError,
     RequestError,
     UserNotFoundError,
     DynamicTextAssets,
@@ -78,7 +78,7 @@ export {
     Path,
     StatProperty,
     StatPropertyValue,
-    User,
+    StarRailUser,
     UserIcon,
 };
 
@@ -88,7 +88,6 @@ export { ClientOptions } from "./client/StarRail";
 export { DynamicData } from "./models/assets/DynamicTextAssets";
 export { ImageBaseUrl } from "./models/assets/ImageAssets";
 export { SkillType, EffectType } from "./models/character/skill/Skill";
-export { HoyoType } from "./models/enka/StarRailCharacterBuild";
 export { LightConeLevel } from "./models/light_cone/LightConeExpType";
 export { RelicLevel } from "./models/relic/RelicExpType";
 export { RelicMainStatData } from "./models/relic/RelicMainStatGroup";
@@ -97,7 +96,7 @@ export { RelicTypeId } from "./models/relic/RelicType";
 export { CombatTypeId } from "./models/CombatType";
 export { PathId } from "./models/Path";
 export { StatPropertyType, OtherStatPropertyType } from "./models/StatProperty";
-export { Birthday } from "./models/User";
+export { Birthday } from "./models/StarRailUser";
 
 // functions
 export { sumStats } from "./models/character/CharacterStats";

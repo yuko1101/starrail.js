@@ -1,4 +1,5 @@
 import { JsonObject, JsonReader } from "config_file.js";
+import { User } from "enka-system";
 import StarRail from "../client/StarRail";
 import Character from "./character/Character";
 import UserIcon from "./UserIcon";
@@ -13,10 +14,8 @@ export interface Birthday {
 /** @typedef */
 export type Platform = "PC" | "ANDROID" | "IOS";
 
-/**
- * @en User
- */
-class User {
+/** @extends {User} */
+class StarRailUser extends User {
     /**  */
     readonly client: StarRail;
 
@@ -53,18 +52,16 @@ class User {
     /**  */
     readonly enkaUserHash: string | null;
 
-    readonly _data: JsonObject;
-
     /**
      * @param data
      * @param client
      */
     constructor(data: JsonObject, client: StarRail) {
+        const json = new JsonReader(data);
+        super(json);
+
         this.client = client;
 
-        this._data = data;
-
-        const json = new JsonReader(this._data);
         const detailInfo = json.get("detailInfo");
 
         this.uid = detailInfo.getAsNumber("uid");
@@ -116,4 +113,4 @@ class User {
     }
 }
 
-export default User;
+export default StarRailUser;

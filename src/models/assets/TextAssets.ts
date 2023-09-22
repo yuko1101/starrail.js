@@ -11,7 +11,7 @@ class TextAssets {
     /**  */
     readonly client: StarRail;
 
-    readonly _test: string | null;
+    // readonly _test: string | null;
 
     /**
      * @param id
@@ -22,7 +22,7 @@ class TextAssets {
 
         this.client = client;
 
-        this._test = this.getNullable();
+        // this._test = this.getNullable();
     }
 
     /**

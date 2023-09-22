@@ -6,7 +6,7 @@ import LightConeData from "../models/light_cone/LightConeData";
 import RelicData from "../models/relic/RelicData";
 import { fetchJSON } from "../utils/axios_utils";
 import StarRailUser from "../models/StarRailUser";
-import { EnkaLibrary, EnkaSystem, InvalidUidFormatError, EnkaNetworkError, UserNotFoundError } from "enka-system";
+import { EnkaLibrary, EnkaSystem, InvalidUidFormatError, EnkaNetworkError, UserNotFoundError, EnkaGameAccount } from "enka-system";
 import StarRailCharacterBuild from "../models/enka/StarRailCharacterBuild";
 import { Overwrite } from "../utils/ts_utils";
 
@@ -124,6 +124,32 @@ class StarRail implements EnkaLibrary<StarRailUser, StarRailCharacterBuild> {
         }
 
         return new StarRailUser({ ...response.data }, this);
+    }
+
+    /**
+     * @param username enka.network username, not in-game nickname
+     * @returns the starrail accounts added to the Enka.Network account
+     */
+    async fetchEnkaStarRailAccounts(username: string): Promise<EnkaGameAccount<StarRail>[]> {
+        return await this.options.enkaSystem.fetchEnkaGameAccounts(username, [1]) as EnkaGameAccount<StarRail>[];
+    }
+
+    /**
+     * @param username enka.network username, not in-game nickname
+     * @param hash EnkaGameAccount hash
+     * @returns the starrail account with provided hash
+     */
+    async fetchEnkaStarRailAccount(username: string, hash: string): Promise<EnkaGameAccount<StarRail>> {
+        return await this.options.enkaSystem.fetchEnkaGameAccount(username, hash);
+    }
+
+    /**
+     * @param username enka.network username, not in-game nickname
+     * @param hash EnkaGameAccount hash
+     * @returns the starrail character builds including saved builds in Enka.Network account
+     */
+    async fetchEnkaStarRailBuilds(username: string, hash: string): Promise<{ [characterId: string]: StarRailCharacterBuild[] }> {
+        return await this.options.enkaSystem.fetchEnkaCharacterBuilds<StarRail>(username, hash);
     }
 
     /**

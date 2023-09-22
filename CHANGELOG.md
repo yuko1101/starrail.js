@@ -1,10 +1,11 @@
 # 1.0.0
 **This version includes Breaking Changes**
 - Fully supports Enka.Network API.
+- Renamed User to StarRailUser.
 - Added User#getCharacters().
 - Added User#enkaUserHash.
 - Added ClientOptions#enkaSystem.
-- Renamed User to StarRailUser.
+- Added StarRail#fetchEnkaStarRailAccounts(), StarRail#fetchEnkaStarRailAccount(), and StarRail#fetchEnkaStarRailBuilds().
 # 0.7.6
 - Added ClientOptions#apiBaseUrl for custom api base url such as `https://enka.network/api/hsr/uid`.
 # 0.7.5

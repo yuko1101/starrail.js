@@ -87,6 +87,8 @@ class StarRail implements EnkaLibrary<StarRailUser, StarRailCharacterBuild> {
         this.options = mergedOptions as unknown as ClientOptions;
 
         this.cachedAssetsManager = new CachedAssetsManager(this);
+
+        this.options.enkaSystem.registerLibrary(this);
     }
 
 

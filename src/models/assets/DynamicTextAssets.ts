@@ -20,7 +20,7 @@ class DynamicTextAssets extends TextAssets {
     /**  */
     readonly dynamicData: DynamicData;
 
-    readonly _dynamicTest: string | null;
+    // readonly _dynamicTest: string | null;
 
     /**
      * @param id
@@ -32,7 +32,7 @@ class DynamicTextAssets extends TextAssets {
 
         this.dynamicData = bindOptions(defaultDynamicData as unknown as { [s: string]: unknown }, data) as unknown as DynamicData;
 
-        this._dynamicTest = this.getNullableReplacedText();
+        // this._dynamicTest = this.getNullableReplacedText();
     }
 
     /**

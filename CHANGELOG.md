@@ -1,3 +1,5 @@
+# 1.0.1
+- Added StarRailCharacterBuild#imageUrl.
 # 1.0.0
 **This version includes Breaking Changes**
 - Fully supports Enka.Network API.

@@ -25,6 +25,8 @@ class StarRailCharacterBuild extends CharacterBuild {
     /**  */
     readonly character: Character;
     /**  */
+    readonly imageUrl: string | null;
+    /**  */
     readonly hoyoType: HoyoType;
     /**  */
     readonly url: string;
@@ -49,17 +51,12 @@ class StarRailCharacterBuild extends CharacterBuild {
         const json = new JsonReader(this._data);
 
         this.id = json.getAsNumber("id");
-
         this.name = json.getAsString("name");
-
         this.order = json.getAsNumber("order");
-
         this.isLive = json.getAsBoolean("live");
-
         this.isPublic = json.getAsBoolean("public");
-
         this.character = new Character(json.getAsJsonObject("avatar_data"), client);
-
+        this.imageUrl = json.getAsNullableString("image");
         this.hoyoType = json.getAsNumber("hoyo_type") as HoyoType;
 
         this.url = `https://enka.network/u/${this.enkaUserInfo.username}/${this.enkaUserInfo.hash}/${this.character.characterData.id}/${this.id}`;

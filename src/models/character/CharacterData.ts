@@ -9,6 +9,7 @@ import ImageAssets from "../assets/ImageAssets";
 import SkillTreeNode from "./skill/SkillTreeNode";
 import Eidolon from "./Eidolon";
 import { StatPropertyValue } from "../StatProperty";
+import { SimpleObject } from "../../utils/ts_utils";
 
 /**
  * @en CharacterData
@@ -128,6 +129,38 @@ class CharacterData {
             new StatPropertyValue("CriticalDamageBase", ascensionJson.getAsNumber("CriticalDamage", "Value"), this.client),
         ];
     }
+
+    /**  */
+    getSkillTreeMap(): SimpleObject<never> {
+        const skillTreeMap: SimpleObject<never> = {};
+        const skillTreeNodes = this.skillTreeNodes;
+        const routes: number[][] = [];
+        for (const node of skillTreeNodes) {
+            const route = getSkillTreeRoute(skillTreeNodes, node);
+            route.push(node.id);
+            routes.push(route);
+        }
+
+        for (const route of routes) {
+            let map = skillTreeMap;
+            for (let i = 0; i < route.length; i++) {
+                const key = route[i].toString();
+                if (!Object.keys(map).includes(key)) {
+                    map[key] = {};
+                }
+                map = map[key] as SimpleObject<never>;
+            }
+        }
+        return skillTreeMap;
+    }
 }
 
 export default CharacterData;
+
+
+function getSkillTreeRoute(nodes: SkillTreeNode[], target: SkillTreeNode, route: number[] = []): number[] {
+    const preNodeId = target.previousNodeId;
+    if (preNodeId === null) return route;
+    const preNode = nodes.find(node => node.id === preNodeId) as SkillTreeNode;
+    return getSkillTreeRoute(nodes, preNode, [preNode.id, ...route]);
+}

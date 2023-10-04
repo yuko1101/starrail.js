@@ -31,7 +31,7 @@ class SkillTreeNode {
     /**  */
     readonly icon: ImageAssets;
     /**  */
-    readonly previousNodeIds: number[];
+    readonly previousNodeId: number | null;
 
     readonly _nodesData: JsonObject[];
 
@@ -62,7 +62,7 @@ class SkillTreeNode {
 
         this.icon = new ImageAssets(json.getAsString("IconPath"), this.client);
 
-        this.previousNodeIds = json.get("PrePoint").mapArray((_, nodeId) => nodeId.getAsNumber());
+        this.previousNodeId = json.getAsNumberWithDefault(null, "PrePoint", 0);
     }
 
     /**
@@ -72,12 +72,17 @@ class SkillTreeNode {
         return new LeveledSkillTreeNode(this._nodesData[level.base - 1], level, this.client);
     }
 
-    /**
-     * As of HSR ver1.1, a node cannot have two or more previous node.
-     * In other words, this method returns an empty array or an array with only one element.
-     */
-    getPreviousNodes(): SkillTreeNode[] {
-        return this.previousNodeIds.map(nodeId => new SkillTreeNode(nodeId, this.client));
+    /**  */
+    getPreviousNodes(): SkillTreeNode | null {
+        if (this.previousNodeId === null) return null;
+        return new SkillTreeNode(this.previousNodeId, this.client);
+    }
+
+    getNextNodes(): SkillTreeNode[] {
+        const nodesData = this.client.cachedAssetsManager.getStarRailCacheData("AvatarSkillTreeConfig");
+        const json = new JsonReader(nodesData);
+        const nextNodes = json.filterObject((_, node) => node.getAsNumberWithDefault(null, "PrePoint", 0) === this.id);
+        return nextNodes.map(([nodeId]) => new SkillTreeNode(Number(nodeId), this.client));
     }
 }
 

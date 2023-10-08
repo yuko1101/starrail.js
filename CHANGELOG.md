@@ -2,6 +2,7 @@
 - Added StarRailCharacterBuild#imageUrl.
 - Removed SkillTreeNode#previousNodeIds, please use SkillTreeNode#previousNodeId instead.
 - Added CharacterData#getSkillTreeMap().
+- Fixed a error with parsing uid of StarRailUser which was from EnkaGameAccount.
 # 1.0.0
 **This version includes Breaking Changes**
 - Fully supports Enka.Network API.

@@ -19,7 +19,7 @@ class StarRailUser extends User {
     /**  */
     readonly client: StarRail;
 
-    /**  */
+    /** This will be NaN if this StarRailUser is from [EnkaGameAccount](https://enka-system.vercel.app/docs/api/EnkaGameAccount) and [isUidPublic](https://enka-system.vercel.app/docs/api/EnkaGameAccount#isUidPublic) is `false`. */
     readonly uid: number;
     /**  */
     readonly nickname: string;
@@ -64,7 +64,7 @@ class StarRailUser extends User {
 
         const detailInfo = json.get("detailInfo");
 
-        this.uid = detailInfo.getAsNumber("uid");
+        this.uid = detailInfo.getAsNumberWithDefault(null, "uid") ?? Number(json.getValue("uid"));
         this.nickname = detailInfo.getAsString("nickname");
         this.signature = detailInfo.getAsStringWithDefault(null, "signature");
 

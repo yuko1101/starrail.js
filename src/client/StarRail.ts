@@ -22,9 +22,10 @@ const defaultImageBaseUrls: (ImageBaseUrl | CustomImageBaseUrl)[] = [
         priority: 6,
         regexList: [
             /^SpriteOutput\/(AvatarShopIcon|AvatarRoundIcon|AvatarDrawCard|RelicFigures|ItemFigures|LightConeMaxFigures|LightConeMediumIcon)\/(.+)\.png/,
+            /^ui\/ui3d\/rank\/_dependencies\/textures\/\d+\/\d+_Rank_[1-6].png/, // TODO: capitalized image path
         ],
         url: "https://api.hakush.in/hsr/UI",
-        customParser: (path: string) => path.split("/").slice(1).join("/"),
+        customParser: (path: string) => path.replace(/^(spriteoutput|ui\/ui3d)\//, ""),
     },
 ];
 

@@ -114,7 +114,7 @@ client.cachedAssetsManager.activateAutoCacheUpdater({
 ```
 
 # Where is the image file for ImageAssets?
-As far as I know, there is only 1 cdn for starrail. So, this library cannot provide urls of some images and ImageAssets#url is often unavailable. But **you can extract image files from StarRail Game Data** with HoyoStudio or something else.
+As far as I know, there are few cdns for starrail. So, this library cannot provide urls of some images and ImageAssets#url is often unavailable. But **you can extract image files from StarRail Game Data** with HoyoStudio or something else.
 
 If you would like ImageAssets#url to show the paths to your extracted images, you can use `imageBaseUrls` option.
 ```js

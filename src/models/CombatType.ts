@@ -2,6 +2,7 @@ import { JsonObject, JsonReader } from "config_file.js";
 import StarRail from "../client/StarRail";
 import AssetsNotFoundError from "../errors/AssetsNotFoundError";
 import TextAssets from "./assets/TextAssets";
+import ImageAssets from "./assets/ImageAssets";
 
 /**
  * @typedef
@@ -33,9 +34,10 @@ class CombatType {
     readonly description: TextAssets;
     /**  */
     readonly color: number;
-
     /** Not exact as it is an approximate value */
     readonly iconColor: number;
+    /**  */
+    readonly icon: ImageAssets;
 
     readonly _data: JsonObject;
 
@@ -59,6 +61,9 @@ class CombatType {
         this.color = parseInt(json.getAsString("Color").replace(/^#/, ""), 16);
 
         this.iconColor = combatTypeIconColors[this.id];
+
+        // use MazeEnterBattleWeakIconPath instead of DamageTypeIconPath as the former is bigger
+        this.icon = new ImageAssets(json.getAsString("MazeEnterBattleWeakIconPath"), this.client);
     }
 }
 

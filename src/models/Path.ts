@@ -2,6 +2,7 @@ import { JsonObject, JsonReader } from "config_file.js";
 import StarRail from "../client/StarRail";
 import TextAssets from "./assets/TextAssets";
 import AssetsNotFoundError from "../errors/AssetsNotFoundError";
+import ImageAssets from "./assets/ImageAssets";
 
 /**
  * @typedef
@@ -31,6 +32,8 @@ class Path {
     readonly name: TextAssets;
     /**  */
     readonly description: TextAssets;
+    /**  */
+    readonly icon: ImageAssets;
 
     readonly _data: JsonObject;
 
@@ -50,6 +53,7 @@ class Path {
 
         this.name = new TextAssets(json.getAsNumber("BaseTypeText", "Hash"), this.client);
         this.description = new TextAssets(json.getAsNumber("BaseTypeDesc", "Hash"), this.client);
+        this.icon = new ImageAssets(json.getAsString("BaseTypeIcon"), this.client);
     }
 }
 

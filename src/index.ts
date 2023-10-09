@@ -78,7 +78,7 @@ export {
 export { LanguageCode, LanguageMap, NullableLanguageMap } from "./client/CachedAssetsManager";
 export { ClientOptions } from "./client/StarRail";
 export { DynamicData } from "./models/assets/DynamicTextAssets";
-export { ImageBaseUrl } from "./models/assets/ImageAssets";
+export { ImageBaseUrl, CustomImageBaseUrl } from "./models/assets/ImageAssets";
 export { SkillType, EffectType } from "./models/character/skill/Skill";
 export { LightConeLevel } from "./models/light_cone/LightConeExpType";
 export { RelicLevel } from "./models/relic/RelicExpType";

@@ -1,7 +1,7 @@
 import { JsonReader, JsonObject, bindOptions, renameKeys } from "config_file.js";
 import CachedAssetsManager, { LanguageCode } from "./CachedAssetsManager";
 import CharacterData from "../models/character/CharacterData";
-import { ImageBaseUrl } from "../models/assets/ImageAssets";
+import { CustomImageBaseUrl, ImageBaseUrl } from "../models/assets/ImageAssets";
 import LightConeData from "../models/light_cone/LightConeData";
 import RelicData from "../models/relic/RelicData";
 import { fetchJSON } from "../utils/axios_utils";
@@ -10,12 +10,21 @@ import { EnkaLibrary, EnkaSystem, InvalidUidFormatError, EnkaNetworkError, UserN
 import StarRailCharacterBuild from "../models/enka/StarRailCharacterBuild";
 import { Overwrite } from "../utils/ts_utils";
 
-const defaultImageBaseUrls: ImageBaseUrl[] = [
+const defaultImageBaseUrls: (ImageBaseUrl | CustomImageBaseUrl)[] = [
     {
         filePath: "UPPER_CAMEL_CASE",
         priority: 5,
         regexList: [/.*/],
         url: "https://enka.network/ui/hsr",
+    },
+    {
+        filePath: "LOWER_CASE",
+        priority: 6,
+        regexList: [
+            /^SpriteOutput\/(AvatarShopIcon|AvatarRoundIcon|AvatarDrawCard|RelicFigures|ItemFigures|LightConeMaxFigures|LightConeMediumIcon)\/(.+)\.png/,
+        ],
+        url: "https://api.hakush.in/hsr/UI",
+        customParser: (path: string) => path.split("/").slice(1).join("/"),
     },
 ];
 

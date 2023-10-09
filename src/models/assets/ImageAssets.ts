@@ -11,6 +11,17 @@ export interface ImageBaseUrl {
 }
 
 /**
+ * @typedef
+ */
+export interface CustomImageBaseUrl extends ImageBaseUrl {
+    /**
+     * @param path path formatted by [ImageBaseUrl#filePath](ImageBaseUrl#filePath)
+     * @returns parsed path
+     */
+    customParser: (path: string) => string,
+}
+
+/**
  * @en ImageAssets
  */
 class ImageAssets {
@@ -37,7 +48,12 @@ class ImageAssets {
 
         this.imageBaseUrl = [...client.options.imageBaseUrls].sort((a, b) => b.priority - a.priority).find(url => url.regexList.some(regex => regex.test(this.path))) ?? null;
 
-        this.url = (this.path === "" || this.imageBaseUrl == null) ? "" : `${this.imageBaseUrl.url}/${convertPathForImageBaseUrl(this.imageBaseUrl, this.path)}`;
+        this.url = (() => {
+            if (this.path === "" || this.imageBaseUrl == null) return "";
+            const convertedPath = convertPathForImageBaseUrl(this.imageBaseUrl, this.path);
+            if ("customParser" in this.imageBaseUrl) return `${this.imageBaseUrl.url}/${(this.imageBaseUrl as CustomImageBaseUrl).customParser(convertedPath)}`;
+            return `${this.imageBaseUrl.url}/${convertedPath}`;
+        })();
 
         this.isAvailable = this.url !== null && this.url !== undefined && this.url !== "";
     }

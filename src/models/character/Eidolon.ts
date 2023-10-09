@@ -50,7 +50,7 @@ class Eidolon {
         // TODO: better way to get characterId
         const characterId = Math.floor(this.id / 100);
         // TODO: capitalized image path
-        this.picture = new ImageAssets(`ui/ui3d/rank/_dependencies/textures/${characterId}/${characterId}_Rank_${this.rank}.png`, this.client);
+        this.picture = new ImageAssets(`UI/UI3D/Rank/_dependencies/Textures/${characterId}/${characterId}_Rank_${this.rank}.png`, this.client);
 
         this.name = new TextAssets(getStableHash(json.getAsString("Name")), this.client);
         // TODO: replace placeholders with numbers in Param

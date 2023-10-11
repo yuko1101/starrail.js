@@ -88,7 +88,7 @@ export { RelicTypeId } from "./models/relic/RelicType";
 export { CombatTypeId } from "./models/CombatType";
 export { PathId } from "./models/Path";
 export { StatPropertyType, OtherStatPropertyType } from "./models/StatProperty";
-export { Birthday } from "./models/StarRailUser";
+export { Birthday, Platform, PlayStationAccount } from "./models/StarRailUser";
 
 // functions
 export { sumStats } from "./models/character/CharacterStats";

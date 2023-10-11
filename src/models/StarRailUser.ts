@@ -10,9 +10,8 @@ export interface Birthday {
     day: number;
 }
 
-// TODO: add PS when starrail supports
 /** @typedef */
-export type Platform = "PC" | "ANDROID" | "IOS";
+export type Platform = "PC" | "ANDROID" | "IOS" | "PS";
 
 /** @extends {User} */
 class StarRailUser extends User {
@@ -72,7 +71,10 @@ class StarRailUser extends User {
 
         this.level = detailInfo.getAsNumber("level");
         this.equilibriumLevel = detailInfo.getAsNumberWithDefault(0, "worldLevel");
-        this.platform = detailInfo.getAsStringWithDefault(null, "platform") as Platform | null;
+
+        let platform = detailInfo.getValue("platform");
+        if (platform === 11) platform = "PS";
+        this.platform = (platform ?? null) as Platform | null;
 
         this.friends = detailInfo.getAsNumberWithDefault(0, "friendCount");
 

@@ -1,6 +1,7 @@
 # 1.0.2
 - Updated image cdns.
 - Added Eidolon#picture, CombatType#icon, and Path#icon.
+- Added "PS" to type of StarRailUser#platform.
 # 1.0.1
 - Added StarRailCharacterBuild#imageUrl.
 - Removed SkillTreeNode#previousNodeIds, please use SkillTreeNode#previousNodeId instead.

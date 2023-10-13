@@ -19,6 +19,16 @@ export interface PlayStationAccount {
     onlineId: string;
 }
 
+/** @typedef */
+export interface ForgottenHallInfo {
+    /**  */
+    memory: number;
+    /**  */
+    memoryOfChaos: number;
+    /**  */
+    memoryOfChaosId: number | null;
+}
+
 /** @extends {User} */
 class StarRailUser extends User {
     /**  */
@@ -48,8 +58,8 @@ class StarRailUser extends User {
     readonly characterCount: number;
     /**  */
     readonly lightConeCount: number;
-    /**  */
-    readonly forgottenHall: number;
+    /** This will be null if the user has not yet unlocked Forgotten Hall. */
+    readonly forgottenHall: ForgottenHallInfo | null;
     /**  */
     readonly simulatedUniverse: number;
     /**  */
@@ -97,7 +107,13 @@ class StarRailUser extends User {
         this.characterCount = recordInfo.getAsNumber("avatarCount");
         this.lightConeCount = recordInfo.getAsNumberWithDefault(0, "equipmentCount");
 
-        this.forgottenHall = recordInfo.getAsNumberWithDefault(0, "challengeInfo", "scheduleMaxLevel");
+        const challengeInfo = recordInfo.get("challengeInfo");
+        this.forgottenHall = challengeInfo.has("noneScheduleMaxLevel") ? {
+            memory: challengeInfo.getAsNumber("noneScheduleMaxLevel"),
+            memoryOfChaos: challengeInfo.getAsNumberWithDefault(0, "scheduleMaxLevel"),
+            memoryOfChaosId: challengeInfo.getAsNumberWithDefault(null, "scheduleGroupId"),
+        } : null;
+
         this.simulatedUniverse = recordInfo.getAsNumberWithDefault(0, "maxRogueChallengeScore");
 
 

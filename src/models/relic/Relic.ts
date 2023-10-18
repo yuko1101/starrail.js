@@ -42,14 +42,14 @@ class Relic {
         const mainStatData = this.relicData.mainStatGroup.mainStats.find(mainStat => mainStat.id === mainAffixId) as RelicMainStatData;
         this.mainStat = new RelicMainStat(mainStatData, this.level);
 
-        this.subStats = json.get("subAffixList").mapArray((_, subAffix) => {
+        this.subStats = json.has("subAffixList") ? json.get("subAffixList").mapArray((_, subAffix) => {
             const subAffixId = subAffix.getAsNumber("affixId");
             const subStatData = this.relicData.subStatGroup.subStats.find(s => s.id === subAffixId) as RelicSubStatData;
             const count = subAffix.getAsNumber("cnt");
             const steps = subAffix.getAsNumberWithDefault(0, "step");
 
             return new RelicSubStat(subStatData, count, steps);
-        });
+        }) : [];
 
     }
 }

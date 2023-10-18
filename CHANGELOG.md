@@ -1,6 +1,7 @@
 # 1.1.0
 **This version includes Breaking Changes**
 - Changed type of StarRailUser#forgottenHall to ForgottenHallInfo.
+- Fixed a error with parsing relic with no sub stats.
 # 1.0.2
 - Updated image cdns.
 - Added Eidolon#picture, CombatType#icon, and Path#icon.

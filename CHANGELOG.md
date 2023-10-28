@@ -1,3 +1,5 @@
+# 1.1.1
+- Updated image cdns.
 # 1.1.0
 **This version includes Breaking Changes**
 - Changed type of StarRailUser#forgottenHall to ForgottenHallInfo.

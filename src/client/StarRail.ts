@@ -19,10 +19,10 @@ const defaultImageBaseUrls: (ImageBaseUrl | CustomImageBaseUrl)[] = [
     },
     {
         filePath: "LOWER_CASE",
-        priority: 6,
+        priority: 4,
         regexList: [
-            /^SpriteOutput\/(AvatarShopIcon|AvatarRoundIcon|AvatarDrawCard|RelicFigures|ItemFigures|LightConeMaxFigures|LightConeMediumIcon)\/(.+)\.png/,
-            /^UI\/UI3D\/Rank\/_dependencies\/Textures\/\d+\/\d+_Rank_[1-6].png/,
+            /^SpriteOutput\/(AvatarShopIcon|AvatarRoundIcon|AvatarDrawCard|RelicFigures|ItemFigures|LightConeMaxFigures|LightConeMediumIcon)\/(.+)\.webp/,
+            /^UI\/UI3D\/Rank\/_dependencies\/Textures\/\d+\/\d+_Rank_[1-6].webp/,
         ],
         url: "https://api.hakush.in/hsr/UI",
         customParser: (path: string) => path.replace(/^(spriteoutput|ui\/ui3d)\//, ""),

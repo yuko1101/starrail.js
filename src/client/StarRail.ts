@@ -34,7 +34,7 @@ export interface ClientOptions {
     userAgent: string;
     cacheDirectory: string | null;
     showFetchCacheLog: boolean;
-    timeout: number;
+    requestTimeout: number;
     defaultLanguage: LanguageCode;
     imageBaseUrls: ImageBaseUrl[];
     githubToken: string | null;
@@ -48,7 +48,7 @@ export const defaultClientOption: Overwrite<ClientOptions, { "enkaSystem": EnkaS
     userAgent: "Mozilla/5.0",
     cacheDirectory: null,
     showFetchCacheLog: true,
-    timeout: 3000,
+    requestTimeout: 3000,
     defaultLanguage: "en",
     imageBaseUrls: [...defaultImageBaseUrls],
     githubToken: null,

@@ -1,3 +1,7 @@
+# 1.2.0
+**This version includes Breaking Changes**
+- Renamed ClientOptions#timeout to ClientOptions#requestTimeout.
+- Fixed AxiosError was occurred instead of EnkaNetworkError.
 # 1.1.1
 - Updated image cdns.
 # 1.1.0

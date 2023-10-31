@@ -11,12 +11,12 @@ export interface Birthday {
 }
 
 /** @typedef */
-export type Platform = "PC" | "ANDROID" | "IOS" | "PS";
+export type Platform = "PC" | "ANDROID" | "IOS" | "PS5";
 
 /** @typedef */
 export interface PlayStationAccount {
-    nickname: string;
     onlineId: string;
+    nickname: string;
 }
 
 /** @typedef */
@@ -91,12 +91,12 @@ class StarRailUser extends User {
         this.equilibriumLevel = detailInfo.getAsNumberWithDefault(0, "worldLevel");
 
         let platform = detailInfo.getValue("platform");
-        if (platform === 11) platform = "PS";
+        if (platform === 11) platform = "PS5";
         this.platform = (platform ?? null) as Platform | null;
 
-        this.playStationAccount = (detailInfo.has("platformAccountId") && detailInfo.has("platformNickname")) ? {
-            nickname: detailInfo.getAsString("platformNickname"),
-            onlineId: detailInfo.getAsString("platformAccountId"),
+        this.playStationAccount = ((detailInfo.has("platformAccountId") || detailInfo.has("unk1")) && (detailInfo.has("platformNickname") || detailInfo.has("unk3"))) ? {
+            onlineId: detailInfo.has("platformAccountId") ? detailInfo.getAsString("platformAccountId") : detailInfo.getAsString("unk1"),
+            nickname: detailInfo.has("platformNickname") ? detailInfo.getAsString("platformNickname") : detailInfo.getAsString("unk3"),
         } : null;
 
         this.friends = detailInfo.getAsNumberWithDefault(0, "friendCount");

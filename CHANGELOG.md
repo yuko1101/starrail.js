@@ -2,6 +2,8 @@
 **This version includes Breaking Changes**
 - Renamed ClientOptions#timeout to ClientOptions#requestTimeout.
 - Fixed AxiosError was occurred instead of EnkaNetworkError.
+- Fixed playstation info for enka.network.
+- Changed "PS" in Platform type to "PS5".
 # 1.1.1
 - Updated image cdns.
 # 1.1.0

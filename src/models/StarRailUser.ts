@@ -13,11 +13,12 @@ export interface Birthday {
 /** @typedef */
 export type Platform = "PC" | "ANDROID" | "IOS" | "PS5";
 
-/** @typedef */
-export interface PlayStationAccount {
-    onlineId: string;
-    nickname: string;
-}
+export const platformMap: { [key: number]: Platform } = {
+    1: "IOS",
+    2: "ANDROID",
+    3: "PC",
+    11: "PS5",
+};
 
 /** @typedef */
 export interface ForgottenHallInfo {
@@ -48,8 +49,6 @@ class StarRailUser extends User {
     readonly equilibriumLevel: number;
     /**  */
     readonly platform: Platform | null;
-    /**  */
-    readonly playStationAccount: PlayStationAccount | null;
     /**  */
     readonly friends: number;
     /**  */
@@ -90,14 +89,8 @@ class StarRailUser extends User {
         this.level = detailInfo.getAsNumber("level");
         this.equilibriumLevel = detailInfo.getAsNumberWithDefault(0, "worldLevel");
 
-        let platform = detailInfo.getValue("platform");
-        if (platform === 11) platform = "PS5";
-        this.platform = (platform ?? null) as Platform | null;
-
-        this.playStationAccount = ((detailInfo.has("platformAccountId") || detailInfo.has("unk1")) && (detailInfo.has("platformNickname") || detailInfo.has("unk3"))) ? {
-            onlineId: detailInfo.has("platformAccountId") ? detailInfo.getAsString("platformAccountId") : detailInfo.getAsString("unk1"),
-            nickname: detailInfo.has("platformNickname") ? detailInfo.getAsString("platformNickname") : detailInfo.getAsString("unk3"),
-        } : null;
+        const platform = detailInfo.getValue("platform");
+        this.platform = typeof platform === "number" ? platformMap[platform] : typeof platform === "string" ? platform as Platform : null;
 
         this.friends = detailInfo.getAsNumberWithDefault(0, "friendCount");
 
@@ -108,11 +101,11 @@ class StarRailUser extends User {
         this.lightConeCount = recordInfo.getAsNumberWithDefault(0, "equipmentCount");
 
         const challengeInfo = recordInfo.get("challengeInfo");
-        this.forgottenHall = challengeInfo.has("noneScheduleMaxLevel") ? {
-            memory: challengeInfo.getAsNumber("noneScheduleMaxLevel"),
-            memoryOfChaos: challengeInfo.getAsNumberWithDefault(0, "scheduleMaxLevel"),
+        this.forgottenHall = {
+            memory: challengeInfo.getAsNumberWithDefault(0, "scheduleMaxLevel"),
+            memoryOfChaos: challengeInfo.getAsNumberWithDefault(0, "noneScheduleMaxLevel"),
             memoryOfChaosId: challengeInfo.getAsNumberWithDefault(null, "scheduleGroupId"),
-        } : null;
+        };
 
         this.simulatedUniverse = recordInfo.getAsNumberWithDefault(0, "maxRogueChallengeScore");
 

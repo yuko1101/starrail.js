@@ -1,3 +1,6 @@
+# 1.3.0
+- Removed StarRailUser#playStationAccount.
+- Fixed parsing error with StarRailUser#platform for HSR v1.6.
 # 1.2.0
 **This version includes Breaking Changes**
 - Renamed ClientOptions#timeout to ClientOptions#requestTimeout.

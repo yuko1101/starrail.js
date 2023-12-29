@@ -10,22 +10,51 @@ import { EnkaLibrary, EnkaSystem, InvalidUidFormatError, EnkaNetworkError, UserN
 import StarRailCharacterBuild from "../models/enka/StarRailCharacterBuild";
 import { Overwrite } from "../utils/ts_utils";
 
+const starRialResMap = {
+    "SpriteOutput/AvatarIcon": "icon/character",
+} as const;
+
 const defaultImageBaseUrls: (ImageBaseUrl | CustomImageBaseUrl)[] = [
     {
         filePath: "UPPER_CAMEL_CASE",
         priority: 5,
-        regexList: [/.*/],
+        regexList: [
+            /^SpriteOutput\/SkillIcons\/\d+\/SkillIcon_\d+_(?!Ultra_on)/,
+            /^SpriteOutput\/ItemIcon\/RelicIcons\/(.+)$/,
+            /^SpriteOutput\/(AvatarRoundIcon|AvatarDrawCard|LightConeFigures)\/(.+)$/,
+            /^SpriteOutput\/UI\/Avatar\/Icon\/(.+)$/,
+        ],
         url: "https://enka.network/ui/hsr",
+        customParser: (path: string) => path.replace(/(?<=^SpriteOutput\/SkillIcons\/)\d+\//, ""),
+    },
+    {
+        filePath: "UPPER_CAMEL_CASE",
+        priority: 4,
+        regexList: [
+            /^SpriteOutput\/AvatarIcon\/(.+)$/,
+        ],
+        url: "https://raw.githubusercontent.com/Mar-7th/StarRailRes/master",
+        customParser: (path: string) => {
+            const split = path.split("/");
+            const fileName = split.pop() as string;
+            const dir = split.join("/");
+            const value = starRialResMap[dir as keyof typeof starRialResMap];
+
+            switch (value) {
+                case "icon/character":
+                    return `${value}/${fileName}`;
+            }
+        },
     },
     {
         filePath: "LOWER_CASE",
-        priority: 4,
+        priority: 3,
         regexList: [
-            /^SpriteOutput\/(AvatarShopIcon|AvatarRoundIcon|AvatarDrawCard|RelicFigures|ItemFigures|LightConeMaxFigures|LightConeMediumIcon)\/(.+)\.webp/,
-            /^UI\/UI3D\/Rank\/_dependencies\/Textures\/\d+\/\d+_Rank_[1-6].webp/,
+            /^SpriteOutput\/(AvatarShopIcon|AvatarRoundIcon|AvatarDrawCard|RelicFigures|ItemFigures|LightConeMaxFigures|LightConeMediumIcon)\/(.+)/,
+            /^UI\/UI3D\/Rank\/_dependencies\/Textures\/\d+\/\d+_Rank_[1-6]/,
         ],
         url: "https://api.hakush.in/hsr/UI",
-        customParser: (path: string) => path.replace(/^(spriteoutput|ui\/ui3d)\//, ""),
+        customParser: (path: string) => path.replace(/^(spriteoutput|ui\/ui3d)\//, "").replace(/\.png$/, ".webp"),
     },
 ];
 

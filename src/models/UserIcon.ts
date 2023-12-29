@@ -1,4 +1,4 @@
-import { JsonReader } from "config_file.js";
+import { JsonObject, JsonReader } from "config_file.js";
 import StarRail from "../client/StarRail";
 import AssetsNotFoundError from "../errors/AssetsNotFoundError";
 import ImageAssets from "./assets/ImageAssets";
@@ -13,11 +13,17 @@ class UserIcon {
     readonly id: number;
     /**  */
     readonly client: StarRail;
+    /**  */
+    readonly _itemData: JsonObject;
+    /**  */
+    readonly _iconData: JsonObject;
 
     /**  */
     readonly name: TextAssets;
     /**  */
     readonly icon: ImageAssets;
+    /**  */
+    readonly itemIcon: ImageAssets;
     /** Available for some non-character icons. */
     readonly figureIcon: ImageAssets;
     /** This will be null if the icon is not of a character. */
@@ -31,22 +37,28 @@ class UserIcon {
         this.id = id;
         this.client = client;
 
-        let headIcon = this.client.cachedAssetsManager.getStarRailCacheData("ItemConfigAvatarPlayerIcon")[this.id];
-        const isCharacterHeadIcon = !!headIcon;
-        if (!headIcon) {
-            const otherHeadIcon = this.client.cachedAssetsManager.getStarRailCacheData("ItemPlayerCard")[this.id];
-            if (!otherHeadIcon) throw new AssetsNotFoundError("UserIcon", this.id);
-            headIcon = otherHeadIcon;
+        let playerIconItem = this.client.cachedAssetsManager.getStarRailCacheData("ItemConfigAvatarPlayerIcon")[this.id];
+        const isCharacterIcon = !!playerIconItem;
+        if (!playerIconItem) {
+            const otherPlayerIcon = this.client.cachedAssetsManager.getStarRailCacheData("ItemPlayerCard")[this.id];
+            if (!otherPlayerIcon) throw new AssetsNotFoundError("UserIcon-Item", this.id);
+            playerIconItem = otherPlayerIcon;
         }
-        const headIconJson = new JsonReader(headIcon);
+        const itemJson = new JsonReader(playerIconItem);
+        this._itemData = itemJson.getAsJsonObject();
 
-        this.name = new TextAssets(headIconJson.getAsNumber("ItemName", "Hash"), this.client);
+        const playerIcon = this.client.cachedAssetsManager.getStarRailCacheData(isCharacterIcon ? "AvatarPlayerIcon" : "PlayerIcon")[this.id];
+        if (!playerIcon) throw new AssetsNotFoundError("UserIcon-Icon", this.id);
+        const iconJson = new JsonReader(playerIcon);
+        this._iconData = iconJson.getAsJsonObject();
 
-        this.icon = new ImageAssets(headIconJson.getAsString("ItemIconPath"), this.client);
-        this.figureIcon = new ImageAssets(headIconJson.getAsString("ItemFigureIconPath"), this.client);
+        this.name = new TextAssets(itemJson.getAsNumber("ItemName", "Hash"), this.client);
 
-        // TODO: better character id get (e.g. use AvatarPlayerIcon.json)
-        this.characterData = isCharacterHeadIcon ? new CharacterData(this.id % 10000, this.client) : null;
+        this.icon = new ImageAssets(iconJson.getAsString("ImagePath"), this.client);
+        this.itemIcon = new ImageAssets(itemJson.getAsString("ItemIconPath"), this.client);
+        this.figureIcon = new ImageAssets(itemJson.getAsString("ItemFigureIconPath"), this.client);
+
+        this.characterData = isCharacterIcon ? new CharacterData(iconJson.getAsNumber("AvatarID"), this.client) : null;
     }
 }
 

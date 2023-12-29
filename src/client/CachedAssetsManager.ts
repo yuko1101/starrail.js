@@ -54,8 +54,14 @@ const contents = [
     "RelicSetSkillConfig", // Relic Set Bonus
     "RelicBaseType", // Relic Types
     "AvatarPropertyConfig", // StatProperty
-    "ItemConfigAvatarPlayerIcon", // Character Icon for a player
-    "ItemPlayerCard", // Other Icon for a player
+
+    // Character Icon for a player
+    "ItemConfigAvatarPlayerIcon",
+    "AvatarPlayerIcon.json",
+
+    // Other Icon for a player
+    "ItemPlayerCard",
+    "PlayerIcon.json",
 ];
 
 const textMapWhiteList: number[] = [

@@ -4,6 +4,8 @@
 - Fixed parsing error with StarRailUser#platform for HSR v1.6.
 - Renamed CharacterData#getSkillTreeMap to getSkillTreeIdMap.
 - Added CharacterData#getSkillTreeMap and CharacterData#getGroupedSkillTreeNodes methods.
+- Renamed UserIcon#icon to itemIcon, and added UserIcon#icon.
+- Fixed most of image urls.
 # 1.2.0
 **This version includes Breaking Changes**
 - Renamed ClientOptions#timeout to ClientOptions#requestTimeout.

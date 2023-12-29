@@ -89,13 +89,14 @@ export { CombatTypeId } from "./models/CombatType";
 export { PathId } from "./models/Path";
 export { StatPropertyType, OtherStatPropertyType } from "./models/StatProperty";
 export { Birthday, Platform, ForgottenHallInfo } from "./models/StarRailUser";
+export { Overwrite, SimpleMap, SimpleObject } from "./utils/ts_utils";
 
 // functions
 export { sumStats } from "./models/character/CharacterStats";
 export { isStatPropertyType } from "./models/StatProperty";
 export { fetchJSON } from "./utils/axios_utils";
 export { getStableHash } from "./utils/hash_utils";
-export { nonNullable } from "./utils/ts_utils";
+export { nonNullable, getKeysFromSimpleMap, getValuesFromSimpleMap } from "./utils/ts_utils";
 
 // constants
 export { combatTypeIconColors } from "./models/CombatType";

@@ -1,6 +1,9 @@
 # 1.3.0
+**This version includes Breaking Changes**
 - Removed StarRailUser#playStationAccount.
 - Fixed parsing error with StarRailUser#platform for HSR v1.6.
+- Renamed CharacterData#getSkillTreeMap to getSkillTreeIdMap.
+- Added CharacterData#getSkillTreeMap and CharacterData#getGroupedSkillTreeNodes methods.
 # 1.2.0
 **This version includes Breaking Changes**
 - Renamed ClientOptions#timeout to ClientOptions#requestTimeout.

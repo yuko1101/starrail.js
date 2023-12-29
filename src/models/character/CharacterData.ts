@@ -9,7 +9,7 @@ import ImageAssets from "../assets/ImageAssets";
 import SkillTreeNode from "./skill/SkillTreeNode";
 import Eidolon from "./Eidolon";
 import { StatPropertyValue } from "../StatProperty";
-import { SimpleObject } from "../../utils/ts_utils";
+import { SimpleMap, SimpleObject, getKeysFromSimpleMap } from "../../utils/ts_utils";
 
 /**
  * @en CharacterData
@@ -131,36 +131,79 @@ class CharacterData {
     }
 
     /**  */
-    getSkillTreeMap(): SimpleObject<never> {
-        const skillTreeMap: SimpleObject<never> = {};
+    getSkillTreeIdMap(): SimpleObject<never> {
+        const skillTreeMap = this.getSkillTreeMap();
+        const skillTreeIdMap: SimpleObject<never> = {};
+
+        function convertKeyIntoId(map: SimpleMap<SkillTreeNode, never>, obj: SimpleObject<never>) {
+            map.forEach((_, key) => {
+                obj[key.id] = {};
+                if (map.get(key) instanceof Map) {
+                    convertKeyIntoId(map.get(key) as SimpleMap<SkillTreeNode, never>, obj[key.id]);
+                }
+            });
+        }
+
+        convertKeyIntoId(skillTreeMap, skillTreeIdMap);
+
+        return skillTreeIdMap;
+    }
+
+    /**  */
+    getSkillTreeMap(): SimpleMap<SkillTreeNode, never> {
+        const skillTreeMap: SimpleMap<SkillTreeNode, never> = new Map();
         const skillTreeNodes = this.skillTreeNodes;
-        const routes: number[][] = [];
+        const routes: SkillTreeNode[][] = [];
         for (const node of skillTreeNodes) {
             const route = getSkillTreeRoute(skillTreeNodes, node);
-            route.push(node.id);
+            route.push(node);
             routes.push(route);
         }
 
         for (const route of routes) {
             let map = skillTreeMap;
             for (let i = 0; i < route.length; i++) {
-                const key = route[i].toString();
-                if (!Object.keys(map).includes(key)) {
-                    map[key] = {};
+                const key = route[i];
+                if (!map.has(key)) {
+                    map.set(key, new Map());
                 }
-                map = map[key] as SimpleObject<never>;
+                map = map.get(key) as SimpleMap<SkillTreeNode, never>;
             }
         }
         return skillTreeMap;
     }
+
+    /**
+     * @returns array of group of SkillTreeNode, which is grouped by the structure of skill tree
+     */
+    getGroupedSkillTreeNodes(): SkillTreeNode[][] {
+        const skillTreeMap = this.getSkillTreeMap();
+
+        const groupedSkillTreeNodes: SkillTreeNode[][] = [];
+
+        const otherNodes: SkillTreeNode[] = [];
+        skillTreeMap.forEach((value, key) => {
+            if (value.size === 0) {
+                if (!key.isUnlockedByDefault) otherNodes.push(key);
+                return;
+            }
+            const group: SkillTreeNode[] = getKeysFromSimpleMap(value);
+            group.unshift(key);
+            groupedSkillTreeNodes.push(group);
+        });
+
+        return [otherNodes, ...groupedSkillTreeNodes];
+    }
+
 }
 
 export default CharacterData;
 
 
-function getSkillTreeRoute(nodes: SkillTreeNode[], target: SkillTreeNode, route: number[] = []): number[] {
+function getSkillTreeRoute(nodes: SkillTreeNode[], target: SkillTreeNode, route: SkillTreeNode[] = []): SkillTreeNode[] {
     const preNodeId = target.previousNodeId;
     if (preNodeId === null) return route;
     const preNode = nodes.find(node => node.id === preNodeId) as SkillTreeNode;
-    return getSkillTreeRoute(nodes, preNode, [preNode.id, ...route]);
+    return getSkillTreeRoute(nodes, preNode, [preNode, ...route]);
 }
+

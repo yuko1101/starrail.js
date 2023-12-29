@@ -51,16 +51,16 @@ const defaultImageBaseUrls: (ImageBaseUrl | CustomImageBaseUrl)[] = [
             }
         },
     },
-    // {
-    //     filePath: "LOWER_CASE",
-    //     priority: 3,
-    //     regexList: [
-    //         /^SpriteOutput\/(AvatarShopIcon|AvatarRoundIcon|AvatarDrawCard|RelicFigures|ItemFigures|LightConeMaxFigures|LightConeMediumIcon)\/(.+)/,
-    //         /^UI\/UI3D\/Rank\/_dependencies\/Textures\/\d+\/\d+_Rank_[1-6]/,
-    //     ],
-    //     url: "https://api.hakush.in/hsr/UI",
-    //     customParser: (path: string) => path.replace(/^(spriteoutput|ui\/ui3d)\//, "").replace(/\.png$/, ".webp"),
-    // },
+    {
+        filePath: "LOWER_CASE",
+        priority: 3,
+        regexList: [
+            /^SpriteOutput\/(AvatarShopIcon|AvatarRoundIcon|AvatarDrawCard|RelicFigures|ItemFigures|LightConeMaxFigures|LightConeMediumIcon)\/(.+)/,
+            /^UI\/UI3D\/Rank\/_dependencies\/Textures\/\d+\/\d+_Rank_[1-6]/,
+        ],
+        url: "https://api.hakush.in/hsr/UI",
+        customParser: (path: string) => path.replace(/^(spriteoutput|ui\/ui3d)\//, "").replace(/\.png$/, ".webp"),
+    },
 ];
 
 /** @typedef */

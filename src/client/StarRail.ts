@@ -12,6 +12,9 @@ import { Overwrite } from "../utils/ts_utils";
 
 const starRialResMap = {
     "SpriteOutput/AvatarIcon": "icon/character",
+    "SpriteOutput/ItemIcon": "icon/item",
+    "SpriteOutput/UI/Avatar/Icon": "icon/property",
+    "SpriteOutput/UI/Nature/IconAttributeMiddle": "icon/element",
 } as const;
 
 const defaultImageBaseUrls: (ImageBaseUrl | CustomImageBaseUrl)[] = [
@@ -30,9 +33,7 @@ const defaultImageBaseUrls: (ImageBaseUrl | CustomImageBaseUrl)[] = [
     {
         filePath: "UPPER_CAMEL_CASE",
         priority: 4,
-        regexList: [
-            /^SpriteOutput\/AvatarIcon\/(.+)$/,
-        ],
+        regexList: Object.keys(starRialResMap).map((key) => new RegExp(`^${key}/([^/]+)$`)),
         url: "https://raw.githubusercontent.com/Mar-7th/StarRailRes/master",
         customParser: (path: string) => {
             const split = path.split("/");
@@ -42,20 +43,24 @@ const defaultImageBaseUrls: (ImageBaseUrl | CustomImageBaseUrl)[] = [
 
             switch (value) {
                 case "icon/character":
+                case "icon/item":
+                case "icon/property":
                     return `${value}/${fileName}`;
+                case "icon/element":
+                    return `${value}/${fileName.replace(/^IconAttribute/, "").replace("Thunder", "Lightning")}`;
             }
         },
     },
-    {
-        filePath: "LOWER_CASE",
-        priority: 3,
-        regexList: [
-            /^SpriteOutput\/(AvatarShopIcon|AvatarRoundIcon|AvatarDrawCard|RelicFigures|ItemFigures|LightConeMaxFigures|LightConeMediumIcon)\/(.+)/,
-            /^UI\/UI3D\/Rank\/_dependencies\/Textures\/\d+\/\d+_Rank_[1-6]/,
-        ],
-        url: "https://api.hakush.in/hsr/UI",
-        customParser: (path: string) => path.replace(/^(spriteoutput|ui\/ui3d)\//, "").replace(/\.png$/, ".webp"),
-    },
+    // {
+    //     filePath: "LOWER_CASE",
+    //     priority: 3,
+    //     regexList: [
+    //         /^SpriteOutput\/(AvatarShopIcon|AvatarRoundIcon|AvatarDrawCard|RelicFigures|ItemFigures|LightConeMaxFigures|LightConeMediumIcon)\/(.+)/,
+    //         /^UI\/UI3D\/Rank\/_dependencies\/Textures\/\d+\/\d+_Rank_[1-6]/,
+    //     ],
+    //     url: "https://api.hakush.in/hsr/UI",
+    //     customParser: (path: string) => path.replace(/^(spriteoutput|ui\/ui3d)\//, "").replace(/\.png$/, ".webp"),
+    // },
 ];
 
 /** @typedef */

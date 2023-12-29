@@ -28,7 +28,7 @@ class StatProperty {
     readonly isBattleDisplay: boolean;
     /**  */
     readonly order: number;
-    /**  */
+    /** Icon for the stat property. Also you can use svg files [here](https://cdn.discordapp.com/attachments/885221800882098197/1118292606384873625/hsr.zip). */
     readonly icon: ImageAssets;
     /**  */
     readonly isPercent: boolean;

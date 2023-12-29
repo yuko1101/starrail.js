@@ -36,7 +36,7 @@ class CombatType {
     readonly color: number;
     /** Not exact as it is an approximate value */
     readonly iconColor: number;
-    /**  */
+    /** Icon for the CombatType. Also you can use svg files [here](https://cdn.discordapp.com/attachments/885221800882098197/1118292606384873625/hsr.zip). */
     readonly icon: ImageAssets;
 
     readonly _data: JsonObject;

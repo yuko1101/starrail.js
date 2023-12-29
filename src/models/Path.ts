@@ -32,7 +32,7 @@ class Path {
     readonly name: TextAssets;
     /**  */
     readonly description: TextAssets;
-    /**  */
+    /** Icon for the Path. Also you can use svg files [here](https://cdn.discordapp.com/attachments/885221800882098197/1118292606384873625/hsr.zip). */
     readonly icon: ImageAssets;
 
     readonly _data: JsonObject;

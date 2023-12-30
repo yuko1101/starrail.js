@@ -19,6 +19,17 @@ import ImageAssets from "./assets/ImageAssets";
  */
 export type PathId = "Warrior" | "Rogue" | "Mage" | "Shaman" | "Warlock" | "Knight" | "Priest" | "Unknown";
 
+export const pathMap = {
+    Warrior: "Destruction",
+    Rogue: "The Hunt",
+    Mage: "Erudition",
+    Shaman: "Harmony",
+    Warlock: "Nihility",
+    Knight: "Preservation",
+    Priest: "Abundance",
+    Unknown: "General",
+} as const satisfies { [path in PathId]: string };
+
 /**
  * @en Path
  */

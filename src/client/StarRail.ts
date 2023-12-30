@@ -21,6 +21,7 @@ const defaultImageBaseUrls: (ImageBaseUrl | CustomImageBaseUrl)[] = [
     {
         filePath: "UPPER_CAMEL_CASE",
         priority: 5,
+        format: "PNG",
         regexList: [
             /^SpriteOutput\/SkillIcons\/\d+\/SkillIcon_\d+_(?!Ultra_on)/,
             /^SpriteOutput\/ItemIcon\/RelicIcons\/(.+)$/,
@@ -33,6 +34,7 @@ const defaultImageBaseUrls: (ImageBaseUrl | CustomImageBaseUrl)[] = [
     {
         filePath: "UPPER_CAMEL_CASE",
         priority: 4,
+        format: "PNG",
         regexList: Object.keys(starRialResMap).map((key) => new RegExp(`^${key}/([^/]+)$`)),
         url: "https://raw.githubusercontent.com/Mar-7th/StarRailRes/master",
         customParser: (path: string) => {
@@ -54,6 +56,7 @@ const defaultImageBaseUrls: (ImageBaseUrl | CustomImageBaseUrl)[] = [
     {
         filePath: "LOWER_CASE",
         priority: 3,
+        format: "WEBP",
         regexList: [
             /^SpriteOutput\/(AvatarShopIcon|AvatarRoundIcon|AvatarDrawCard|RelicFigures|ItemFigures|LightConeMaxFigures|LightConeMediumIcon)\/(.+)/,
             /^UI\/UI3D\/Rank\/_dependencies\/Textures\/\d+\/\d+_Rank_[1-6]/,

@@ -8,6 +8,7 @@ export interface ImageBaseUrl {
     url: string,
     regexList: RegExp[],
     priority: number,
+    format: "PNG" | "WEBP" | "JPG",
 }
 
 /**

@@ -100,4 +100,5 @@ export { nonNullable, getKeysFromSimpleMap, getValuesFromSimpleMap } from "./uti
 
 // constants
 export { combatTypeIconColors } from "./models/CombatType";
+export { pathMap } from "./models/Path";
 export { statPropertyTypes, otherStatPropertyTypes } from "./models/StatProperty";

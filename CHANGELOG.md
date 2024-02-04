@@ -1,3 +1,5 @@
+# 1.3.1
+- Added TextUtils to make it easier to modify formatted texts.
 # 1.3.0
 **This version includes Breaking Changes**
 - Removed StarRailUser#playStationAccount.

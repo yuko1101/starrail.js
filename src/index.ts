@@ -30,6 +30,7 @@ import Path from "./models/Path";
 import StatProperty, { StatPropertyValue } from "./models/StatProperty";
 import StarRailUser from "./models/StarRailUser";
 import UserIcon from "./models/UserIcon";
+import TextUtils from "./utils/text_utils";
 
 // classes
 export {
@@ -72,6 +73,7 @@ export {
     StatPropertyValue,
     StarRailUser,
     UserIcon,
+    TextUtils,
 };
 
 // typedefs

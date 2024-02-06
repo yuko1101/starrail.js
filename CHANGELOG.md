@@ -1,5 +1,8 @@
-# 1.3.1
+# 1.4.0
+**This version includes Breaking Changes**
+- Renamed StarRailUser#supportCharacter to supportCharacters and its type to Character[].
 - Added TextUtils to make it easier to modify formatted texts.
+- Fixed some invalid files in assets.
 # 1.3.0
 **This version includes Breaking Changes**
 - Removed StarRailUser#playStationAccount.

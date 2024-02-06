@@ -57,11 +57,11 @@ const contents = [
 
     // Character Icon for a player
     "ItemConfigAvatarPlayerIcon",
-    "AvatarPlayerIcon.json",
+    "AvatarPlayerIcon",
 
     // Other Icon for a player
     "ItemPlayerCard",
-    "PlayerIcon.json",
+    "PlayerIcon",
 ];
 
 const textMapWhiteList: number[] = [

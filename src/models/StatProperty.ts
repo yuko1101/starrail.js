@@ -168,7 +168,7 @@ export const statPropertyTypes = {
     "QuantumResistanceDelta": { "isPercent": false, "defaultValue": 0, "comment": "unknown, not used, likely flat" },
     "ImaginaryResistanceDelta": { "isPercent": false, "defaultValue": 0, "comment": "unknown, not used, likely flat" },
     "SpeedDelta": { "isPercent": false, "defaultValue": 0 },
-} as const;
+} as const satisfies { [key: string]: { isPercent: boolean, defaultValue: number, comment?: string } };
 
 /**
  * @typedef
@@ -234,7 +234,7 @@ export type StatPropertyType = keyof typeof statPropertyTypes;
 /** @constant */
 export const otherStatPropertyTypes = {
     "SpeedAddedRatio": { "isPercent": true, "defaultValue": 0 },
-} as const;
+} as const satisfies { [key: string]: { isPercent: boolean, defaultValue: number, comment?: string } };
 
 /**
  * StatPropertyTypes which do not exist in AvatarPropertyConfig.json

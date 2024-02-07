@@ -42,12 +42,12 @@ class ImageAssets {
      * @param path
      * @param client
      */
-    constructor(path: string, client: StarRail) {
+    constructor(path: string, client: StarRail, maxPriority: number = Number.POSITIVE_INFINITY) {
         this.client = client;
 
         this.path = path;
 
-        this.imageBaseUrl = [...client.options.imageBaseUrls].sort((a, b) => b.priority - a.priority).find(url => url.regexList.some(regex => regex.test(this.path))) ?? null;
+        this.imageBaseUrl = [...client.options.imageBaseUrls].filter(url => url.priority <= maxPriority).sort((a, b) => b.priority - a.priority).find(url => url.regexList.some(regex => regex.test(this.path))) ?? null;
 
         this.url = (() => {
             if (this.path === "" || this.imageBaseUrl == null) return "";
@@ -57,6 +57,14 @@ class ImageAssets {
         })();
 
         this.isAvailable = this.url !== null && this.url !== undefined && this.url !== "";
+    }
+
+    /**
+     * @returns a new instance of ImageAssets with the another imageBaseUrl, or this instance if the imageBaseUrl is null
+     */
+    nextSource(): ImageAssets {
+        if (this.imageBaseUrl == null) return this;
+        return new ImageAssets(this.path, this.client, this.imageBaseUrl.priority - 1);
     }
 }
 

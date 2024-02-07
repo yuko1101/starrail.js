@@ -1,6 +1,6 @@
 # 1.4.1
-- Added Path#smallIcon.
-- Added CombatType#bigIcon.
+- Added Path#smallIcon and CombatType#bigIcon.
+- Added ImageAssets#nextSource().
 - Added some CDN urls.
 # 1.4.0
 **This version includes Breaking Changes**

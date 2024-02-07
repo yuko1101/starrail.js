@@ -46,13 +46,26 @@ const defaultImageBaseUrls: (ImageBaseUrl | CustomImageBaseUrl)[] = [
         customParser: (path: string) => path.replace(/(?<=^SpriteOutput\/SkillIcons\/)\d+\//, ""),
     },
     {
-        filePath: "LOWER_CASE",
+        filePath: "UPPER_CAMEL_CASE",
         priority: 4,
         format: "PNG",
-        regexList: [
-            /^SpriteOutput\/(.+)/,
-        ],
-        url: "https://raw.githubusercontent.com/FortOfFans/HSR/main",
+        regexList: Object.keys(yattaMap).map((key) => new RegExp(`^${key}/([^/]+)$`)),
+        url: "https://api.yatta.top/hsr/assets/UI",
+        customParser: (path: string) => {
+            const split = path.split("/");
+
+            // without extension
+            const fileName = (split.pop() as string).split(".").slice(0, -1).join(".");
+            // dir without numbered directory
+            let dir = split.filter(d => !/\d+/.test(d)).join("/") as keyof typeof yattaMap;
+            if (dir === "SpriteOutput/ItemIcon" && fileName.length === 5 && fileName.startsWith("71")) {
+                dir = "SpriteOutput/ItemIcon/RelicIcons";
+            }
+            const value = yattaMap[dir];
+
+
+            return value.replace(/{fileName}/g, fileName) + ".png";
+        },
     },
     {
         filePath: "UPPER_CAMEL_CASE",
@@ -77,26 +90,13 @@ const defaultImageBaseUrls: (ImageBaseUrl | CustomImageBaseUrl)[] = [
         },
     },
     {
-        filePath: "UPPER_CAMEL_CASE",
+        filePath: "LOWER_CASE",
         priority: 2,
         format: "PNG",
-        regexList: Object.keys(yattaMap).map((key) => new RegExp(`^${key}/([^/]+)$`)),
-        url: "https://api.yatta.top/hsr/assets/UI",
-        customParser: (path: string) => {
-            const split = path.split("/");
-
-            // without extension
-            const fileName = (split.pop() as string).split(".").slice(0, -1).join(".");
-            // dir without numbered directory
-            let dir = split.filter(d => !/\d+/.test(d)).join("/") as keyof typeof yattaMap;
-            if (dir === "SpriteOutput/ItemIcon" && fileName.length === 5 && fileName.startsWith("71")) {
-                dir = "SpriteOutput/ItemIcon/RelicIcons";
-            }
-            const value = yattaMap[dir];
-
-
-            return value.replace(/{fileName}/g, fileName) + ".png";
-        },
+        regexList: [
+            /^SpriteOutput\/(.+)/,
+        ],
+        url: "https://raw.githubusercontent.com/FortOfFans/HSR/main",
     },
     {
         filePath: "LOWER_CASE",

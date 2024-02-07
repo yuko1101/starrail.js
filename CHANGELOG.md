@@ -1,3 +1,7 @@
+# 1.4.1
+- Added Path#smallIcon.
+- Added CombatType#bigIcon.
+- Added some CDN urls.
 # 1.4.0
 **This version includes Breaking Changes**
 - Renamed StarRailUser#supportCharacter to supportCharacters and its type to Character[].

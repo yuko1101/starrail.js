@@ -38,6 +38,8 @@ class CombatType {
     readonly iconColor: number;
     /** Icon for the CombatType. Also you can use svg files [here](https://cdn.discordapp.com/attachments/885221800882098197/1118292606384873625/hsr.zip). */
     readonly icon: ImageAssets;
+    /**  */
+    readonly bigIcon: ImageAssets;
 
     readonly _data: JsonObject;
 
@@ -62,8 +64,10 @@ class CombatType {
 
         this.iconColor = combatTypeIconColors[this.id];
 
+        this.icon = new ImageAssets(json.getAsString("DamageTypeIconPath"), this.client);
         // use MazeEnterBattleWeakIconPath instead of DamageTypeIconPath as the former is bigger
-        this.icon = new ImageAssets(json.getAsString("MazeEnterBattleWeakIconPath"), this.client);
+        this.bigIcon = new ImageAssets(json.getAsString("MazeEnterBattleWeakIconPath"), this.client);
+
     }
 }
 

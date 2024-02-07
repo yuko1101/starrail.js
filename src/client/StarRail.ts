@@ -10,11 +10,25 @@ import { EnkaLibrary, EnkaSystem, InvalidUidFormatError, EnkaNetworkError, UserN
 import StarRailCharacterBuild from "../models/enka/StarRailCharacterBuild";
 import { Overwrite } from "../utils/ts_utils";
 
-const starRialResMap = {
+const starRailResMap = {
     "SpriteOutput/AvatarIcon": "icon/character",
     "SpriteOutput/ItemIcon": "icon/item",
     "SpriteOutput/UI/Avatar/Icon": "icon/property",
     "SpriteOutput/UI/Nature/IconAttributeMiddle": "icon/element",
+} as const;
+
+const yattaMap = {
+    "SpriteOutput/AvatarDrawCard": "avatar/large/{fileName}.sm",
+    "SpriteOutput/AvatarRoundIcon": "avatar/round/{fileName}",
+    // some shop icons are 2px height smaller than the original
+    "SpriteOutput/AvatarShopIcon": "avatar/medium/{fileName}",
+    "SpriteOutput/ProfessionIconSmall": "profession/{fileName}",
+    "SpriteOutput/UI/Nature/IconAttribute": "attribute/{fileName}",
+    "SpriteOutput/SkillIcons": "skill/{fileName}",
+    "SpriteOutput/ItemIcon": "item/{fileName}",
+    "SpriteOutput/UI/Avatar/Icon": "status/{fileName}",
+    "SpriteOutput/ItemIcon/RelicIcons": "relic/{fileName}",
+    "SpriteOutput/UI/Avatar/Relic": "relic/white/{fileName}",
 } as const;
 
 const defaultImageBaseUrls: (ImageBaseUrl | CustomImageBaseUrl)[] = [
@@ -32,16 +46,25 @@ const defaultImageBaseUrls: (ImageBaseUrl | CustomImageBaseUrl)[] = [
         customParser: (path: string) => path.replace(/(?<=^SpriteOutput\/SkillIcons\/)\d+\//, ""),
     },
     {
-        filePath: "UPPER_CAMEL_CASE",
+        filePath: "LOWER_CASE",
         priority: 4,
         format: "PNG",
-        regexList: Object.keys(starRialResMap).map((key) => new RegExp(`^${key}/([^/]+)$`)),
+        regexList: [
+            /^SpriteOutput\/(.+)/,
+        ],
+        url: "https://raw.githubusercontent.com/FortOfFans/HSR/main",
+    },
+    {
+        filePath: "UPPER_CAMEL_CASE",
+        priority: 3,
+        format: "PNG",
+        regexList: Object.keys(starRailResMap).map((key) => new RegExp(`^${key}/([^/]+)$`)),
         url: "https://raw.githubusercontent.com/Mar-7th/StarRailRes/master",
         customParser: (path: string) => {
             const split = path.split("/");
             const fileName = split.pop() as string;
             const dir = split.join("/");
-            const value = starRialResMap[dir as keyof typeof starRialResMap];
+            const value = starRailResMap[dir as keyof typeof starRailResMap];
 
             switch (value) {
                 case "icon/character":
@@ -54,8 +77,30 @@ const defaultImageBaseUrls: (ImageBaseUrl | CustomImageBaseUrl)[] = [
         },
     },
     {
+        filePath: "UPPER_CAMEL_CASE",
+        priority: 2,
+        format: "PNG",
+        regexList: Object.keys(yattaMap).map((key) => new RegExp(`^${key}/([^/]+)$`)),
+        url: "https://api.yatta.top/hsr/assets/UI",
+        customParser: (path: string) => {
+            const split = path.split("/");
+
+            // without extension
+            const fileName = (split.pop() as string).split(".").slice(0, -1).join(".");
+            // dir without numbered directory
+            let dir = split.filter(d => !/\d+/.test(d)).join("/") as keyof typeof yattaMap;
+            if (dir === "SpriteOutput/ItemIcon" && fileName.length === 5 && fileName.startsWith("71")) {
+                dir = "SpriteOutput/ItemIcon/RelicIcons";
+            }
+            const value = yattaMap[dir];
+
+
+            return value.replace(/{fileName}/g, fileName) + ".png";
+        },
+    },
+    {
         filePath: "LOWER_CASE",
-        priority: 3,
+        priority: 1,
         format: "WEBP",
         regexList: [
             /^SpriteOutput\/(AvatarShopIcon|AvatarRoundIcon|AvatarDrawCard|RelicFigures|ItemFigures|LightConeMaxFigures|LightConeMediumIcon)\/(.+)/,

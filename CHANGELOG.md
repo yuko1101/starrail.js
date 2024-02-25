@@ -1,3 +1,5 @@
+# 1.5.0
+- Added caching for fetching user data by uid (StarRail#fetchUser).
 # 1.4.1
 - Added Path#smallIcon and CombatType#bigIcon.
 - Added ImageAssets#nextSource().

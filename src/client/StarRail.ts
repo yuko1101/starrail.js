@@ -1,4 +1,4 @@
-import { JsonReader, JsonObject, bindOptions, renameKeys } from "config_file.js";
+import { JsonReader, JsonObject, bindOptions, renameKeys, generateUuid } from "config_file.js";
 import CachedAssetsManager, { LanguageCode } from "./CachedAssetsManager";
 import CharacterData from "../models/character/CharacterData";
 import { CustomImageBaseUrl, ImageBaseUrl } from "../models/assets/ImageAssets";
@@ -111,6 +111,17 @@ const defaultImageBaseUrls: (ImageBaseUrl | CustomImageBaseUrl)[] = [
     },
 ];
 
+/**
+ * @typedef
+ */
+export interface UserCacheOptions {
+    isEnabled: boolean;
+    mihomoTtl: number;
+    getter: ((key: string) => Promise<JsonObject>) | null;
+    setter: ((key: string, data: JsonObject) => Promise<void>) | null;
+    deleter: ((key: string) => Promise<void>) | null;
+}
+
 /** @typedef */
 export interface ClientOptions {
     userAgent: string;
@@ -123,6 +134,7 @@ export interface ClientOptions {
     /** This will be used for fetching user data by uid. */
     apiBaseUrl: "https://enka.network/api/hsr/uid" | "https://api.mihomo.me/sr_info" | string;
     readonly enkaSystem: EnkaSystem;
+    userCache: UserCacheOptions;
 }
 
 /** @constant */
@@ -136,7 +148,21 @@ export const defaultClientOption: Overwrite<ClientOptions, { "enkaSystem": EnkaS
     githubToken: null,
     apiBaseUrl: "https://enka.network/api/hsr/uid",
     enkaSystem: null,
+    userCache: {
+        isEnabled: true,
+        mihomoTtl: 600,
+        getter: null,
+        setter: null,
+        deleter: null,
+    },
 };
+
+/** @typedef */
+export interface FetchOptions {
+    mihomoForceUpdate: boolean;
+}
+
+const userCacheMap = new Map();
 
 /**
  * @en StarRail
@@ -157,6 +183,8 @@ class StarRail implements EnkaLibrary<StarRailUser, StarRailCharacterBuild> {
 
     /**  */
     readonly cachedAssetsManager: CachedAssetsManager;
+
+    private _tasks: NodeJS.Timeout[] = [];
 
     /**
      * @param options
@@ -184,39 +212,85 @@ class StarRail implements EnkaLibrary<StarRailUser, StarRailCharacterBuild> {
      * @param uid
      * @throws {EnkaNetworkError}
      */
-    async fetchUser(uid: number | string): Promise<StarRailUser> {
+    async fetchUser(uid: number | string, options: Partial<FetchOptions> = {}): Promise<StarRailUser> {
         if (isNaN(Number(uid))) throw new Error("Parameter `uid` must be a number or a string number.");
+        const fetchOptions: FetchOptions = bindOptions(
+            {
+                mihomoForceUpdate: false,
+            } satisfies FetchOptions,
+            options,
+        ) as unknown as FetchOptions;
 
-        const baseUrl = this.options.apiBaseUrl;
-        const url = `${baseUrl}/${uid}`;
+        const cacheGetter = this.options.userCache.getter ?? (async (key) => userCacheMap.get(key));
+        const cacheSetter = this.options.userCache.setter ?? (async (key, data) => { userCacheMap.set(key, data); });
+        const cacheDeleter = this.options.userCache.deleter ?? (async (key) => { userCacheMap.delete(key); });
 
-        // TODO: data caching
-        const response = await fetchJSON(url, this, true);
+        const cacheKey = `${uid}`;
+        const cachedUserData = await cacheGetter(cacheKey);
 
-        if (response.status !== 200) {
-            switch (response.status) {
-                case 400:
-                    throw new InvalidUidFormatError(Number(uid), response.status, response.statusText);
-                case 424:
-                    throw new EnkaNetworkError("Request to enka.network failed because it is under maintenance.", response.status, response.statusText);
-                case 429:
-                    throw new EnkaNetworkError("Rate Limit reached. You reached enka.network's rate limit. Please try again in a few minutes.", response.status, response.statusText);
-                case 404:
-                    throw new UserNotFoundError(`User with uid ${uid} was not found. Please check whether the uid is correct. If you find the uid is correct, it may be a internal server error.`, response.status, response.statusText);
-                default:
-                    throw new EnkaNetworkError(`Request failed with unknown status code ${response.status} - ${response.statusText}\nError Detail: ${response.data["detail"]}\nRequest url: ${url}`, response.status, response.statusText);
+        const mihomoForceUpdate = fetchOptions.mihomoForceUpdate && this.options.apiBaseUrl === "https://api.mihomo.me/sr_info";
+
+        const useCache = !!(cachedUserData && this.options.userCache.isEnabled) && !mihomoForceUpdate;
+
+        let data: JsonObject;
+        if (!useCache) {
+            const baseUrl = this.options.apiBaseUrl;
+            const url = `${baseUrl}/${uid}${mihomoForceUpdate ? "?is_force_update=1" : ""}`;
+
+            const response = await fetchJSON(url, this, true);
+
+            if (response.status !== 200) {
+                switch (response.status) {
+                    case 400:
+                        throw new InvalidUidFormatError(Number(uid), response.status, response.statusText);
+                    case 424:
+                        throw new EnkaNetworkError("Request to enka.network failed because it is under maintenance.", response.status, response.statusText);
+                    case 429:
+                        throw new EnkaNetworkError("Rate Limit reached. You reached enka.network's rate limit. Please try again in a few minutes.", response.status, response.statusText);
+                    case 404:
+                        throw new UserNotFoundError(`User with uid ${uid} was not found. Please check whether the uid is correct. If you find the uid is correct, it may be a internal server error.`, response.status, response.statusText);
+                    default:
+                        throw new EnkaNetworkError(`Request failed with unknown status code ${response.status} - ${response.statusText}\nError Detail: ${response.data["detail"]}\nRequest url: ${url}`, response.status, response.statusText);
+                }
+            } else if (response.data["retcode"]) {
+                // only for mihomo api
+                switch (response.data["retcode"]) {
+                    case 3612:
+                        throw new UserNotFoundError(`User with uid ${uid} was not found. Please check whether the uid is correct. If you find the uid is correct, it may be a internal server error.`, response.status, response.statusText);
+                    default:
+                        throw new Error(`Unknown server error occurred. ErrorCode(retcode): ${response.data["retcode"]}`);
+                }
             }
-        } else if (response.data["retcode"]) {
-            // only for mihomo api
-            switch (response.data["retcode"]) {
-                case 3612:
-                    throw new UserNotFoundError(`User with uid ${uid} was not found. Please check whether the uid is correct. If you find the uid is correct, it may be a internal server error.`, response.status, response.statusText);
-                default:
-                    throw new Error(`Unknown server error occurred. ErrorCode(retcode): ${response.data["retcode"]}`);
+
+            data = { ...response.data };
+
+            if (this.options.userCache.isEnabled) {
+                if (data.ttl === undefined) data.ttl = this.options.userCache.mihomoTtl;
+                const lifetime = data.ttl as number * 1000;
+                const now = Date.now();
+
+                data._lib = { cache_id: generateUuid(), created_at: now, expires_at: now + lifetime, original_ttl: data.ttl };
+                const task = setTimeout(async () => {
+                    const dataToDelete = await cacheGetter(cacheKey);
+                    if (!dataToDelete) return;
+                    if ((dataToDelete._lib as JsonObject).cache_id === (data._lib as JsonObject).cache_id) {
+                        await cacheDeleter(cacheKey);
+                    }
+                    this._tasks.splice(this._tasks.indexOf(task), 1);
+                }, lifetime);
+                this._tasks.push(task);
+
+                await cacheSetter(cacheKey, data);
             }
+
+        } else {
+            data = { ...cachedUserData };
+            data.ttl = Math.ceil(((data._lib as JsonObject).expires_at as number - Date.now()) / 1000);
         }
 
-        return new StarRailUser({ ...response.data }, this);
+        const userData = bindOptions(data, { _lib: { is_cache: useCache } }) as JsonObject;
+
+        return new StarRailUser(userData, this);
     }
 
     /**
@@ -266,6 +340,13 @@ class StarRail implements EnkaLibrary<StarRailUser, StarRailCharacterBuild> {
      */
     getAllRelics(): RelicData[] {
         return new JsonReader(this.cachedAssetsManager.getStarRailCacheData("RelicConfig")).mapObject((_, relic) => new RelicData(relic.getAsNumber("ID"), this));
+    }
+
+    /**
+     * Clear all running tasks in the client.
+     */
+    close(): void {
+        this._tasks.forEach(task => clearTimeout(task));
     }
 }
 

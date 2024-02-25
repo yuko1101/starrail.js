@@ -78,7 +78,7 @@ export {
 
 // typedefs
 export { LanguageCode, LanguageMap, NullableLanguageMap } from "./client/CachedAssetsManager";
-export { ClientOptions } from "./client/StarRail";
+export { ClientOptions, UserCacheOptions, FetchOptions } from "./client/StarRail";
 export { DynamicData } from "./models/assets/DynamicTextAssets";
 export { ImageBaseUrl, CustomImageBaseUrl } from "./models/assets/ImageAssets";
 export { SkillType, EffectType } from "./models/character/skill/Skill";
@@ -101,6 +101,7 @@ export { getStableHash } from "./utils/hash_utils";
 export { nonNullable, getKeysFromSimpleMap, getValuesFromSimpleMap } from "./utils/ts_utils";
 
 // constants
+export { defaultClientOption } from "./client/StarRail";
 export { combatTypeIconColors } from "./models/CombatType";
 export { pathMap } from "./models/Path";
 export { statPropertyTypes, otherStatPropertyTypes } from "./models/StatProperty";

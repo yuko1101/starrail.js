@@ -63,7 +63,7 @@ class StarRailUser extends User {
     readonly simulatedUniverse: number;
     /**  */
     readonly supportCharacters: Character[];
-    /** Characters on the user's display. The same character as [supportCharacter](#supportCharacter) is omitted if you use Enka.Network API. */
+    /** Characters on the user's display. Characters that are also in [supportCharacter](#supportCharacter) are omitted if you use Enka.Network API. */
     readonly starfaringCompanions: Character[];
     /**  */
     readonly enkaUserHash: string | null;
@@ -123,7 +123,9 @@ class StarRailUser extends User {
 
     }
 
-    /**  */
+    /**
+     * You should use this method to get characters if you use Enka.Network API.
+     */
     getCharacters(): Character[] {
         const characters = [...this.supportCharacters, ...this.starfaringCompanions];
         return Array.from(new Set(characters));

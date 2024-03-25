@@ -75,7 +75,7 @@ export class StatPropertyValue {
     readonly client: StarRail;
     /**  */
     readonly type: StatPropertyType | OtherStatPropertyType;
-    /** This will be null if type of provided `type` is [OtherStatPropertyType](OtherStatPropertyType). */
+    /** This will be null if type of provided `type` is {@apilink OtherStatPropertyType}. */
     readonly statProperty: StatProperty | null;
     /**  */
     readonly isPercent: boolean;

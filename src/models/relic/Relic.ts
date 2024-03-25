@@ -65,7 +65,7 @@ export class RelicMainStat extends StatPropertyValue {
     readonly mainStatData: RelicMainStatData;
     /** Relic's level */
     readonly level: number;
-    /** Calculated by [baseValue](RelicMainStatData#baseValue) + [levelValue](RelicMainStatData#levelValue) \* [level](#level) */
+    /** Calculated by [mainStatData.baseValue](/api/interface/RelicMainStatData#baseValue) + [mainStatData.levelValue](/api/interface/RelicMainStatData#levelValue) \* [level](#level) */
     readonly value: number;
 
     /**
@@ -94,7 +94,7 @@ export class RelicSubStat extends StatPropertyValue {
     readonly count: number;
     /**  */
     readonly steps: number;
-    /** Calculated by [baseValue](RelicSubStatData#baseValue) \* [count](#count) + [stepValue](RelicSubStatData#stepValue) \* [steps](#steps) */
+    /** Calculated by [subStatData.baseValue](/api/interface/RelicSubStatData#baseValue) \* [count](#count) + [subStatData.stepValue](/api/interface/RelicSubStatData#stepValue) \* [steps](#steps) */
     readonly value: number;
 
     /**

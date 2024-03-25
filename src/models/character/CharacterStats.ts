@@ -68,7 +68,8 @@ export class StatList {
     readonly client: StarRail;
 
     /**
-     * @param stats
+     * @param list
+     * @param combatTypeId
      * @param client
      */
     constructor(list: { [key: string]: StatPropertyValue }, combatTypeId: CombatTypeId, client: StarRail) {

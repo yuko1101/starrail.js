@@ -5,17 +5,16 @@ import AssetsNotFoundError from "../errors/AssetsNotFoundError";
 import ImageAssets from "./assets/ImageAssets";
 
 /**
+ * PathId|In-game Name
+ * ---|---
+ * Warrior|Destruction
+ * Rogue|The Hunt
+ * Mage|Erudition
+ * Shaman|Harmony
+ * Warlock|Nihility
+ * Knight|Preservation
+ * Priest|Abundance
  * @typedef
- * @example
- * |PathId|In-game Name|
- * |---|---|
- * |Warrior|Destruction|
- * |Rogue|The Hunt|
- * |Mage|Erudition|
- * |Shaman|Harmony|
- * |Warlock|Nihility|
- * |Knight|Preservation|
- * |Priest|Abundance|
  */
 export type PathId = "Warrior" | "Rogue" | "Mage" | "Shaman" | "Warlock" | "Knight" | "Priest" | "Unknown";
 

@@ -5,17 +5,16 @@ import TextAssets from "../assets/TextAssets";
 import ImageAssets from "../assets/ImageAssets";
 
 /**
+ * RelicTypeId|In-game Name
+ * ---|---
+ * HEAD|Head
+ * HAND|Hands
+ * BODY|Body
+ * FOOT|Feet
+ * OBJECT|Link Rope
+ * NECK|Planar Sphere
  * @typedef
- * @example
- * |RelicTypeId|In-game Name|
- * |---|---|
- * |HEAD|Head|
- * |HAND|Hands|
- * |BODY|Body|
- * |FOOT|Feet|
- * |OBJECT|Link Rope|
- * |NECK|Planar Sphere|
- */
+*/
 export type RelicTypeId = "HEAD" | "HAND" | "BODY" | "FOOT" | "OBJECT" | "NECK";
 
 /**

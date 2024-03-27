@@ -5,17 +5,16 @@ import TextAssets from "./assets/TextAssets";
 import ImageAssets from "./assets/ImageAssets";
 
 /**
+ * CombatTypeId|In-game Name
+ * ---|---
+ * Physical|Physical
+ * Fire|Fire
+ * Ice|Ice
+ * Thunder|Lightning
+ * Wind|Wind
+ * Quantum|Quantum
+ * Imaginary|Imaginary
  * @typedef
- * @example
- * |CombatTypeId|In-game Name|
- * |---|---|
- * |Physical|Physical|
- * |Fire|Fire|
- * |Ice|Ice|
- * |Thunder|Lightning|
- * |Wind|Wind|
- * |Quantum|Quantum|
- * |Imaginary|Imaginary|
  */
 export type CombatTypeId = "Physical" | "Fire" | "Ice" | "Thunder" | "Wind" | "Quantum" | "Imaginary";
 

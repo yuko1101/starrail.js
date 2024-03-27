@@ -5,40 +5,23 @@ import ImageAssets from "./assets/ImageAssets";
 import TextAssets from "./assets/TextAssets";
 import DynamicTextAssets from "./assets/DynamicTextAssets";
 
-/**
- * @en StatProperty
- */
 class StatProperty {
-    /**  */
     readonly type: StatPropertyType;
-    /**  */
     readonly client: StarRail;
 
-    /**  */
     readonly name: TextAssets;
-    /**  */
     readonly nameSkillTree: TextAssets;
-    /**  */
     readonly nameRelic: TextAssets;
-    /**  */
     readonly nameFilter: TextAssets;
-    /**  */
     readonly isDisplay: boolean;
-    /**  */
     readonly isBattleDisplay: boolean;
-    /**  */
     readonly order: number;
     /** Icon for the stat property. Also you can use svg files [here](https://cdn.discordapp.com/attachments/885221800882098197/1118292606384873625/hsr.zip). */
     readonly icon: ImageAssets;
-    /**  */
     readonly isPercent: boolean;
 
     readonly _data: JsonObject;
 
-    /**
-     * @param type
-     * @param client
-     */
     constructor(type: StatPropertyType, client: StarRail) {
         this.type = type;
         this.client = client;
@@ -64,31 +47,21 @@ class StatProperty {
         this.isPercent = statPropertyTypes[this.type].isPercent;
     }
 
-    /**  */
     static ALL_DAMAGE_TYPES = ["PhysicalAddedRatio", "FireAddedRatio", "IceAddedRatio", "ThunderAddedRatio", "WindAddedRatio", "QuantumAddedRatio", "ImaginaryAddedRatio"] as const;
 }
 
 export default StatProperty;
 
 export class StatPropertyValue {
-    /**  */
     readonly client: StarRail;
-    /**  */
     readonly type: StatPropertyType | OtherStatPropertyType;
     /** This will be null if type of provided `type` is {@apilink OtherStatPropertyType}. */
     readonly statProperty: StatProperty | null;
-    /**  */
     readonly isPercent: boolean;
-    /**  */
     readonly value: number;
     /** This will be null if [statProperty](#statProperty) is null. */
     readonly nameSkillTree: DynamicTextAssets | null;
 
-    /**
-     * @param type
-     * @param value
-     * @param client
-     */
     constructor(type: StatPropertyType | OtherStatPropertyType, value: number, client: StarRail) {
         this.client = client;
         this.type = type;
@@ -99,7 +72,6 @@ export class StatPropertyValue {
         this.nameSkillTree = this.statProperty ? new DynamicTextAssets(this.statProperty.nameSkillTree.id, { paramList: [value] }, this.client) : null;
     }
 
-    /**  */
     public get valueText(): string {
         if (this.isPercent) {
             let valueString = (this.value * 100).toString();
@@ -113,7 +85,6 @@ export class StatPropertyValue {
 }
 
 // Object.entries(data).map(l => `|${l[0]}|${l[1]["isPercent"]}|${l[1]["defaultValue"]}|${l[1]["comment"] ?? ""}|`).join("\n");
-/** @constant */
 export const statPropertyTypes = {
     "MaxHP": { "isPercent": false, "defaultValue": 0 },
     "Attack": { "isPercent": false, "defaultValue": 0 },
@@ -226,11 +197,9 @@ export const statPropertyTypes = {
  * QuantumResistanceDelta|false|0|unknown, not used, likely flat
  * ImaginaryResistanceDelta|false|0|unknown, not used, likely flat
  * SpeedDelta|false|0|
- * @typedef
  */
 export type StatPropertyType = keyof typeof statPropertyTypes;
 
-/** @constant */
 export const otherStatPropertyTypes = {
     "SpeedAddedRatio": { "isPercent": true, "defaultValue": 0 },
 } as const satisfies { [key: string]: { isPercent: boolean, defaultValue: number, comment?: string } };
@@ -241,14 +210,9 @@ export const otherStatPropertyTypes = {
  * OtherStatPropertyType|isPercent|defaultValue|Comment
  * ---|---|---|---
  * SpeedAddedRatio|true|0|
- * @typedef
  */
 export type OtherStatPropertyType = keyof typeof otherStatPropertyTypes;
 
-/**
- * @param type
- * @returns
- */
 export function isStatPropertyType(type: StatPropertyType | OtherStatPropertyType): type is StatPropertyType {
     return type != "SpeedAddedRatio";
 }

@@ -6,33 +6,18 @@ import TextAssets from "../assets/TextAssets";
 import { getStableHash } from "../../utils/hash_utils";
 import Skill from "./skill/Skill";
 
-/**
- * @en Eidolon
- */
 class Eidolon {
-    /**  */
     readonly id: number;
-    /**  */
     readonly client: StarRail;
-    /**  */
     readonly rank: number;
-    /**  */
     readonly icon: ImageAssets;
-    /**  */
     readonly picture: ImageAssets;
-    /**  */
     readonly name: TextAssets;
-    /**  */
     readonly description: TextAssets;
-    /**  */
     readonly skillsLevelUp: { [skillId: string]: { skill: Skill, levelUp: number } };
 
     readonly _data: JsonObject;
 
-    /**
-     * @param id
-     * @param client
-     */
     constructor(id: number, client: StarRail) {
         this.id = id;
         this.client = client;

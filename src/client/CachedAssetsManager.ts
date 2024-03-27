@@ -18,15 +18,9 @@ let langDataMemory: NullableLanguageMap = { ...initialLangDataMemory };
 
 let objectKeysManager: ObjectKeysManager | null;
 
-/** @typedef */
 export type NullableLanguageMap = { [key in LanguageCode]: { [key: string]: string } | null };
-/** @typedef */
 export type LanguageMap = { [key in LanguageCode]: { [key: string]: string } };
 
-/**
- * @en LanguageCode
- * @typedef
- */
 export type LanguageCode = "chs" | "cht" | "de" | "en" | "es" | "fr" | "id" | "jp" | "kr" | "pt" | "ru" | "th" | "vi";
 
 // Thanks @Dimbreath
@@ -72,9 +66,6 @@ const getGitRemoteAPIUrl = (useRawStarRailData: boolean, rawDate: Date, date: Da
     ? `https://api.github.com/repos/Dimbreath/StarRailData/commits?sha=master&since=${rawDate.toISOString()}`
     : `https://api.github.com/repos/yuko1101/starrail.js/commits?sha=main&path=cache.zip&since=${date.toISOString()}`;
 
-/**
- * @en CachedAssetsManager
- */
 class CachedAssetsManager {
     /** The client that instantiated this */
     readonly client: StarRail;
@@ -92,9 +83,6 @@ class CachedAssetsManager {
     _githubCache: ConfigFile | null;
     _isFetching: boolean;
 
-    /**
-     * @param client
-    */
     constructor(client: StarRail) {
         this.client = client;
         this.defaultCacheDirectoryPath = path.resolve(__dirname, "..", "..", "cache");
@@ -347,7 +335,6 @@ class CachedAssetsManager {
     }
 
     /**
-     * @param lang
      * @returns text map file path for a specific language
      */
     getLanguageDataPath(lang: LanguageCode): string {
@@ -373,7 +360,6 @@ class CachedAssetsManager {
     }
 
     /**
-     * @param lang
      * @returns text map for a specific language
      */
     getLanguageData(lang: LanguageCode): { [key: string]: string } {
@@ -417,8 +403,6 @@ class CachedAssetsManager {
 
     /**
      * Remove all unused text map entries
-     * @param data
-     * @param langsData
      */
     removeUnusedTextData(data: { [s: string]: { [s: string]: JsonObject } }, langsData: LanguageMap, showLog = true): LanguageMap {
         const required: number[] = [];

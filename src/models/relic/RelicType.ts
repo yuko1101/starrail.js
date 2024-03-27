@@ -13,30 +13,18 @@ import ImageAssets from "../assets/ImageAssets";
  * FOOT|Feet
  * OBJECT|Link Rope
  * NECK|Planar Sphere
- * @typedef
 */
 export type RelicTypeId = "HEAD" | "HAND" | "BODY" | "FOOT" | "OBJECT" | "NECK";
 
-/**
- * @en RelicType
- */
 class RelicType {
-    /**  */
     readonly id: RelicTypeId;
-    /**  */
     readonly client: StarRail;
 
-    /**  */
     readonly name: TextAssets;
-    /**  */
     readonly icon: ImageAssets;
 
     readonly _data: JsonObject;
 
-    /**
-     * @param id
-     * @param client
-     */
     constructor(id: RelicTypeId, client: StarRail) {
         this.id = id;
         this.client = client;

@@ -3,7 +3,6 @@ import StarRail from "../../client/StarRail";
 import AssetsNotFoundError from "../../errors/AssetsNotFoundError";
 import StatProperty, { StatPropertyType } from "../StatProperty";
 
-/** @typedef */
 export interface RelicSubStatData {
     id: number;
     groupId: number;
@@ -12,24 +11,14 @@ export interface RelicSubStatData {
     stepValue: number;
 }
 
-/**
- * @en RelicSubStatGroup
- */
 class RelicSubStatGroup {
-    /**  */
     readonly id: number;
-    /**  */
     readonly client: StarRail;
 
-    /**  */
     readonly subStats: RelicSubStatData[];
 
     readonly _data: JsonObject<JsonObject>;
 
-    /**
-     * @param id
-     * @param client
-     */
     constructor(id: number, client: StarRail) {
         this.id = id;
         this.client = client;

@@ -5,32 +5,18 @@ import TextAssets from "../assets/TextAssets";
 import StatProperty, { StatPropertyType, StatPropertyValue } from "../StatProperty";
 import DynamicTextAssets from "../assets/DynamicTextAssets";
 
-/**
- * @en LightConeSuperimposition
- */
 class LightConeSuperimposition {
-    /**  */
     readonly id: number;
-    /**  */
     readonly level: number;
-    /**  */
     readonly client: StarRail;
 
-    /**  */
     readonly paramList: number[];
-    /**  */
     readonly name: TextAssets;
-    /**  */
     readonly description: DynamicTextAssets;
-    /**  */
     readonly stats: StatPropertyValue[];
 
     readonly _data: JsonObject;
 
-    /**
-     * @param id
-     * @param client
-     */
     constructor(id: number, level: number, client: StarRail) {
         this.id = id;
         this.level = level;

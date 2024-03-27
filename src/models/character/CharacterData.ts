@@ -11,59 +11,32 @@ import Eidolon from "./Eidolon";
 import { StatPropertyValue } from "../StatProperty";
 import { SimpleMap, SimpleObject, getKeysFromSimpleMap } from "../../utils/ts_utils";
 
-/**
- * @en CharacterData
- */
 class CharacterData {
-    /**  */
     readonly id: number;
-    /**  */
     readonly client: StarRail;
 
-    /**  */
     readonly name: TextAssets;
-    /**  */
     readonly description: TextAssets;
-    /**  */
     readonly stars: number;
-    /**  */
     readonly maxEnergy: number;
-    /**  */
     readonly combatType: CombatType;
-    /**  */
     readonly path: Path;
-    /**  */
     readonly skills: Skill[];
-    /**  */
     readonly skillTreeNodes: SkillTreeNode[];
-    /**  */
     readonly eidolons: Eidolon[];
-    /**  */
     readonly icon: ImageAssets;
-    /**  */
     readonly sideIcon: ImageAssets;
-    /**  */
     readonly miniIcon: ImageAssets;
-    /**  */
     readonly teamActionIcon: ImageAssets;
-    /**  */
     readonly teamWaitingIcon: ImageAssets;
-    /**  */
     readonly splashImage: ImageAssets;
-    /**  */
     readonly splashCutInFigureImage: ImageAssets;
-    /**  */
     readonly splashCutInBackgroundImage: ImageAssets;
-    /**  */
     readonly shopItemIcon: ImageAssets;
 
     readonly _data: JsonObject;
     readonly _itemData: JsonObject;
 
-    /**
-     * @param id
-     * @param client
-     */
     constructor(id: number, client: StarRail) {
         this.id = id;
 
@@ -112,10 +85,6 @@ class CharacterData {
         this.shopItemIcon = new ImageAssets(itemJson.getAsString("ItemAvatarIconPath"), this.client);
     }
 
-    /**
-     * @param ascension
-     * @param level
-     */
     getStatsByLevel(ascension: number, level: number): StatPropertyValue[] {
         const ascensionData = this.client.cachedAssetsManager.getStarRailCacheData("AvatarPromotionConfig")[this.id][ascension];
         const ascensionJson = new JsonReader(ascensionData);
@@ -130,7 +99,6 @@ class CharacterData {
         ];
     }
 
-    /**  */
     getSkillTreeIdMap(): SimpleObject<never> {
         const skillTreeMap = this.getSkillTreeMap();
         const skillTreeIdMap: SimpleObject<never> = {};
@@ -149,7 +117,6 @@ class CharacterData {
         return skillTreeIdMap;
     }
 
-    /**  */
     getSkillTreeMap(): SimpleMap<SkillTreeNode, never> {
         const skillTreeMap: SimpleMap<SkillTreeNode, never> = new Map();
         const skillTreeNodes = this.skillTreeNodes;

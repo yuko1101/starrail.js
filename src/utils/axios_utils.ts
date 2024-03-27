@@ -2,11 +2,6 @@ import axios, { AxiosResponse, AxiosRequestConfig } from "axios";
 import StarRail from "../client/StarRail";
 import { JsonObject } from "config_file.js";
 
-/**
- * @param url
- * @param client
- * @param enableTimeout
- */
 export async function fetchJSON(url: string, client: StarRail, enableTimeout = false): Promise<AxiosResponse> {
     const headers: JsonObject = { "User-Agent": client.options.userAgent };
     if (client.options.githubToken && url.startsWith("https://api.github.com/")) headers["Authorization"] = `Bearer ${client.options.githubToken}`;

@@ -1,8 +1,5 @@
 import StarRail from "../../client/StarRail";
 
-/**
- * @typedef
- */
 export interface ImageBaseUrl {
     filePath: "UPPER_CAMEL_CASE" | "LOWER_CASE" | "NONE",
     url: string,
@@ -11,9 +8,6 @@ export interface ImageBaseUrl {
     format: "PNG" | "WEBP" | "JPG",
 }
 
-/**
- * @typedef
- */
 export interface CustomImageBaseUrl extends ImageBaseUrl {
     /**
      * @param path path formatted by [ImageBaseUrl#filePath](ImageBaseUrl#filePath)
@@ -22,26 +16,14 @@ export interface CustomImageBaseUrl extends ImageBaseUrl {
     customParser: (path: string) => string,
 }
 
-/**
- * @en ImageAssets
- */
 class ImageAssets {
-    /**  */
     readonly client: StarRail;
-    /**  */
     readonly path: string;
 
-    /**  */
     readonly imageBaseUrl: ImageBaseUrl | null;
-    /**  */
     readonly url: string;
-    /**  */
     readonly isAvailable: boolean;
 
-    /**
-     * @param path
-     * @param client
-     */
     constructor(path: string, client: StarRail, maxPriority: number = Number.POSITIVE_INFINITY) {
         this.client = client;
 

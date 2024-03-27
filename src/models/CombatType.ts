@@ -14,38 +14,24 @@ import ImageAssets from "./assets/ImageAssets";
  * Wind|Wind
  * Quantum|Quantum
  * Imaginary|Imaginary
- * @typedef
  */
 export type CombatTypeId = "Physical" | "Fire" | "Ice" | "Thunder" | "Wind" | "Quantum" | "Imaginary";
 
-/**
- * @en CombatType
- */
 class CombatType {
-    /**  */
     readonly id: CombatTypeId;
-    /**  */
     readonly client: StarRail;
 
-    /**  */
     readonly name: TextAssets;
-    /**  */
     readonly description: TextAssets;
-    /**  */
     readonly color: number;
     /** Not exact as it is an approximate value */
     readonly iconColor: number;
     /** Icon for the CombatType. Also you can use svg files [here](https://cdn.discordapp.com/attachments/885221800882098197/1118292606384873625/hsr.zip). */
     readonly icon: ImageAssets;
-    /**  */
     readonly bigIcon: ImageAssets;
 
     readonly _data: JsonObject;
 
-    /**
-     * @param id
-     * @param client
-     */
     constructor(id: CombatTypeId, client: StarRail) {
         this.id = id;
         this.client = client;
@@ -72,7 +58,6 @@ class CombatType {
 
 export default CombatType;
 
-/** @constant */
 export const combatTypeIconColors: { [key in CombatTypeId]: number } = {
     Physical: 0xCFCFCF,
     Fire: 0xEE4639,

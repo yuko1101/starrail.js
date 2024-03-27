@@ -10,42 +10,23 @@ import { LeveledSkill } from "./skill/Skill";
 import SkillLevel from "./skill/SkillLevel";
 import { nonNullable } from "../../utils/ts_utils";
 
-/**
- * @en Character
- */
 class Character {
-    /**  */
     readonly client: StarRail;
 
-    /**  */
     readonly characterData: CharacterData;
-    /**  */
     readonly lightCone: LightCone | null;
-    /**  */
     readonly relics: Relic[];
-    /**  */
     readonly level: number;
-    /**  */
     readonly exp: number;
-    /**  */
     readonly ascension: number;
-    /**  */
     readonly eidolons: number;
-    /**  */
     readonly skillTreeNodes: LeveledSkillTreeNode[];
-    /**  */
     readonly skills: LeveledSkill[];
-    /**  */
     readonly basicStats: StatPropertyValue[];
-    /**  */
     readonly stats: CharacterStats;
 
     readonly _data: JsonObject;
 
-    /**
-     * @param data
-     * @param client
-     */
     constructor(data: JsonObject, client: StarRail) {
         this.client = client;
         this._data = data;

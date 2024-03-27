@@ -5,29 +5,16 @@ import TextAssets from "../assets/TextAssets";
 import { getStableHash } from "../../utils/hash_utils";
 import { StatPropertyType, StatPropertyValue } from "../StatProperty";
 
-/**
- * @en RelicSetBonus
- */
 class RelicSetBonus {
-    /**  */
     readonly setId: number;
-    /**  */
     readonly needCount: number;
-    /**  */
     readonly client: StarRail;
 
-    /**  */
     readonly description: TextAssets;
-    /**  */
     readonly stats: StatPropertyValue[];
 
     readonly _data: JsonObject;
 
-    /**
-     * @param setId
-     * @param needCount
-     * @param client
-     */
     constructor(setId: number, needCount: number, client: StarRail) {
         this.setId = setId;
         this.needCount = needCount;

@@ -2,21 +2,12 @@ import { LanguageCode } from "../../client/CachedAssetsManager";
 import StarRail from "../../client/StarRail";
 import AssetsNotFoundError from "../../errors/AssetsNotFoundError";
 
-/**
- * @en TextAssets
- */
 class TextAssets {
-    /**  */
     readonly id: number;
-    /**  */
     readonly client: StarRail;
 
     // readonly _test: string | null;
 
-    /**
-     * @param id
-     * @param client
-     */
     constructor(id: number, client: StarRail) {
         this.id = id;
 
@@ -26,7 +17,6 @@ class TextAssets {
     }
 
     /**
-     * @param lang
      * @throws {AssetsNotFoundError}
      */
     get(lang?: LanguageCode): string {

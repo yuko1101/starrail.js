@@ -6,28 +6,16 @@ import { RelicSubStatData } from "./RelicSubStatGroup";
 import { StatPropertyValue } from "../StatProperty";
 
 
-/**
- * @en Relic
- */
 class Relic {
-    /**  */
     readonly client: StarRail;
 
-    /**  */
     readonly relicData: RelicData;
-    /**  */
     readonly level: number;
-    /**  */
     readonly mainStat: RelicMainStat;
-    /**  */
     readonly subStats: RelicSubStat[];
 
     readonly _data: JsonObject;
 
-    /**
-     * @param data
-     * @param client
-     */
     constructor(data: JsonObject, client: StarRail) {
         this.client = client;
         this._data = data;
@@ -56,22 +44,13 @@ class Relic {
 
 export default Relic;
 
-/**
- * @en RelicMainStat
- * @extends {StatPropertyValue}
- */
 export class RelicMainStat extends StatPropertyValue {
-    /**  */
     readonly mainStatData: RelicMainStatData;
     /** Relic's level */
     readonly level: number;
     /** Calculated by [mainStatData.baseValue](/api/interface/RelicMainStatData#baseValue) + [mainStatData.levelValue](/api/interface/RelicMainStatData#levelValue) \* [level](#level) */
     readonly value: number;
 
-    /**
-     * @param mainStatData
-     * @param level
-     */
     constructor(mainStatData: RelicMainStatData, level: number) {
         const value = mainStatData.baseValue + mainStatData.levelValue * level;
         super(mainStatData.statProperty.type, value, mainStatData.statProperty.client);
@@ -83,25 +62,14 @@ export class RelicMainStat extends StatPropertyValue {
     }
 }
 
-/**
- * @en RelicSubStat
- * @extends {StatPropertyValue}
- */
 export class RelicSubStat extends StatPropertyValue {
-    /**  */
     readonly subStatData: RelicSubStatData;
     /** The number of times this SubStat has been enhanced */
     readonly count: number;
-    /**  */
     readonly steps: number;
     /** Calculated by [subStatData.baseValue](/api/interface/RelicSubStatData#baseValue) \* [count](#count) + [subStatData.stepValue](/api/interface/RelicSubStatData#stepValue) \* [steps](#steps) */
     readonly value: number;
 
-    /**
-     * @param subStatData
-     * @param count
-     * @param steps
-     */
     constructor(subStatData: RelicSubStatData, count: number, steps: number) {
         const value = subStatData.baseValue * count + subStatData.stepValue * steps;
         super(subStatData.statProperty.type, value, subStatData.statProperty.client);

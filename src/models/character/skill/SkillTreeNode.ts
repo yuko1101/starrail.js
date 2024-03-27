@@ -9,37 +9,20 @@ import { StatPropertyType, StatPropertyValue } from "../../StatProperty";
 import SkillLevel from "./SkillLevel";
 import DynamicTextAssets from "../../assets/DynamicTextAssets";
 
-/**
- * @en SkillTreeNode
- */
 class SkillTreeNode {
-    /**  */
     readonly id: number;
-    /**  */
     readonly client: StarRail;
 
-    /**  */
     readonly characterId: number;
-    /**  */
     readonly maxLevel: number;
-    /**  */
     readonly isUnlockedByDefault: boolean;
-    /**  */
     readonly levelUpSkills: Skill[];
-    /**  */
     readonly name: TextAssets;
-    /**  */
     readonly icon: ImageAssets;
-    /**  */
     readonly previousNodeId: number | null;
 
     readonly _nodesData: JsonObject[];
 
-    /**
-     * @param id
-     * @param client
-     * @param nodeIndexToUse
-     */
     constructor(id: number, client: StarRail, nodeIndexToUse = 0) {
         this.id = id;
         this.client = client;
@@ -65,14 +48,10 @@ class SkillTreeNode {
         this.previousNodeId = json.getAsNumberWithDefault(null, "PrePoint", 0);
     }
 
-    /**
-     * @param level
-     */
     getSkillTreeNodeByLevel(level: SkillLevel): LeveledSkillTreeNode {
         return new LeveledSkillTreeNode(this._nodesData[level.base - 1], level, this.client);
     }
 
-    /**  */
     getPreviousNodes(): SkillTreeNode | null {
         if (this.previousNodeId === null) return null;
         return new SkillTreeNode(this.previousNodeId, this.client);
@@ -88,26 +67,14 @@ class SkillTreeNode {
 
 export default SkillTreeNode;
 
-/**
- * @en LeveledSkillTreeNode
- * @extends {SkillTreeNode}
- */
 export class LeveledSkillTreeNode extends SkillTreeNode {
-    /**  */
     readonly level: SkillLevel;
-    /**  */
     readonly stats: StatPropertyValue[];
-    /**  */
     readonly paramList: number[];
-    /**  */
     readonly description: DynamicTextAssets;
 
     readonly _data: JsonObject;
 
-    /**
-     * @param data
-     * @param client
-     */
     constructor(data: JsonObject, level: SkillLevel, client: StarRail) {
         // skill tree node data with base level
         const json = new JsonReader(data);

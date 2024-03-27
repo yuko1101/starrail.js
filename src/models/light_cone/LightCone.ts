@@ -8,16 +8,11 @@ import { StatPropertyValue } from "../StatProperty";
  * @en
  */
 class LightCone {
-    /**  */
     readonly client: StarRail;
 
-    /**  */
     readonly lightConeData: LightConeData;
-    /**  */
     readonly level: number;
-    /**  */
     readonly ascension: number;
-    /**  */
     readonly superimposition: LightConeSuperimposition;
     /** BaseHP, BaseAttack, and BaseDefence of this light cone. */
     readonly basicStats: StatPropertyValue[];
@@ -26,10 +21,6 @@ class LightCone {
 
     readonly _data: JsonObject;
 
-    /**
-     * @param data
-     * @param client
-     */
     constructor(data: JsonObject, client: StarRail) {
         this.client = client;
         this._data = data;

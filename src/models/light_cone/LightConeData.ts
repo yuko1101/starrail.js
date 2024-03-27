@@ -8,49 +8,29 @@ import ImageAssets from "../assets/ImageAssets";
 import LightConeSuperimposition from "./LightConeSuperimposition";
 import { StatPropertyValue } from "../StatProperty";
 
-/**
- * @en LightConeData
- */
 class LightConeData {
-    /**  */
     readonly id: number;
-    /**  */
     readonly client: StarRail;
 
-    /**  */
     readonly name: TextAssets;
-    /**  */
     readonly description: TextAssets;
-    /**  */
     readonly itemDescription: TextAssets;
-    /**  */
     readonly stars: number;
-    /**  */
     readonly path: Path;
-    /**  */
     readonly maxAscension: number;
-    /**  */
     readonly maxSuperimposition: number;
-    /**  */
     readonly superimpositions: LightConeSuperimposition[];
-    /**  */
     readonly expType: LightConeExpType;
     /** Experience value provided by the light cone when used as a material */
     readonly expProvide: number;
     /** Coin cost to level up other light cones when the light cone is used as a material */
     readonly coinCost: number;
-    /**  */
     readonly icon: ImageAssets;
-    /**  */
     readonly cardImage: ImageAssets;
 
     readonly _data: JsonObject;
     readonly _itemData: JsonObject;
 
-    /**
-     * @param id
-     * @param client
-     */
     constructor(id: number, client: StarRail) {
         this.id = id;
         this.client = client;
@@ -93,10 +73,6 @@ class LightConeData {
         this.cardImage = new ImageAssets(json.getAsString("ImagePath"), this.client);
     }
 
-    /**
-     * @param ascension
-     * @param level
-     */
     getStatsByLevel(ascension: number, level: number): StatPropertyValue[] {
         const ascensionData = this.client.cachedAssetsManager.getStarRailCacheData("EquipmentPromotionConfig")[this.id][ascension];
         const ascensionJson = new JsonReader(ascensionData);
@@ -108,9 +84,6 @@ class LightConeData {
         ];
     }
 
-    /**
-     * @param superimposition
-     */
     getSuperimpositionStats(superimposition: number): StatPropertyValue[] {
         return this.superimpositions[superimposition - 1].stats;
     }

@@ -5,34 +5,21 @@ import ImageAssets from "./assets/ImageAssets";
 import TextAssets from "./assets/TextAssets";
 import CharacterData from "./character/CharacterData";
 
-/**
- * @en UserIcon
- */
 class UserIcon {
     /** This can be found in PlayerIcon.json, ItemPlayerCard.json, AvatarPlayerIcon.json, or ItemConfigAvatarPlayerIcon.json */
     readonly id: number;
-    /**  */
     readonly client: StarRail;
-    /**  */
     readonly _itemData: JsonObject;
-    /**  */
     readonly _iconData: JsonObject;
 
-    /**  */
     readonly name: TextAssets;
-    /**  */
     readonly icon: ImageAssets;
-    /**  */
     readonly itemIcon: ImageAssets;
     /** Available for some non-character icons. */
     readonly figureIcon: ImageAssets;
     /** This will be null if the icon is not of a character. */
     readonly characterData: CharacterData | null;
 
-    /**
-     * @param id
-     * @param client
-     */
     constructor(id: number, client: StarRail) {
         this.id = id;
         this.client = client;

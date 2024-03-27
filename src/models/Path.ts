@@ -14,7 +14,6 @@ import ImageAssets from "./assets/ImageAssets";
  * Warlock|Nihility
  * Knight|Preservation
  * Priest|Abundance
- * @typedef
  */
 export type PathId = "Warrior" | "Rogue" | "Mage" | "Shaman" | "Warlock" | "Knight" | "Priest" | "Unknown";
 
@@ -29,30 +28,18 @@ export const pathMap = {
     Unknown: "General",
 } as const satisfies { [path in PathId]: string };
 
-/**
- * @en Path
- */
 class Path {
-    /**  */
     readonly id: PathId;
-    /**  */
     readonly client: StarRail;
 
-    /**  */
     readonly name: TextAssets;
-    /**  */
     readonly description: TextAssets;
     /** Icon for the Path. Also you can use svg files [here](https://cdn.discordapp.com/attachments/885221800882098197/1118292606384873625/hsr.zip). */
     readonly icon: ImageAssets;
-    /**  */
     readonly smallIcon: ImageAssets;
 
     readonly _data: JsonObject;
 
-    /**
-     * @param id
-     * @param client
-     */
     constructor(id: PathId, client: StarRail) {
         this.id = id;
         this.client = client;

@@ -4,13 +4,11 @@ import StarRail from "../client/StarRail";
 import Character from "./character/Character";
 import UserIcon from "./UserIcon";
 
-/** @typedef */
 export interface Birthday {
     month: number;
     day: number;
 }
 
-/** @typedef */
 export type Platform = "PC" | "ANDROID" | "IOS" | "PS5";
 
 export const platformMap: { [key: number]: Platform } = {
@@ -20,58 +18,37 @@ export const platformMap: { [key: number]: Platform } = {
     11: "PS5",
 };
 
-/** @typedef */
 export interface ForgottenHallInfo {
-    /**  */
     memory: number;
-    /**  */
     memoryOfChaos: number;
-    /**  */
     memoryOfChaosId: number | null;
 }
 
-/** @extends {User} */
 class StarRailUser extends User {
-    /**  */
     readonly client: StarRail;
 
     /** This will be NaN if this StarRailUser is from [EnkaGameAccount](https://enka-system.vercel.app/docs/api/EnkaGameAccount) and [isUidPublic](https://enka-system.vercel.app/docs/api/EnkaGameAccount#isUidPublic) is `false`. */
     readonly uid: number;
-    /**  */
     readonly nickname: string;
-    /**  */
     readonly signature: string | null;
-    /**  */
     readonly icon: UserIcon;
     /** Trailblaze level */
     readonly level: number;
     /** World level */
     readonly equilibriumLevel: number;
-    /**  */
     readonly platform: Platform | null;
-    /**  */
     readonly friends: number;
-    /**  */
     readonly achievements: number;
-    /**  */
     readonly characterCount: number;
-    /**  */
     readonly lightConeCount: number;
     /** This will be null if the user has not yet unlocked Forgotten Hall. */
     readonly forgottenHall: ForgottenHallInfo | null;
-    /**  */
     readonly simulatedUniverse: number;
-    /**  */
     readonly supportCharacters: Character[];
     /** Characters on the user's display. Characters that are also in [supportCharacter](#supportCharacter) are omitted if you use Enka.Network API. */
     readonly starfaringCompanions: Character[];
-    /**  */
     readonly enkaUserHash: string | null;
 
-    /**
-     * @param data
-     * @param client
-     */
     constructor(data: JsonObject, client: StarRail) {
         const json = new JsonReader(data);
         super(json);

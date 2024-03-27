@@ -9,49 +9,29 @@ import TextAssets from "../assets/TextAssets";
 import ImageAssets from "../assets/ImageAssets";
 import RelicType, { RelicTypeId } from "./RelicType";
 
-/**
- * @en RelicData
- */
 class RelicData {
-    /**  */
     readonly id: number;
-    /**  */
     readonly client: StarRail;
 
-    /**  */
     readonly name: TextAssets;
-    /**  */
     readonly description: TextAssets;
-    /**  */
     readonly type: RelicType;
-    /**  */
     readonly stars: number;
-    /**  */
     readonly maxLevel: number;
-    /**  */
     readonly expType: RelicExpType;
-    /**  */
     readonly mainStatGroup: RelicMainStatGroup;
-    /**  */
     readonly subStatGroup: RelicSubStatGroup;
     /** Experience value provided by the light cone when used as a material */
     readonly expProvide: number;
     /** Coin cost to level up other light cones when the light cone is used as a material */
     readonly coinCost: number;
-    /**  */
     readonly icon: ImageAssets;
-    /**  */
     readonly figureIcon: ImageAssets;
-    /**  */
     readonly set: RelicSet;
 
     readonly _data: JsonObject;
     readonly _itemData: JsonObject;
 
-    /**
-     * @param id
-     * @param client
-     */
     constructor(id: number, client: StarRail) {
         this.id = id;
         this.client = client;

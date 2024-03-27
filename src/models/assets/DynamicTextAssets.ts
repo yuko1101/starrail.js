@@ -3,7 +3,6 @@ import StarRail from "../../client/StarRail";
 import TextAssets from "./TextAssets";
 import { LanguageCode } from "../../client/CachedAssetsManager";
 
-/** @typedef */
 export interface DynamicData {
     paramList: number[];
 }
@@ -13,20 +12,13 @@ const defaultDynamicData: DynamicData = {
 };
 
 /**
- * @en DynamicTextAssets
  * TextAssets which has placeholders in the text.
  */
 class DynamicTextAssets extends TextAssets {
-    /**  */
     readonly dynamicData: DynamicData;
 
     // readonly _dynamicTest: string | null;
 
-    /**
-     * @param id
-     * @param data
-     * @param client
-     */
     constructor(id: number, data: Partial<DynamicData>, client: StarRail) {
         super(id, client);
 
@@ -36,8 +28,6 @@ class DynamicTextAssets extends TextAssets {
     }
 
     /**
-     * @param replaceWith
-     * @param lang
      * @throws AssetsNotFoundError
      */
     getReplacedData(replaceWith: (keyof DynamicData)[] = [], lang?: LanguageCode): { text: string, usedParamIndices: number[] } {
@@ -75,8 +65,6 @@ class DynamicTextAssets extends TextAssets {
     }
 
     /**
-     * @param replaceWith
-     * @param lang
      * @returns null instead of throwing AssetsNotFoundError.
      */
     getNullableReplacedData(replaceWith: (keyof DynamicData)[] = [], lang?: LanguageCode): { text: string, usedParamIndices: number[] } | null {
@@ -88,8 +76,6 @@ class DynamicTextAssets extends TextAssets {
     }
 
     /**
-     * @param replaceWith
-     * @param lang
      * @throws AssetsNotFoundError
      */
     getReplacedText(replaceWith: (keyof DynamicData)[] = [], lang?: LanguageCode): string {
@@ -97,8 +83,6 @@ class DynamicTextAssets extends TextAssets {
     }
 
     /**
-     * @param replaceWith
-     * @param lang
      * @returns null instead of throwing AssetsNotFoundError.
      */
     getNullableReplacedText(replaceWith: (keyof DynamicData)[] = [], lang?: LanguageCode): string | null {

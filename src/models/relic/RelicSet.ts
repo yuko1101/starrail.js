@@ -7,30 +7,17 @@ import RelicSetBonus from "./RelicSetBonus";
 import Relic from "./Relic";
 import RelicData from "./RelicData";
 
-/**
- * @en RelicSet
- */
 class RelicSet {
-    /**  */
     readonly id: number;
-    /**  */
     readonly client: StarRail;
 
-    /**  */
     readonly name: TextAssets;
-    /**  */
     readonly icon: ImageAssets;
-    /**  */
     readonly figureIcon: ImageAssets;
-    /**  */
     readonly setBonus: RelicSetBonus[];
 
     readonly _data: JsonObject;
 
-    /**
-     * @param id
-     * @param client
-     */
     constructor(id: number, client: StarRail) {
         this.id = id;
         this.client = client;
@@ -49,9 +36,6 @@ class RelicSet {
         this.setBonus = json.get("SetSkillList").mapArray((_, needCount) => new RelicSetBonus(this.id, needCount.getAsNumber(), this.client));
     }
 
-    /**
-    * @param relics
-    */
     static getActiveSetBonus(relics: (Relic | RelicData | RelicSet)[]): { set: RelicSet, count: number, activeBonus: RelicSetBonus[] }[] {
         const relicSets = relics.map(a => (a instanceof RelicSet) ? a : (a instanceof RelicData) ? a.set : a.relicData.set);
 

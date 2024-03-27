@@ -111,9 +111,6 @@ const defaultImageBaseUrls: (ImageBaseUrl | CustomImageBaseUrl)[] = [
     },
 ];
 
-/**
- * @typedef
- */
 export interface UserCacheOptions {
     isEnabled: boolean;
     mihomoTtl: number;
@@ -122,7 +119,6 @@ export interface UserCacheOptions {
     deleter: ((key: string) => Promise<void>) | null;
 }
 
-/** @typedef */
 export interface ClientOptions {
     userAgent: string;
     cacheDirectory: string | null;
@@ -137,7 +133,6 @@ export interface ClientOptions {
     userCache: UserCacheOptions;
 }
 
-/** @constant */
 export const defaultClientOption: Overwrite<ClientOptions, { "enkaSystem": EnkaSystem | null }> = {
     userAgent: "Mozilla/5.0",
     cacheDirectory: null,
@@ -157,16 +152,12 @@ export const defaultClientOption: Overwrite<ClientOptions, { "enkaSystem": EnkaS
     },
 };
 
-/** @typedef */
 export interface FetchOptions {
     mihomoForceUpdate: boolean;
 }
 
 const userCacheMap = new Map();
 
-/**
- * @en StarRail
- */
 class StarRail implements EnkaLibrary<StarRailUser, StarRailCharacterBuild> {
     readonly hoyoType: 1;
     getUser(data: JsonObject): StarRailUser {
@@ -181,14 +172,10 @@ class StarRail implements EnkaLibrary<StarRailUser, StarRailCharacterBuild> {
     /** The options the client was instantiated with */
     readonly options: ClientOptions;
 
-    /**  */
     readonly cachedAssetsManager: CachedAssetsManager;
 
     private _tasks: NodeJS.Timeout[] = [];
 
-    /**
-     * @param options
-     */
     constructor(options: Partial<ClientOptions>) {
         this.hoyoType = 1;
 
@@ -209,7 +196,6 @@ class StarRail implements EnkaLibrary<StarRailUser, StarRailCharacterBuild> {
 
 
     /**
-     * @param uid
      * @throws {EnkaNetworkError}
      */
     async fetchUser(uid: number | string, options: Partial<FetchOptions> = {}): Promise<StarRailUser> {
@@ -320,7 +306,6 @@ class StarRail implements EnkaLibrary<StarRailUser, StarRailCharacterBuild> {
     }
 
     /**
-     * @param playableOnly
      * @returns all character data
      */
     getAllCharacters(playableOnly = true): CharacterData[] {
@@ -328,7 +313,6 @@ class StarRail implements EnkaLibrary<StarRailUser, StarRailCharacterBuild> {
     }
 
     /**
-     * @param excludeTestLightCones
      * @returns all light cone data
      */
     getAllLightCones(excludeTestLightCones = true): LightConeData[] {

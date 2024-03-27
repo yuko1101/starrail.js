@@ -3,42 +3,22 @@ import { CharacterBuild, HoyoType } from "enka-system";
 import StarRail from "../../client/StarRail";
 import Character from "../character/Character";
 
-/**
- * @extends {CharacterBuild}
- */
 class StarRailCharacterBuild extends CharacterBuild {
-    /**  */
     readonly client: StarRail;
-    /**  */
     readonly enkaUserInfo: { username: string, hash: string };
 
-    /**  */
     readonly id: number;
-    /**  */
     readonly name: string;
-    /**  */
     readonly order: number;
-    /**  */
     readonly isLive: boolean;
-    /**  */
     readonly isPublic: boolean;
-    /**  */
     readonly character: Character;
-    /**  */
     readonly imageUrl: string | null;
-    /**  */
     readonly hoyoType: HoyoType;
-    /**  */
     readonly url: string;
 
     readonly _data: JsonObject;
 
-    /**
-     * @param data
-     * @param client
-     * @param username
-     * @param hash
-     */
     constructor(data: JsonObject, client: StarRail, username: string, hash: string) {
         super();
 

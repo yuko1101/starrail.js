@@ -7,47 +7,27 @@ import CombatType, { CombatTypeId } from "../../CombatType";
 import SkillLevel from "./SkillLevel";
 import DynamicTextAssets from "../../assets/DynamicTextAssets";
 
-/** @typedef */
 export type SkillType = "Normal" | "Ultra" | "MazeNormal" | "Maze" | "BPSkill" | "Talent";
 
-/** @typedef */
 export type EffectType = "SingleAttack" | "AoEAttack" | "MazeAttack" | "Enhance" | "Blast" | "Impair" | "Bounce" | "Support" | "Defence" | "Restore";
 
-/**
- * @en Skill
- */
 class Skill {
-    /**  */
     readonly id: number;
-    /**  */
     readonly client: StarRail;
 
-    /**  */
     readonly name: TextAssets;
-    /**  */
     readonly effectTypeText: TextAssets;
-    /**  */
     readonly skillTypeText: TextAssets;
-    /**  */
     readonly combatType: CombatType | null;
-    /**  */
     readonly skillType: SkillType;
-    /**  */
     readonly effectType: EffectType;
-    /**  */
     readonly maxLevel: number;
-    /**  */
     readonly skillIcon: ImageAssets;
     /** Available only when [skillType](#skillType) is "Ultra" */
     readonly ultraSkillIcon: ImageAssets;
 
     readonly _skillsData: JsonObject[];
 
-    /**
-     * @param id
-     * @param client
-     * @param skillIndexToUse
-     */
     constructor(id: number, client: StarRail, skillIndexToUse = 0) {
         this.id = id;
         this.client = client;
@@ -76,9 +56,6 @@ class Skill {
 
     }
 
-    /**
-     * @param level
-     */
     getSkillByLevel(level: SkillLevel): LeveledSkill {
         return new LeveledSkill(this._skillsData[level.value - 1], level, this.client);
     }
@@ -86,28 +63,15 @@ class Skill {
 
 export default Skill;
 
-/**
- * @en LeveledSkill
- * @extends {Skill}
- */
 export class LeveledSkill extends Skill {
-    /**  */
     readonly level: SkillLevel;
-    /**  */
     readonly paramList: number[];
-    /**  */
     readonly simpleParamList: number[];
-    /**  */
     readonly description: DynamicTextAssets;
-    /**  */
     readonly simpleDescription: DynamicTextAssets;
 
     readonly _data: JsonObject;
 
-    /**
-     * @param data
-     * @param client
-     */
     constructor(data: JsonObject, level: SkillLevel, client: StarRail) {
         const json = new JsonReader(data);
         const id = json.getAsNumber("SkillID");

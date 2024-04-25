@@ -1,3 +1,5 @@
+# 1.5.1
+- Added CharacterData#getBaseAggro(number).
 # 1.5.0
 - Added caching for fetching user data by uid (StarRail#fetchUser).
 # 1.4.1

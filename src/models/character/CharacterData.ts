@@ -162,6 +162,12 @@ class CharacterData {
         return [otherNodes, ...groupedSkillTreeNodes];
     }
 
+    getBaseAggro(ascension: number): number {
+        const ascensionData = this.client.cachedAssetsManager.getStarRailCacheData("AvatarPromotionConfig")[this.id][ascension];
+        const ascensionJson = new JsonReader(ascensionData);
+
+        return ascensionJson.getAsNumber("BaseAggro", "Value");
+    }
 }
 
 export default CharacterData;

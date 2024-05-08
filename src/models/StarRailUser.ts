@@ -1,5 +1,5 @@
 import { JsonObject, JsonReader } from "config_file.js";
-import { User } from "enka-system";
+import { EnkaProfile, User } from "enka-system";
 import StarRail from "../client/StarRail";
 import Character from "./character/Character";
 import UserIcon from "./UserIcon";
@@ -19,9 +19,14 @@ export const platformMap: { [key: number]: Platform } = {
 };
 
 export interface ForgottenHallInfo {
-    memory: number;
-    memoryOfChaos: number;
-    memoryOfChaosId: number | null;
+    memory: {
+        maxLevel: number,
+    }
+}
+
+export interface PureFictionInfo {
+    level: number,
+    stars: number,
 }
 
 class StarRailUser extends User {
@@ -38,15 +43,22 @@ class StarRailUser extends User {
     readonly equilibriumLevel: number;
     readonly platform: Platform | null;
     readonly friends: number;
-    readonly achievements: number;
+    readonly achievementCount: number;
     readonly characterCount: number;
     readonly lightConeCount: number;
+    readonly bookCount: number;
+    readonly relicCount: number;
+    readonly musicCount: number;
     /** This will be null if the user has not yet unlocked Forgotten Hall. */
     readonly forgottenHall: ForgottenHallInfo | null;
+    readonly pureFiction: PureFictionInfo | null;
     readonly simulatedUniverse: number;
+    /** Whether the user displays characters in their showcase. */
+    readonly isDisplayCharacter: boolean;
     readonly supportCharacters: Character[];
     /** Characters on the user's display. Characters that are also in [supportCharacter](#supportCharacter) are omitted if you use Enka.Network API. */
     readonly starfaringCompanions: Character[];
+    readonly enkaProfile: EnkaProfile | null;
     readonly enkaUserHash: string | null;
 
     constructor(data: JsonObject, client: StarRail) {
@@ -73,18 +85,27 @@ class StarRailUser extends User {
 
         const recordInfo = detailInfo.get("recordInfo");
 
-        this.achievements = recordInfo.getAsNumberWithDefault(0, "achievementCount");
+        this.achievementCount = recordInfo.getAsNumberWithDefault(0, "achievementCount");
         this.characterCount = recordInfo.getAsNumber("avatarCount");
         this.lightConeCount = recordInfo.getAsNumberWithDefault(0, "equipmentCount");
+        this.bookCount = recordInfo.getAsNumberWithDefault(0, "bookCount");
+        this.relicCount = recordInfo.getAsNumberWithDefault(0, "relicCount");
+        this.musicCount = recordInfo.getAsNumberWithDefault(0, "musicCount");
 
         const challengeInfo = recordInfo.get("challengeInfo");
         this.forgottenHall = {
-            memory: challengeInfo.getAsNumberWithDefault(0, "scheduleMaxLevel"),
-            memoryOfChaos: challengeInfo.getAsNumberWithDefault(0, "noneScheduleMaxLevel"),
-            memoryOfChaosId: challengeInfo.getAsNumberWithDefault(null, "scheduleGroupId"),
+            memory: {
+                maxLevel: challengeInfo.getAsNumberWithDefault(0, "noneScheduleMaxLevel"),
+            },
+        };
+        this.pureFiction = {
+            level: challengeInfo.getAsNumberWithDefault(0, "abyssLevel"),
+            stars: challengeInfo.getAsNumberWithDefault(0, "abyssStarCount"),
         };
 
         this.simulatedUniverse = recordInfo.getAsNumberWithDefault(0, "maxRogueChallengeScore");
+
+        this.isDisplayCharacter = detailInfo.getAsBoolean("isDisplayAvatar");
 
         const avatarDetailList = detailInfo.getAsJsonArrayWithDefault([], "avatarDetailList");
         this.starfaringCompanions = avatarDetailList.filter(c => !(c as JsonObject)["_assist"]).map(c => new Character(c as JsonObject, this.client));
@@ -97,7 +118,7 @@ class StarRailUser extends User {
         })();
 
         this.enkaUserHash = json.getAsStringWithDefault(null, "owner", "hash");
-
+        this.enkaProfile = json.has("owner") ? new EnkaProfile(client.options.enkaSystem, json.getAsJsonObject("owner")) : null;
     }
 
     /**

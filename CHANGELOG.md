@@ -1,5 +1,12 @@
-# 1.5.1
+# 1.6.0
+**This version includes Breaking Changes**
+- Added StarRailUser#bookCount, StarRailUser#relicCount, and StarRailUser#musicCount.
+- Added StarRailUser#isDisplayAvatar.
+- Added StarRailUser#enkaProfile.
+- Added StarRailUser#pureFiction.
 - Added CharacterData#getBaseAggro(number).
+- Renamed StarRailUser#achievements to StarRailUser#achievementCount.
+- Changed structure of ForgottenHallInfo.
 # 1.5.0
 - Added caching for fetching user data by uid (StarRail#fetchUser).
 # 1.4.1

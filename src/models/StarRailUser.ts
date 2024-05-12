@@ -95,7 +95,7 @@ class StarRailUser extends User {
         const challengeInfo = recordInfo.get("challengeInfo");
         this.forgottenHall = {
             memory: {
-                maxLevel: challengeInfo.getAsNumberWithDefault(0, "noneScheduleMaxLevel"),
+                maxLevel: challengeInfo.getAsNumberWithDefault(0, "scheduleMaxLevel"),
             },
         };
         this.pureFiction = {

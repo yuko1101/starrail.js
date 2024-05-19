@@ -2,6 +2,7 @@
 **This version includes Breaking Changes**
 - Renamed StarRailUser#pureFiction to challengeInfo.
 - Renamed PureFictionInfo to ChallengeInfo.
+- Moved StarRailUser#forgottenHall into the challengeInfo.
 # 1.6.0
 **This version includes Breaking Changes**
 - Added StarRailUser#bookCount, StarRailUser#relicCount, and StarRailUser#musicCount.

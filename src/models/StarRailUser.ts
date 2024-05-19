@@ -24,7 +24,7 @@ export interface ForgottenHallInfo {
     }
 }
 
-export interface PureFictionInfo {
+export interface ChallengeInfo {
     level: number,
     stars: number,
 }
@@ -51,7 +51,7 @@ class StarRailUser extends User {
     readonly musicCount: number;
     /** This will be null if the user has not yet unlocked Forgotten Hall. */
     readonly forgottenHall: ForgottenHallInfo | null;
-    readonly pureFiction: PureFictionInfo | null;
+    readonly challengeInfo: ChallengeInfo | null;
     readonly simulatedUniverse: number;
     /** Whether the user displays characters in their showcase. */
     readonly isDisplayCharacter: boolean;
@@ -98,7 +98,7 @@ class StarRailUser extends User {
                 maxLevel: challengeInfo.getAsNumberWithDefault(0, "scheduleMaxLevel"),
             },
         };
-        this.pureFiction = {
+        this.challengeInfo = {
             level: challengeInfo.getAsNumberWithDefault(0, "abyssLevel"),
             stars: challengeInfo.getAsNumberWithDefault(0, "abyssStarCount"),
         };

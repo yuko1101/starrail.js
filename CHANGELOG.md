@@ -1,3 +1,7 @@
+# 1.7.0
+**This version includes Breaking Changes**
+- Renamed StarRailUser#pureFiction to challengeInfo.
+- Renamed PureFictionInfo to ChallengeInfo.
 # 1.6.0
 **This version includes Breaking Changes**
 - Added StarRailUser#bookCount, StarRailUser#relicCount, and StarRailUser#musicCount.

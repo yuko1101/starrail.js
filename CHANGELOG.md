@@ -1,3 +1,6 @@
+# 1.7.1
+- Fixed structure errors with new excels (v2.4+).
+- Improved code quality.
 # 1.7.0
 **This version includes Breaking Changes**
 - Renamed StarRailUser#pureFiction to challengeInfo.

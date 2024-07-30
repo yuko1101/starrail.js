@@ -2,61 +2,63 @@ import fs from "fs";
 import path from "path";
 import { Axios } from "axios";
 import unzip, { Entry } from "unzip-stream";
-import { ConfigFile, JsonObject, JsonReader, bindOptions, move } from "config_file.js";
+import { ConfigFile, JsonArray, JsonElement, JsonObject, JsonReader, bindOptions, isJsonObject, move } from "config_file.js";
 import { fetchJSON } from "../utils/axios_utils";
 import ObjectKeysManager from "./ObjectKeysManager";
 import StarRail from "./StarRail";
 import { getStableHash } from "../utils/hash_utils";
 
-const languages: LanguageCode[] = ["chs", "cht", "de", "en", "es", "fr", "id", "jp", "kr", "pt", "ru", "th", "vi"];
-
-let dataMemory: { [key: string]: { [key: string]: JsonObject } } = {};
-
-
-const initialLangDataMemory: NullableLanguageMap = { chs: null, cht: null, de: null, en: null, es: null, fr: null, id: null, jp: null, kr: null, pt: null, ru: null, th: null, vi: null };
-let langDataMemory: NullableLanguageMap = { ...initialLangDataMemory };
-
-let objectKeysManager: ObjectKeysManager | null;
-
-export type NullableLanguageMap = { [key in LanguageCode]: { [key: string]: string } | null };
-export type LanguageMap = { [key in LanguageCode]: { [key: string]: string } };
-
-export type LanguageCode = "chs" | "cht" | "de" | "en" | "es" | "fr" | "id" | "jp" | "kr" | "pt" | "ru" | "th" | "vi";
-
 // Thanks @Dimbreath
-const contentBaseUrl = "https://raw.githubusercontent.com/Dimbreath/StarRailData/master";
-const contents = [
-    "AvatarConfig", // Characters
-    "ItemConfigAvatar", // Characters as Items
-    "DamageType", // Combat Types
-    "AvatarBaseType", // Paths
-    "AvatarSkillConfig", // Character Skills
-    "AvatarSkillTreeConfig", // Character Skill Trees
-    "AvatarRankConfig", // Character Eidolons
-    "AvatarPromotionConfig", // Character Promotions and Character Basic Stats.
-    "EquipmentConfig", // Light Cones
-    "ItemConfigEquipment", // Light Cones as Items
-    "EquipmentExpType", // Light Cone Exp Types
-    "EquipmentSkillConfig", // Light Cone Superimpositions
-    "EquipmentPromotionConfig", // Light Cone Promotions and Light Cone Basic Stats
-    "RelicConfig", // Relics
-    "ItemConfigRelic", // Relics as Items
-    "RelicExpType", // Relic Exp Types
-    "RelicMainAffixConfig", // Relic Main Stats
-    "RelicSubAffixConfig", // Relic Sub Stats
-    "RelicSetConfig", // Relic Sets
-    "RelicSetSkillConfig", // Relic Set Bonus
-    "RelicBaseType", // Relic Types
-    "AvatarPropertyConfig", // StatProperty
+const excelBaseUrl = "https://raw.githubusercontent.com/Dimbreath/StarRailData/master";
+
+export type ExcelKey = string | [string, JsonElement];
+export const excelKeyMap = {
+    "AvatarConfig": ["AvatarID"], // Characters
+    "ItemConfigAvatar": ["ID"], // Characters as Items
+    "DamageType": ["ID"], // Combat Types
+    "AvatarBaseType": [["ID", "Unknown"]], // Paths
+    "AvatarSkillConfig": ["SkillID", "Level"], // Character Skills
+    "AvatarSkillTreeConfig": ["PointID", "Level"], // Character Skill Trees
+    "AvatarRankConfig": ["RankID"], // Character Eidolons
+    "AvatarPromotionConfig": ["AvatarID", ["Promotion", 0]], // Character Promotions and Character Basic Stats.
+    "EquipmentConfig": ["EquipmentID"], // Light Cones
+    "ItemConfigEquipment": ["ID"], // Light Cones as Items
+    "EquipmentExpType": ["ExpType", "Level"], // Light Cone Exp Types
+    "EquipmentSkillConfig": ["SkillID", "Level"], // Light Cone Superimpositions
+    "EquipmentPromotionConfig": ["EquipmentID", ["Promotion", 0]], // Light Cone Promotions and Light Cone Basic Stats
+    "RelicConfig": ["ID"], // Relics
+    "ItemConfigRelic": ["ID"], // Relics as Items
+    "RelicExpType": ["TypeID", ["Level", 0]], // Relic Exp Types
+    "RelicMainAffixConfig": ["GroupID", "AffixID"], // Relic Main Stats
+    "RelicSubAffixConfig": ["GroupID", "AffixID"], // Relic Sub Stats
+    "RelicSetConfig": ["SetID"], // Relic Sets
+    "RelicSetSkillConfig": ["SetID", "RequireNum"], // Relic Set Bonus
+    "RelicBaseType": [["Type", "All"]], // Relic Types
+    "AvatarPropertyConfig": ["PropertyType"], // StatProperty
 
     // Character Icon for a player
-    "ItemConfigAvatarPlayerIcon",
-    "AvatarPlayerIcon",
+    "ItemConfigAvatarPlayerIcon": ["ID"],
+    "AvatarPlayerIcon": ["ID"],
 
     // Other Icon for a player
-    "ItemPlayerCard",
-    "PlayerIcon",
-];
+    "ItemPlayerCard": ["ID"],
+    "PlayerIcon": ["ID"],
+} as const satisfies { [excel: string]: ExcelKey[] };
+export type ExcelType = keyof typeof excelKeyMap;
+export const excels = Object.keys(excelKeyMap) as ExcelType[];
+export type LoadedExcelDataMap = { [excel in keyof typeof excelKeyMap]: SingleBy<typeof excelKeyMap[excel]> };
+export type ExcelDataMap = { [excel in keyof typeof excelKeyMap]: LoadedExcelDataMap[excel] | null };
+const initialExcelDataMemory = Object.fromEntries(excels.map(content => [content, null])) as ExcelDataMap;
+let excelDataMemory: ExcelDataMap = { ...initialExcelDataMemory };
+
+const languages = ["chs", "cht", "de", "en", "es", "fr", "id", "jp", "kr", "pt", "ru", "th", "vi"] as const;
+export type LanguageCode = typeof languages[number];
+export type LoadedLanguageMap = { [key in LanguageCode]: { [key: string]: string } };
+export type LanguageMap = { [key in LanguageCode]: LoadedLanguageMap[key] | null };
+const initialLangDataMemory: LanguageMap = Object.fromEntries(languages.map(lang => [lang, null])) as LanguageMap;
+let langDataMemory: LanguageMap = { ...initialLangDataMemory };
+
+let objectKeysManager: ObjectKeysManager | null;
 
 const textMapWhiteList: number[] = [
 
@@ -73,20 +75,20 @@ class CachedAssetsManager {
     /** Default path of StarRail cache data directory */
     readonly defaultCacheDirectoryPath: string;
     /** List of the names of the files this library uses */
-    readonly _contentsSrc: string[];
+    readonly _excels: ExcelType[];
     /** List of supported languages */
-    readonly _langs: string[];
+    readonly _langs: typeof languages;
     /** Path of directory where StarRail cache data is stored */
     cacheDirectoryPath: string;
 
-    _cacheUpdater: NodeJS.Timer | null;
+    _cacheUpdater: NodeJS.Timeout | null;
     _githubCache: ConfigFile | null;
     _isFetching: boolean;
 
     constructor(client: StarRail) {
         this.client = client;
         this.defaultCacheDirectoryPath = path.resolve(__dirname, "..", "..", "cache");
-        this._contentsSrc = contents;
+        this._excels = excels;
         this._langs = languages;
 
         this.cacheDirectoryPath = client.options.cacheDirectory ?? this.defaultCacheDirectoryPath;
@@ -131,7 +133,7 @@ class CachedAssetsManager {
     /** Obtains a text map for a specific language. */
     async fetchLanguageData(lang: LanguageCode): Promise<{ [key: string]: string }> {
         await this.cacheDirectorySetup();
-        const url = `${contentBaseUrl}/TextMap/TextMap${lang.toUpperCase()}.json`;
+        const url = `${excelBaseUrl}/TextMap/TextMap${lang.toUpperCase()}.json`;
         const json = (await fetchJSON(url, this.client)).data;
         return json;
     }
@@ -186,16 +188,16 @@ class CachedAssetsManager {
             }
 
             const promises: Promise<void>[] = [];
-            const excelOutputData: { [s: string]: { [s: string]: JsonObject } } = {};
-            for (const content of contents) {
-                const fileName = `${content}.json`;
-                const url = `${contentBaseUrl}/ExcelOutput/${fileName}`;
+            const excelOutputData: JsonObject = { ...initialExcelDataMemory };
+            for (const excel of excels) {
+                const fileName = `${excel}.json`;
+                const url = `${excelBaseUrl}/ExcelOutput/${fileName}`;
                 promises.push((async () => {
-                    const json = (await fetchJSON(url, this.client)).data;
+                    const json = (await fetchJSON(url, this.client)).data as JsonObject[];
                     if (this.client.options.showFetchCacheLog) {
                         console.info(`Downloaded data/${fileName}`);
                     }
-                    excelOutputData[content] = json;
+                    excelOutputData[excel] = this.formatExcel(excel, json);
                 })());
             }
             await Promise.all(promises);
@@ -205,7 +207,7 @@ class CachedAssetsManager {
                 console.info("Downloading language files...");
             }
 
-            const langsData: NullableLanguageMap = { ...initialLangDataMemory };
+            const langsData: LanguageMap = { ...initialLangDataMemory };
             const langPromises: Promise<void>[] = [];
             for (const lang of languages) {
                 langPromises.push(
@@ -225,7 +227,7 @@ class CachedAssetsManager {
                 console.info("Parsing data... (This may take more than 10 minutes)");
             }
 
-            const clearLangsData: NullableLanguageMap = this.removeUnusedTextData(excelOutputData, langsData as LanguageMap);
+            const clearLangsData = this.removeUnusedTextData(excelOutputData as LoadedExcelDataMap, langsData as LoadedLanguageMap);
 
             if (this.client.options.showFetchCacheLog) {
                 console.info("> Parsing completed");
@@ -236,8 +238,8 @@ class CachedAssetsManager {
                 fs.writeFileSync(path.resolve(this.cacheDirectoryPath, "langs", `${lang}.json`), JSON.stringify(clearLangsData[lang]));
             }
 
-            for (const key in excelOutputData) {
-                fs.writeFileSync(path.resolve(this.cacheDirectoryPath, "data", `${key}.json`), JSON.stringify(excelOutputData[key]));
+            for (const excel of Object.keys(excelOutputData) as ExcelType[]) {
+                fs.writeFileSync(path.resolve(this.cacheDirectoryPath, "data", `${excel}.json`), JSON.stringify(excelOutputData[excel]));
             }
 
             await this._githubCache?.set("rawLastUpdate", Date.now()).save();
@@ -258,8 +260,8 @@ class CachedAssetsManager {
         for (const lang of languages) {
             if (!fs.existsSync(path.resolve(this.cacheDirectoryPath, "langs", `${lang}.json`))) return false;
         }
-        for (const content of contents) {
-            const fileName = `${content}.json`;
+        for (const excel of excels) {
+            const fileName = `${excel}.json`;
             if (!fs.existsSync(path.resolve(this.cacheDirectoryPath, "data", fileName))) return false;
         }
         return true;
@@ -274,8 +276,6 @@ class CachedAssetsManager {
         options = bindOptions({
             useRawStarRailData: false,
             ghproxy: false,
-            onUpdateStart: null,
-            onUpdateEnd: null,
         }, options);
 
         await this.cacheDirectorySetup();
@@ -308,9 +308,6 @@ class CachedAssetsManager {
             instant: true,
             ghproxy: false,
             timeout: 60 * 60 * 1000,
-            onUpdateStart: null,
-            onUpdateEnd: null,
-            onError: null,
         }, options);
         if (options.timeout as number < 60 * 1000) throw new Error("timeout cannot be shorter than 1 minute.");
         if (options.instant) this.updateContents({ onUpdateStart: options.onUpdateStart, onUpdateEnd: options.onUpdateEnd, useRawStarRailData: options.useRawStarRailData, ghproxy: options.ghproxy });
@@ -350,13 +347,22 @@ class CachedAssetsManager {
     }
 
     /**
-     * @param name without extensions (.json)
+     * @param excel without extensions (.json)
      */
-    getStarRailCacheData(name: string): { [key: string]: JsonObject } {
-        if (!Object.keys(dataMemory).includes(name)) {
-            dataMemory[name] = JSON.parse(fs.readFileSync(this.getJSONDataPath(name), "utf-8"));
-        }
-        return dataMemory[name];
+    _getExcelData<T extends ExcelType>(excel: T): SingleBy<typeof excelKeyMap[T]> {
+        excelDataMemory[excel] ??= JSON.parse(fs.readFileSync(this.getJSONDataPath(excel), "utf-8"));
+        const excelData = excelDataMemory[excel];
+        if (!excelData) throw new Error(`Failed to load ${excel} excel.`);
+        return excelData;
+    }
+
+    /**
+     * @param excel without extension (.json)
+     */
+    getExcelData<T extends ExcelType, U extends (string | number)[]>(excel: T, ...keys: U): IndexBy<SingleBy<typeof excelKeyMap[T]>, U> {
+        const excelData = this._getExcelData(excel);
+
+        return indexBy(excelData, ...keys);
     }
 
     /**
@@ -364,7 +370,9 @@ class CachedAssetsManager {
      */
     getLanguageData(lang: LanguageCode): { [key: string]: string } {
         langDataMemory[lang] ??= JSON.parse(fs.readFileSync(this.getLanguageDataPath(lang), "utf-8"));
-        return langDataMemory[lang] ?? {};
+        const langData = langDataMemory[lang];
+        if (!langData) throw new Error(`Failed to load ${lang} language data.`);
+        return langData;
     }
 
     /**
@@ -381,17 +389,17 @@ class CachedAssetsManager {
      * If `reload` is false, load each file as needed.
      */
     refreshAllData(reload = false): void {
-        const loadedData = reload ? Object.keys(dataMemory) : null;
+        const loadedData = reload ? Object.keys(excelDataMemory) as ExcelType[] : [];
         const loadedLangs = reload ? Object.keys(langDataMemory) as LanguageCode[] : null;
 
-        dataMemory = {};
+        excelDataMemory = { ...initialExcelDataMemory };
         langDataMemory = { ...initialLangDataMemory };
 
         objectKeysManager = null;
 
         if (reload && loadedData && loadedLangs) {
             for (const name of loadedData) {
-                this.getStarRailCacheData(name);
+                this._getExcelData(name);
             }
             for (const lang of loadedLangs) {
                 this.getLanguageData(lang);
@@ -400,11 +408,15 @@ class CachedAssetsManager {
         }
     }
 
+    formatExcel<T extends ExcelType>(excel: T, data: JsonObject[]): SingleBy<typeof excelKeyMap[T]> {
+        const keys = excelKeyMap[excel];
+        return singleBy(data, ...keys);
+    }
 
     /**
      * Remove all unused text map entries
      */
-    removeUnusedTextData(data: { [s: string]: { [s: string]: JsonObject } }, langsData: LanguageMap, showLog = true): LanguageMap {
+    removeUnusedTextData(data: LoadedExcelDataMap, langsData: LoadedLanguageMap, showLog = true): LoadedLanguageMap {
         const required: number[] = [];
 
         function push(...keys: number[]) {
@@ -556,7 +568,7 @@ class CachedAssetsManager {
 
         if (showLog) console.info(`Required keys have been loaded (${requiredStringKeys.length.toLocaleString()} keys)`);
 
-        const clearLangsData: NullableLanguageMap = { ...initialLangDataMemory };
+        const clearLangsData: LanguageMap = { ...initialLangDataMemory };
 
         const keyCount = requiredStringKeys.length;
         for (const lang of Object.keys(langsData) as LanguageCode[]) {
@@ -577,7 +589,7 @@ class CachedAssetsManager {
 
         if (showLog) console.info("Removing unused keys completed.");
 
-        return clearLangsData as LanguageMap;
+        return clearLangsData as LoadedLanguageMap;
     }
 
     /**
@@ -631,3 +643,46 @@ class CachedAssetsManager {
 }
 
 export default CachedAssetsManager;
+
+
+export type IndexBy<T, Keys extends (string | number)[]> =
+    Keys extends [string | number, ...infer U]
+    ? U extends (string | number)[]
+    ? T extends JsonObject<infer V>
+    ? IndexBy<V, U> | undefined
+    : unknown
+    : T extends JsonObject<infer V>
+    ? V | undefined
+    : unknown
+    : T;
+export function indexBy<T extends JsonObject, U extends (string | number)[]>(data: T, ...keys: U): IndexBy<T, U> {
+    if (keys.length === 0) return data as IndexBy<T, U>;
+    const v = data[keys[0]];
+    if (!isJsonObject(v)) return undefined as IndexBy<T, U>;
+    return indexBy(v, ...keys.slice(1)) as IndexBy<T, U>;
+}
+
+export type SingleBy<Keys extends ExcelKey[]> = Keys extends [ExcelKey, ...infer T] ? T extends ExcelKey[] ? JsonObject<SingleBy<T>> : never : JsonObject;
+export function singleBy<T extends ExcelKey[]>(array: JsonArray<JsonObject>, ...keys: T): SingleBy<T> {
+    if (keys.length === 0) {
+        if (array.length > 1) throw Error("Cannot have multiple elements");
+        return array[0] as SingleBy<T>;
+    }
+    const grouped: JsonObject<JsonObject[]> = {};
+    for (const e of array) {
+        const key = Array.isArray(keys[0]) ? keys[0][0] : keys[0];
+        if (!(key in e) && Array.isArray(keys[0])) e[key] = keys[0][1];
+        const id = e[key]?.toString();
+        if (!id) throw new Error("Some elements don't have specified keys");
+        if (!(id in grouped)) grouped[id] = [];
+        grouped[id].push(e);
+    }
+
+    const recursiveGrouped: JsonObject = {};
+    for (const key in grouped) {
+        const arr = grouped[key];
+        recursiveGrouped[key] = singleBy(arr, ...keys.slice(1));
+    }
+
+    return recursiveGrouped as SingleBy<T>;
+}

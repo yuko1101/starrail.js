@@ -309,21 +309,21 @@ class StarRail implements EnkaLibrary<StarRailUser, StarRailCharacterBuild> {
      * @returns all character data
      */
     getAllCharacters(playableOnly = true): CharacterData[] {
-        return new JsonReader(this.cachedAssetsManager.getStarRailCacheData("AvatarConfig")).filterObject((_, c) => (playableOnly && c.getAsNumber("AdventurePlayerID") === c.getAsNumber("AvatarID")) || !playableOnly).map(([, c]) => new CharacterData(c.getAsNumber("AvatarID"), this));
+        return new JsonReader(this.cachedAssetsManager._getExcelData("AvatarConfig")).filterObject((_, c) => (playableOnly && c.getAsNumber("AdventurePlayerID") === c.getAsNumber("AvatarID")) || !playableOnly).map(([, c]) => new CharacterData(c.getAsNumber("AvatarID"), this));
     }
 
     /**
      * @returns all light cone data
      */
     getAllLightCones(excludeTestLightCones = true): LightConeData[] {
-        return new JsonReader(this.cachedAssetsManager.getStarRailCacheData("EquipmentConfig")).filterObject((_, lc) => (excludeTestLightCones && lc.has("AvatarBaseType")) || !excludeTestLightCones).map(([, lc]) => new LightConeData(lc.getAsNumber("EquipmentID"), this));
+        return new JsonReader(this.cachedAssetsManager._getExcelData("EquipmentConfig")).filterObject((_, lc) => (excludeTestLightCones && lc.has("AvatarBaseType")) || !excludeTestLightCones).map(([, lc]) => new LightConeData(lc.getAsNumber("EquipmentID"), this));
     }
 
     /**
      * @returns all relic data
      */
     getAllRelics(): RelicData[] {
-        return new JsonReader(this.cachedAssetsManager.getStarRailCacheData("RelicConfig")).mapObject((_, relic) => new RelicData(relic.getAsNumber("ID"), this));
+        return new JsonReader(this.cachedAssetsManager._getExcelData("RelicConfig")).mapObject((_, relic) => new RelicData(relic.getAsNumber("ID"), this));
     }
 
     /**

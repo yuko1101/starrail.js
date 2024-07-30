@@ -26,7 +26,7 @@ class StatProperty {
         this.type = type;
         this.client = client;
 
-        const _data = client.cachedAssetsManager.getStarRailCacheData("AvatarPropertyConfig")[this.type];
+        const _data = client.cachedAssetsManager.getExcelData("AvatarPropertyConfig", this.type);
         if (!_data) throw new AssetsNotFoundError("StatProperty", this.type);
         this._data = _data;
 

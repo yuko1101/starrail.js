@@ -8,7 +8,7 @@ class ObjectKeysManager {
     readonly relicSetBonusStatPropertyValueKey: string;
 
     constructor(cachedAssetsManager: CachedAssetsManager) {
-        const setBonus: JsonElement | undefined = cachedAssetsManager.getStarRailCacheData("RelicSetSkillConfig")[101][2];
+        const setBonus = cachedAssetsManager.getExcelData("RelicSetSkillConfig", 101, 2);
         const setBonusPropertyList = new JsonReader(setBonus).get("PropertyList", 0);
 
         this.relicSetBonusStatPropertyTypeKey = setBonusPropertyList.findObject((key, value) => value.getValue() === "HealRatioBase")?.[0] as string;

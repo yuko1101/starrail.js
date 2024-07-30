@@ -21,9 +21,9 @@ class LightConeExpType {
         this.expType = expType;
         this.client = client;
 
-        const _data: JsonObject | undefined = client.cachedAssetsManager.getStarRailCacheData("EquipmentExpType")[this.expType];
+        const _data = client.cachedAssetsManager.getExcelData("EquipmentExpType", this.expType);
         if (!_data) throw new AssetsNotFoundError("LightConeExpType", this.expType);
-        this._data = _data as JsonObject<JsonObject>;
+        this._data = _data;
 
         const json = new JsonReader(this._data);
 

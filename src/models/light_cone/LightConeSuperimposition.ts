@@ -22,7 +22,7 @@ class LightConeSuperimposition {
         this.level = level;
         this.client = client;
 
-        const _data: JsonObject | undefined = client.cachedAssetsManager.getStarRailCacheData("EquipmentSkillConfig")[this.id]?.[this.level] as JsonObject | undefined;
+        const _data = client.cachedAssetsManager.getExcelData("EquipmentSkillConfig", this.id, this.level);
         if (!_data) throw new AssetsNotFoundError("LightConeSuperimposition", this.id);
         this._data = _data;
 

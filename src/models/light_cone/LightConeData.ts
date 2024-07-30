@@ -35,11 +35,11 @@ class LightConeData {
         this.id = id;
         this.client = client;
 
-        const _data: JsonObject | undefined = client.cachedAssetsManager.getStarRailCacheData("EquipmentConfig")[this.id];
+        const _data = client.cachedAssetsManager.getExcelData("EquipmentConfig", this.id);
         if (!_data) throw new AssetsNotFoundError("LightCone", this.id);
         this._data = _data;
 
-        const _itemData: JsonObject | undefined = client.cachedAssetsManager.getStarRailCacheData("ItemConfigEquipment")[this.id];
+        const _itemData = client.cachedAssetsManager.getExcelData("ItemConfigEquipment", this.id);
         if (!_itemData) throw new AssetsNotFoundError("LightCone Item", this.id);
         this._itemData = _itemData;
 
@@ -74,7 +74,8 @@ class LightConeData {
     }
 
     getStatsByLevel(ascension: number, level: number): StatPropertyValue[] {
-        const ascensionData = this.client.cachedAssetsManager.getStarRailCacheData("EquipmentPromotionConfig")[this.id][ascension];
+        const ascensionData = this.client.cachedAssetsManager.getExcelData("EquipmentPromotionConfig", this.id, ascension);
+        if (!ascensionData) throw new AssetsNotFoundError("LightCone Ascension", `${this.id}-${ascension}`);
         const ascensionJson = new JsonReader(ascensionData);
 
         return [

@@ -29,7 +29,7 @@ class RelicType {
         this.id = id;
         this.client = client;
 
-        const _data = client.cachedAssetsManager.getStarRailCacheData("RelicBaseType")[this.id];
+        const _data = client.cachedAssetsManager.getExcelData("RelicBaseType", this.id);
         if (!_data) throw new AssetsNotFoundError("RelicType", this.id);
         this._data = _data;
 

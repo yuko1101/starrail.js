@@ -77,7 +77,7 @@ export {
 };
 
 // typedefs
-export { LanguageCode, LanguageMap, NullableLanguageMap } from "./client/CachedAssetsManager";
+export { LanguageCode, LanguageMap } from "./client/CachedAssetsManager";
 export { ClientOptions, UserCacheOptions, FetchOptions } from "./client/StarRail";
 export { DynamicData } from "./models/assets/DynamicTextAssets";
 export { ImageBaseUrl, CustomImageBaseUrl } from "./models/assets/ImageAssets";

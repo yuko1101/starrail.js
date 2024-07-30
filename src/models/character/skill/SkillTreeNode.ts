@@ -27,7 +27,7 @@ class SkillTreeNode {
         this.id = id;
         this.client = client;
 
-        const _data: JsonObject | undefined = client.cachedAssetsManager.getStarRailCacheData("AvatarSkillTreeConfig")[this.id];
+        const _data = client.cachedAssetsManager.getExcelData("AvatarSkillTreeConfig", this.id);
         if (!_data) throw new AssetsNotFoundError("SkillTreeNode", this.id);
         this._nodesData = Object.values(_data) as JsonObject[];
 
@@ -58,7 +58,7 @@ class SkillTreeNode {
     }
 
     getNextNodes(): SkillTreeNode[] {
-        const nodesData = this.client.cachedAssetsManager.getStarRailCacheData("AvatarSkillTreeConfig");
+        const nodesData = this.client.cachedAssetsManager._getExcelData("AvatarSkillTreeConfig");
         const json = new JsonReader(nodesData);
         const nextNodes = json.filterObject((_, node) => node.getAsNumberWithDefault(null, "PrePoint", 0) === this.id);
         return nextNodes.map(([nodeId]) => new SkillTreeNode(Number(nodeId), this.client));

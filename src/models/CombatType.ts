@@ -36,7 +36,7 @@ class CombatType {
         this.id = id;
         this.client = client;
 
-        const _data: JsonObject | undefined = client.cachedAssetsManager.getStarRailCacheData("DamageType")[this.id];
+        const _data = client.cachedAssetsManager.getExcelData("DamageType", this.id);
         if (!_data) throw new AssetsNotFoundError("CombatType", this.id);
         this._data = _data;
 

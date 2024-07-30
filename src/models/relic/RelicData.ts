@@ -36,11 +36,11 @@ class RelicData {
         this.id = id;
         this.client = client;
 
-        const _data = client.cachedAssetsManager.getStarRailCacheData("RelicConfig")[this.id];
+        const _data = client.cachedAssetsManager.getExcelData("RelicConfig", this.id);
         if (!_data) throw new AssetsNotFoundError("Relic", this.id);
         this._data = _data;
 
-        const _itemData: JsonObject | undefined = client.cachedAssetsManager.getStarRailCacheData("ItemConfigRelic")[this.id];
+        const _itemData = client.cachedAssetsManager.getExcelData("ItemConfigRelic", this.id);
         if (!_itemData) throw new AssetsNotFoundError("Relic Item", this.id);
         this._itemData = _itemData;
 

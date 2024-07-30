@@ -32,7 +32,7 @@ class Skill {
         this.id = id;
         this.client = client;
 
-        const _data: JsonObject | undefined = client.cachedAssetsManager.getStarRailCacheData("AvatarSkillConfig")[this.id];
+        const _data = client.cachedAssetsManager.getExcelData("AvatarSkillConfig", this.id);
         if (!_data) throw new AssetsNotFoundError("Skill", this.id);
         this._skillsData = Object.values(_data) as JsonObject[];
 

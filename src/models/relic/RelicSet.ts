@@ -22,7 +22,7 @@ class RelicSet {
         this.id = id;
         this.client = client;
 
-        const _data = client.cachedAssetsManager.getStarRailCacheData("RelicSetConfig")[this.id];
+        const _data = client.cachedAssetsManager.getExcelData("RelicSetConfig", this.id);
         if (!_data) throw new AssetsNotFoundError("RelicSet", this.id);
         this._data = _data;
 

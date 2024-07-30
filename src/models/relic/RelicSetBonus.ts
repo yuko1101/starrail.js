@@ -20,9 +20,9 @@ class RelicSetBonus {
         this.needCount = needCount;
         this.client = client;
 
-        const _data = client.cachedAssetsManager.getStarRailCacheData("RelicSetSkillConfig")[this.setId]?.[needCount];
+        const _data = client.cachedAssetsManager.getExcelData("RelicSetSkillConfig", this.setId, needCount);
         if (!_data) throw new AssetsNotFoundError("RelicSetBonus", `${this.setId}-${this.needCount}`);
-        this._data = _data as JsonObject;
+        this._data = _data;
 
         const json = new JsonReader(this._data);
 

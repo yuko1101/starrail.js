@@ -23,9 +23,9 @@ class RelicSubStatGroup {
         this.id = id;
         this.client = client;
 
-        const _data: JsonObject | undefined = client.cachedAssetsManager.getStarRailCacheData("RelicSubAffixConfig")[this.id];
+        const _data = client.cachedAssetsManager.getExcelData("RelicSubAffixConfig")[this.id];
         if (!_data) throw new AssetsNotFoundError("RelicSubStatGroup", this.id);
-        this._data = _data as JsonObject<JsonObject>;
+        this._data = _data;
 
         const json = new JsonReader(this._data);
 

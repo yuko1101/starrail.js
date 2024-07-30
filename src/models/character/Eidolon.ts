@@ -22,7 +22,7 @@ class Eidolon {
         this.id = id;
         this.client = client;
 
-        const _data: JsonObject | undefined = this.client.cachedAssetsManager.getStarRailCacheData("AvatarRankConfig")[id];
+        const _data = this.client.cachedAssetsManager.getExcelData("AvatarRankConfig", id);
         if (!_data) throw new AssetsNotFoundError("Eidolon", this.id);
         this._data = _data;
 

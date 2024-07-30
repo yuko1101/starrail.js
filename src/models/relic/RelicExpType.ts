@@ -21,9 +21,9 @@ class RelicExpType {
         this.expType = expType;
         this.client = client;
 
-        const _data: JsonObject | undefined = client.cachedAssetsManager.getStarRailCacheData("RelicExpType")[this.expType];
+        const _data = client.cachedAssetsManager.getExcelData("RelicExpType", this.expType);
         if (!_data) throw new AssetsNotFoundError("RelicExpType", this.expType);
-        this._data = _data as JsonObject<JsonObject>;
+        this._data = _data;
 
         const json = new JsonReader(this._data);
 

@@ -44,7 +44,7 @@ class Path {
         this.id = id;
         this.client = client;
 
-        const _data: JsonObject | undefined = client.cachedAssetsManager.getStarRailCacheData("AvatarBaseType")[this.id];
+        const _data = client.cachedAssetsManager.getExcelData("AvatarBaseType", this.id);
         if (!_data) throw new AssetsNotFoundError("Path", this.id);
         this._data = _data;
 

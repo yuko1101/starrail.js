@@ -42,11 +42,11 @@ class CharacterData {
 
         this.client = client;
 
-        const _data: JsonObject | undefined = client.cachedAssetsManager.getStarRailCacheData("AvatarConfig")[this.id];
+        const _data: JsonObject | undefined = client.cachedAssetsManager._getExcelData("AvatarConfig")[this.id];
         if (!_data) throw new AssetsNotFoundError("Character", this.id);
         this._data = _data;
 
-        const _itemData: JsonObject | undefined = client.cachedAssetsManager.getStarRailCacheData("ItemConfigAvatar")[this.id];
+        const _itemData = client.cachedAssetsManager.getExcelData("ItemConfigAvatar", this.id);
         if (!_itemData) throw new AssetsNotFoundError("Character Item", this.id);
         this._itemData = _itemData;
 
@@ -66,11 +66,11 @@ class CharacterData {
 
         this.skills = json.get("SkillList").mapArray((_, skillId) => new Skill(skillId.getAsNumber(), this.client));
 
-        const skillTreeData = this.client.cachedAssetsManager.getStarRailCacheData("AvatarSkillTreeConfig");
+        const skillTreeData = this.client.cachedAssetsManager._getExcelData("AvatarSkillTreeConfig");
         const skillTreeJson = new JsonReader(skillTreeData);
         this.skillTreeNodes = skillTreeJson.filterObject((_, node) => node.getAsNumber("1", "AvatarID") === this.id).map(([nodeId]) => new SkillTreeNode(Number(nodeId), this.client));
 
-        const eidolonsData = this.client.cachedAssetsManager.getStarRailCacheData("AvatarRankConfig");
+        const eidolonsData = this.client.cachedAssetsManager._getExcelData("AvatarRankConfig");
         const eidolonsJson = new JsonReader(eidolonsData);
         this.eidolons = eidolonsJson.filterObject((eidolonId) => Math.floor(Number(eidolonId) / 100) === this.id).map(([eidolonId]) => new Eidolon(Number(eidolonId), this.client));
 
@@ -86,7 +86,7 @@ class CharacterData {
     }
 
     getStatsByLevel(ascension: number, level: number): StatPropertyValue[] {
-        const ascensionData = this.client.cachedAssetsManager.getStarRailCacheData("AvatarPromotionConfig")[this.id][ascension];
+        const ascensionData = this.client.cachedAssetsManager._getExcelData("AvatarPromotionConfig")[this.id][ascension];
         const ascensionJson = new JsonReader(ascensionData);
 
         return [
@@ -163,7 +163,7 @@ class CharacterData {
     }
 
     getBaseAggro(ascension: number): number {
-        const ascensionData = this.client.cachedAssetsManager.getStarRailCacheData("AvatarPromotionConfig")[this.id][ascension];
+        const ascensionData = this.client.cachedAssetsManager._getExcelData("AvatarPromotionConfig")[this.id][ascension];
         const ascensionJson = new JsonReader(ascensionData);
 
         return ascensionJson.getAsNumber("BaseAggro", "Value");

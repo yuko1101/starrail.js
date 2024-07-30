@@ -24,20 +24,23 @@ class UserIcon {
         this.id = id;
         this.client = client;
 
-        let playerIconItem = this.client.cachedAssetsManager.getStarRailCacheData("ItemConfigAvatarPlayerIcon")[this.id];
+        let playerIconItem = this.client.cachedAssetsManager.getExcelData("ItemConfigAvatarPlayerIcon", this.id);
         const isCharacterIcon = !!playerIconItem;
         if (!playerIconItem) {
-            const otherPlayerIcon = this.client.cachedAssetsManager.getStarRailCacheData("ItemPlayerCard")[this.id];
+            const otherPlayerIcon = this.client.cachedAssetsManager.getExcelData("ItemPlayerCard", this.id);
             if (!otherPlayerIcon) throw new AssetsNotFoundError("UserIcon-Item", this.id);
             playerIconItem = otherPlayerIcon;
         }
-        const itemJson = new JsonReader(playerIconItem);
-        this._itemData = itemJson.getAsJsonObject();
 
-        const playerIcon = this.client.cachedAssetsManager.getStarRailCacheData(isCharacterIcon ? "AvatarPlayerIcon" : "PlayerIcon")[this.id];
+        if (!playerIconItem) throw new AssetsNotFoundError("UserIcon-Item", this.id);
+
+        const itemJson = new JsonReader(playerIconItem);
+        this._itemData = playerIconItem;
+
+        const playerIcon = this.client.cachedAssetsManager.getExcelData(isCharacterIcon ? "AvatarPlayerIcon" : "PlayerIcon", this.id);
         if (!playerIcon) throw new AssetsNotFoundError("UserIcon-Icon", this.id);
         const iconJson = new JsonReader(playerIcon);
-        this._iconData = iconJson.getAsJsonObject();
+        this._iconData = playerIcon;
 
         this.name = new TextAssets(itemJson.getAsNumber("ItemName", "Hash"), this.client);
 

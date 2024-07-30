@@ -1,6 +1,6 @@
 import { bindOptions } from "config_file.js";
-import StarRail from "../../client/StarRail";
-import TextAssets from "./TextAssets";
+import { StarRail } from "../../client/StarRail";
+import { TextAssets } from "./TextAssets";
 import { LanguageCode } from "../../client/CachedAssetsManager";
 
 export interface DynamicData {
@@ -14,7 +14,7 @@ const defaultDynamicData: DynamicData = {
 /**
  * TextAssets which has placeholders in the text.
  */
-class DynamicTextAssets extends TextAssets {
+export class DynamicTextAssets extends TextAssets {
     readonly dynamicData: DynamicData;
 
     // readonly _dynamicTest: string | null;
@@ -93,5 +93,3 @@ class DynamicTextAssets extends TextAssets {
         }
     }
 }
-
-export default DynamicTextAssets;

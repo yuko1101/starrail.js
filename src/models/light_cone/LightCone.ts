@@ -1,13 +1,10 @@
 import { JsonObject, JsonReader } from "config_file.js";
-import StarRail from "../../client/StarRail";
-import LightConeData from "./LightConeData";
-import LightConeSuperimposition from "./LightConeSuperimposition";
+import { StarRail } from "../../client/StarRail";
+import { LightConeData } from "./LightConeData";
+import { LightConeSuperimposition } from "./LightConeSuperimposition";
 import { StatPropertyValue } from "../StatProperty";
 
-/**
- * @en
- */
-class LightCone {
+export class LightCone {
     readonly client: StarRail;
 
     readonly lightConeData: LightConeData;
@@ -40,5 +37,3 @@ class LightCone {
 
     }
 }
-
-export default LightCone;

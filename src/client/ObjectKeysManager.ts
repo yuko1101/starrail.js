@@ -1,7 +1,7 @@
-import { JsonElement, JsonReader } from "config_file.js";
-import CachedAssetsManager from "./CachedAssetsManager";
+import { JsonReader } from "config_file.js";
+import { CachedAssetsManager } from "./CachedAssetsManager";
 
-class ObjectKeysManager {
+export class ObjectKeysManager {
     /** Map key name where the value is StatPropertyType in property lists of set bonuses in RelicSetSkillConfig.json */
     readonly relicSetBonusStatPropertyTypeKey: string;
     /** Map key name where the value has property value in "Value" in RelicSetSkillConfig.json */
@@ -15,5 +15,3 @@ class ObjectKeysManager {
         this.relicSetBonusStatPropertyValueKey = setBonusPropertyList.findObject((key, value) => typeof value.getValue("Value") === "number")?.[0] as string;
     }
 }
-
-export default ObjectKeysManager;

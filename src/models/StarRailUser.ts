@@ -1,8 +1,8 @@
 import { JsonObject, JsonReader } from "config_file.js";
 import { EnkaProfile, User } from "enka-system";
-import StarRail from "../client/StarRail";
-import Character from "./character/Character";
-import UserIcon from "./UserIcon";
+import { StarRail } from "../client/StarRail";
+import { Character } from "./character/Character";
+import { UserIcon } from "./UserIcon";
 
 export interface Birthday {
     month: number;
@@ -30,7 +30,7 @@ export interface ChallengeInfo {
     forgottenHall: ForgottenHallInfo,
 }
 
-class StarRailUser extends User {
+export class StarRailUser extends User {
     readonly client: StarRail;
 
     /** This will be NaN if this StarRailUser is from [EnkaGameAccount](https://enka-system.vercel.app/docs/api/EnkaGameAccount) and [isUidPublic](https://enka-system.vercel.app/docs/api/EnkaGameAccount#isUidPublic) is `false`. */
@@ -128,5 +128,3 @@ class StarRailUser extends User {
         return Array.from(new Set(characters));
     }
 }
-
-export default StarRailUser;

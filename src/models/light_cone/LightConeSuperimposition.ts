@@ -1,11 +1,11 @@
 import { JsonObject, JsonReader } from "config_file.js";
-import StarRail from "../../client/StarRail";
-import AssetsNotFoundError from "../../errors/AssetsNotFoundError";
-import TextAssets from "../assets/TextAssets";
-import StatProperty, { StatPropertyType, StatPropertyValue } from "../StatProperty";
-import DynamicTextAssets from "../assets/DynamicTextAssets";
+import { StarRail } from "../../client/StarRail";
+import { AssetsNotFoundError } from "../../errors/AssetsNotFoundError";
+import { TextAssets } from "../assets/TextAssets";
+import { StatProperty, StatPropertyType, StatPropertyValue } from "../StatProperty";
+import { DynamicTextAssets } from "../assets/DynamicTextAssets";
 
-class LightConeSuperimposition {
+export class LightConeSuperimposition {
     readonly id: number;
     readonly level: number;
     readonly client: StarRail;
@@ -41,5 +41,3 @@ class LightConeSuperimposition {
         }).flat();
     }
 }
-
-export default LightConeSuperimposition;

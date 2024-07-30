@@ -1,15 +1,15 @@
 import { JsonObject, JsonReader } from "config_file.js";
-import StarRail from "../../../client/StarRail";
-import AssetsNotFoundError from "../../../errors/AssetsNotFoundError";
-import Skill from "./Skill";
-import TextAssets from "../../assets/TextAssets";
+import { StarRail } from "../../../client/StarRail";
+import { AssetsNotFoundError } from "../../../errors/AssetsNotFoundError";
+import { Skill } from "./Skill";
+import { TextAssets } from "../../assets/TextAssets";
 import { getStableHash } from "../../../utils/hash_utils";
-import ImageAssets from "../../assets/ImageAssets";
+import { ImageAssets } from "../../assets/ImageAssets";
 import { StatPropertyType, StatPropertyValue } from "../../StatProperty";
-import SkillLevel from "./SkillLevel";
-import DynamicTextAssets from "../../assets/DynamicTextAssets";
+import { SkillLevel } from "./SkillLevel";
+import { DynamicTextAssets } from "../../assets/DynamicTextAssets";
 
-class SkillTreeNode {
+export class SkillTreeNode {
     readonly id: number;
     readonly client: StarRail;
 
@@ -64,8 +64,6 @@ class SkillTreeNode {
         return nextNodes.map(([nodeId]) => new SkillTreeNode(Number(nodeId), this.client));
     }
 }
-
-export default SkillTreeNode;
 
 export class LeveledSkillTreeNode extends SkillTreeNode {
     readonly level: SkillLevel;

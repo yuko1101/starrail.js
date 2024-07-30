@@ -1,12 +1,12 @@
 import { JsonObject, JsonReader } from "config_file.js";
-import StarRail from "../../client/StarRail";
-import AssetsNotFoundError from "../../errors/AssetsNotFoundError";
-import ImageAssets from "../assets/ImageAssets";
-import TextAssets from "../assets/TextAssets";
+import { StarRail } from "../../client/StarRail";
+import { AssetsNotFoundError } from "../../errors/AssetsNotFoundError";
+import { ImageAssets } from "../assets/ImageAssets";
+import { TextAssets } from "../assets/TextAssets";
 import { getStableHash } from "../../utils/hash_utils";
-import Skill from "./skill/Skill";
+import { Skill } from "./skill/Skill";
 
-class Eidolon {
+export class Eidolon {
     readonly id: number;
     readonly client: StarRail;
     readonly rank: number;
@@ -43,5 +43,3 @@ class Eidolon {
         this.skillsLevelUp = Object.fromEntries(json.get("SkillAddLevelList").mapObject((skillId, levelAdd) => [skillId, { skill: new Skill(Number(skillId), this.client), levelUp: levelAdd.getAsNumber() }]));
     }
 }
-
-export default Eidolon;

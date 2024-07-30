@@ -1,4 +1,4 @@
-import StarRail from "../../client/StarRail";
+import { StarRail } from "../../client/StarRail";
 
 export interface ImageBaseUrl {
     filePath: "UPPER_CAMEL_CASE" | "LOWER_CASE" | "NONE",
@@ -16,7 +16,7 @@ export interface CustomImageBaseUrl extends ImageBaseUrl {
     customParser: (path: string) => string,
 }
 
-class ImageAssets {
+export class ImageAssets {
     readonly client: StarRail;
     readonly path: string;
 
@@ -49,8 +49,6 @@ class ImageAssets {
         return new ImageAssets(this.path, this.client, this.imageBaseUrl.priority - 1);
     }
 }
-
-export default ImageAssets;
 
 function convertPathForImageBaseUrl(imageBaseUrl: ImageBaseUrl, path: string): string {
     const split = path.split("/");

@@ -1,14 +1,14 @@
 import { JsonObject, JsonReader } from "config_file.js";
-import StarRail from "../../client/StarRail";
-import AssetsNotFoundError from "../../errors/AssetsNotFoundError";
-import TextAssets from "../assets/TextAssets";
-import Path, { PathId } from "../Path";
-import LightConeExpType from "./LightConeExpType";
-import ImageAssets from "../assets/ImageAssets";
-import LightConeSuperimposition from "./LightConeSuperimposition";
+import { StarRail } from "../../client/StarRail";
+import { AssetsNotFoundError } from "../../errors/AssetsNotFoundError";
+import { TextAssets } from "../assets/TextAssets";
+import { Path, PathId } from "../Path";
+import { LightConeExpType } from "./LightConeExpType";
+import { ImageAssets } from "../assets/ImageAssets";
+import { LightConeSuperimposition } from "./LightConeSuperimposition";
 import { StatPropertyValue } from "../StatProperty";
 
-class LightConeData {
+export class LightConeData {
     readonly id: number;
     readonly client: StarRail;
 
@@ -89,5 +89,3 @@ class LightConeData {
         return this.superimpositions[superimposition - 1].stats;
     }
 }
-
-export default LightConeData;

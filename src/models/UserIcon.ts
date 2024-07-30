@@ -1,11 +1,11 @@
 import { JsonObject, JsonReader } from "config_file.js";
-import StarRail from "../client/StarRail";
-import AssetsNotFoundError from "../errors/AssetsNotFoundError";
-import ImageAssets from "./assets/ImageAssets";
-import TextAssets from "./assets/TextAssets";
-import CharacterData from "./character/CharacterData";
+import { StarRail } from "../client/StarRail";
+import { AssetsNotFoundError } from "../errors/AssetsNotFoundError";
+import { ImageAssets } from "./assets/ImageAssets";
+import { TextAssets } from "./assets/TextAssets";
+import { CharacterData } from "./character/CharacterData";
 
-class UserIcon {
+export class UserIcon {
     /** This can be found in PlayerIcon.json, ItemPlayerCard.json, AvatarPlayerIcon.json, or ItemConfigAvatarPlayerIcon.json */
     readonly id: number;
     readonly client: StarRail;
@@ -51,5 +51,3 @@ class UserIcon {
         this.characterData = isCharacterIcon ? new CharacterData(iconJson.getAsNumber("AvatarID"), this.client) : null;
     }
 }
-
-export default UserIcon;

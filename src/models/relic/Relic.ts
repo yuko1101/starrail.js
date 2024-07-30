@@ -1,12 +1,11 @@
 import { JsonObject, JsonReader } from "config_file.js";
-import StarRail from "../../client/StarRail";
-import RelicData from "./RelicData";
+import { StarRail } from "../../client/StarRail";
+import { RelicData } from "./RelicData";
 import { RelicMainStatData } from "./RelicMainStatGroup";
 import { RelicSubStatData } from "./RelicSubStatGroup";
 import { StatPropertyValue } from "../StatProperty";
 
-
-class Relic {
+export class Relic {
     readonly client: StarRail;
 
     readonly relicData: RelicData;
@@ -41,8 +40,6 @@ class Relic {
 
     }
 }
-
-export default Relic;
 
 export class RelicMainStat extends StatPropertyValue {
     readonly mainStatData: RelicMainStatData;

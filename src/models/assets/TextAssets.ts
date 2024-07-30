@@ -1,8 +1,8 @@
 import { LanguageCode } from "../../client/CachedAssetsManager";
-import StarRail from "../../client/StarRail";
-import AssetsNotFoundError from "../../errors/AssetsNotFoundError";
+import { StarRail } from "../../client/StarRail";
+import { AssetsNotFoundError } from "../../errors/AssetsNotFoundError";
 
-class TextAssets {
+export class TextAssets {
     readonly id: number;
     readonly client: StarRail;
 
@@ -65,8 +65,6 @@ class TextAssets {
         return this.getNullable() ?? `Unknown TextAssets(${this.id})`;
     }
 }
-
-export default TextAssets;
 
 function isTextFormatted(text: string | null) {
     if (text === null) return false;

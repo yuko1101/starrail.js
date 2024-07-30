@@ -1,11 +1,11 @@
 import { JsonObject, JsonReader } from "config_file.js";
-import StarRail from "../../client/StarRail";
-import AssetsNotFoundError from "../../errors/AssetsNotFoundError";
-import TextAssets from "../assets/TextAssets";
+import { StarRail } from "../../client/StarRail";
+import { AssetsNotFoundError } from "../../errors/AssetsNotFoundError";
+import { TextAssets } from "../assets/TextAssets";
 import { getStableHash } from "../../utils/hash_utils";
 import { StatPropertyType, StatPropertyValue } from "../StatProperty";
 
-class RelicSetBonus {
+export class RelicSetBonus {
     readonly setId: number;
     readonly needCount: number;
     readonly client: StarRail;
@@ -37,5 +37,3 @@ class RelicSetBonus {
 
     }
 }
-
-export default RelicSetBonus;

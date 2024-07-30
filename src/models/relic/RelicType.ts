@@ -1,8 +1,8 @@
 import { JsonObject, JsonReader } from "config_file.js";
-import StarRail from "../../client/StarRail";
-import AssetsNotFoundError from "../../errors/AssetsNotFoundError";
-import TextAssets from "../assets/TextAssets";
-import ImageAssets from "../assets/ImageAssets";
+import { StarRail } from "../../client/StarRail";
+import { AssetsNotFoundError } from "../../errors/AssetsNotFoundError";
+import { TextAssets } from "../assets/TextAssets";
+import { ImageAssets } from "../assets/ImageAssets";
 
 /**
  * RelicTypeId|In-game Name
@@ -16,7 +16,7 @@ import ImageAssets from "../assets/ImageAssets";
 */
 export type RelicTypeId = "HEAD" | "HAND" | "BODY" | "FOOT" | "OBJECT" | "NECK";
 
-class RelicType {
+export class RelicType {
     readonly id: RelicTypeId;
     readonly client: StarRail;
 
@@ -39,5 +39,3 @@ class RelicType {
         this.icon = new ImageAssets(json.getAsString("BaseTypeIconPath"), this.client);
     }
 }
-
-export default RelicType;

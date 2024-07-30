@@ -1,9 +1,9 @@
 import { JsonObject, JsonReader } from "config_file.js";
 import { CharacterBuild, HoyoType } from "enka-system";
-import StarRail from "../../client/StarRail";
-import Character from "../character/Character";
+import { StarRail } from "../../client/StarRail";
+import { Character } from "../character/Character";
 
-class StarRailCharacterBuild extends CharacterBuild {
+export class StarRailCharacterBuild extends CharacterBuild {
     readonly client: StarRail;
     readonly enkaUserInfo: { username: string, hash: string };
 
@@ -42,5 +42,3 @@ class StarRailCharacterBuild extends CharacterBuild {
         this.url = `https://enka.network/u/${this.enkaUserInfo.username}/${this.enkaUserInfo.hash}/${this.character.characterData.id}/${this.id}`;
     }
 }
-
-export default StarRailCharacterBuild;

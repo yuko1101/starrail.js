@@ -1,15 +1,15 @@
 import { JsonObject, JsonReader } from "config_file.js";
-import StarRail from "../../client/StarRail";
-import AssetsNotFoundError from "../../errors/AssetsNotFoundError";
-import RelicExpType from "./RelicExpType";
-import RelicMainStatGroup from "./RelicMainStatGroup";
-import RelicSubStatGroup from "./RelicSubStatGroup";
-import RelicSet from "./RelicSet";
-import TextAssets from "../assets/TextAssets";
-import ImageAssets from "../assets/ImageAssets";
-import RelicType, { RelicTypeId } from "./RelicType";
+import { StarRail } from "../../client/StarRail";
+import { AssetsNotFoundError } from "../../errors/AssetsNotFoundError";
+import { RelicExpType } from "./RelicExpType";
+import { RelicMainStatGroup } from "./RelicMainStatGroup";
+import { RelicSubStatGroup } from "./RelicSubStatGroup";
+import { RelicSet } from "./RelicSet";
+import { TextAssets } from "../assets/TextAssets";
+import { ImageAssets } from "../assets/ImageAssets";
+import { RelicType, RelicTypeId } from "./RelicType";
 
-class RelicData {
+export class RelicData {
     readonly id: number;
     readonly client: StarRail;
 
@@ -71,5 +71,3 @@ class RelicData {
 
     }
 }
-
-export default RelicData;

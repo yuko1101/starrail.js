@@ -1,11 +1,11 @@
 import { JsonObject, JsonReader } from "config_file.js";
-import StarRail from "../client/StarRail";
-import AssetsNotFoundError from "../errors/AssetsNotFoundError";
-import ImageAssets from "./assets/ImageAssets";
-import TextAssets from "./assets/TextAssets";
-import DynamicTextAssets from "./assets/DynamicTextAssets";
+import { StarRail } from "../client/StarRail";
+import { AssetsNotFoundError } from "../errors/AssetsNotFoundError";
+import { ImageAssets } from "./assets/ImageAssets";
+import { TextAssets } from "./assets/TextAssets";
+import { DynamicTextAssets } from "./assets/DynamicTextAssets";
 
-class StatProperty {
+export class StatProperty {
     readonly type: StatPropertyType;
     readonly client: StarRail;
 
@@ -49,8 +49,6 @@ class StatProperty {
 
     static ALL_DAMAGE_TYPES = ["PhysicalAddedRatio", "FireAddedRatio", "IceAddedRatio", "ThunderAddedRatio", "WindAddedRatio", "QuantumAddedRatio", "ImaginaryAddedRatio"] as const;
 }
-
-export default StatProperty;
 
 export class StatPropertyValue {
     readonly client: StarRail;

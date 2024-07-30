@@ -1,16 +1,16 @@
 import { JsonObject, JsonReader } from "config_file.js";
-import StarRail from "../../client/StarRail";
-import CharacterData from "./CharacterData";
-import LightCone from "../light_cone/LightCone";
-import Relic from "../relic/Relic";
-import SkillTreeNode, { LeveledSkillTreeNode } from "./skill/SkillTreeNode";
+import { StarRail } from "../../client/StarRail";
+import { CharacterData } from "./CharacterData";
+import { LightCone } from "../light_cone/LightCone";
+import { Relic } from "../relic/Relic";
+import { SkillTreeNode, LeveledSkillTreeNode } from "./skill/SkillTreeNode";
 import { StatPropertyValue } from "../StatProperty";
-import CharacterStats from "./CharacterStats";
+import { CharacterStats } from "./CharacterStats";
 import { LeveledSkill } from "./skill/Skill";
-import SkillLevel from "./skill/SkillLevel";
+import { SkillLevel } from "./skill/SkillLevel";
 import { nonNullable } from "../../utils/ts_utils";
 
-class Character {
+export class Character {
     readonly client: StarRail;
 
     readonly characterData: CharacterData;
@@ -70,5 +70,3 @@ class Character {
         this.stats = new CharacterStats(this);
     }
 }
-
-export default Character;

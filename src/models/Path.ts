@@ -1,8 +1,8 @@
 import { JsonObject, JsonReader } from "config_file.js";
-import StarRail from "../client/StarRail";
-import TextAssets from "./assets/TextAssets";
-import AssetsNotFoundError from "../errors/AssetsNotFoundError";
-import ImageAssets from "./assets/ImageAssets";
+import { StarRail } from "../client/StarRail";
+import { TextAssets } from "./assets/TextAssets";
+import { AssetsNotFoundError } from "../errors/AssetsNotFoundError";
+import { ImageAssets } from "./assets/ImageAssets";
 
 /**
  * PathId|In-game Name
@@ -28,7 +28,7 @@ export const pathMap = {
     Unknown: "General",
 } as const satisfies { [path in PathId]: string };
 
-class Path {
+export class Path {
     readonly id: PathId;
     readonly client: StarRail;
 
@@ -56,5 +56,3 @@ class Path {
         this.smallIcon = new ImageAssets(json.getAsString("BaseTypeIconSmall"), this.client);
     }
 }
-
-export default Path;

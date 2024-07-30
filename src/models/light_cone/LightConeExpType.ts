@@ -1,6 +1,6 @@
 import { JsonObject, JsonReader } from "config_file.js";
-import StarRail from "../../client/StarRail";
-import AssetsNotFoundError from "../../errors/AssetsNotFoundError";
+import { StarRail } from "../../client/StarRail";
+import { AssetsNotFoundError } from "../../errors/AssetsNotFoundError";
 
 export interface LightConeLevel {
     expType: number;
@@ -9,7 +9,7 @@ export interface LightConeLevel {
     exp: number;
 }
 
-class LightConeExpType {
+export class LightConeExpType {
     readonly expType: number;
     readonly client: StarRail;
 
@@ -34,5 +34,3 @@ class LightConeExpType {
         return this.levels[level - 1];
     }
 }
-
-export default LightConeExpType;

@@ -1,17 +1,17 @@
 import { JsonObject, JsonReader } from "config_file.js";
-import StarRail from "../../../client/StarRail";
-import TextAssets from "../../assets/TextAssets";
-import AssetsNotFoundError from "../../../errors/AssetsNotFoundError";
-import ImageAssets from "../../assets/ImageAssets";
-import CombatType, { CombatTypeId } from "../../CombatType";
-import SkillLevel from "./SkillLevel";
-import DynamicTextAssets from "../../assets/DynamicTextAssets";
+import { StarRail } from "../../../client/StarRail";
+import { TextAssets } from "../../assets/TextAssets";
+import { AssetsNotFoundError } from "../../../errors/AssetsNotFoundError";
+import { ImageAssets } from "../../assets/ImageAssets";
+import { CombatType, CombatTypeId } from "../../CombatType";
+import { SkillLevel } from "./SkillLevel";
+import { DynamicTextAssets } from "../../assets/DynamicTextAssets";
 
 export type SkillType = "Normal" | "Ultra" | "MazeNormal" | "Maze" | "BPSkill" | "Talent";
 
 export type EffectType = "SingleAttack" | "AoEAttack" | "MazeAttack" | "Enhance" | "Blast" | "Impair" | "Bounce" | "Support" | "Defence" | "Restore";
 
-class Skill {
+export class Skill {
     readonly id: number;
     readonly client: StarRail;
 
@@ -60,8 +60,6 @@ class Skill {
         return new LeveledSkill(this._skillsData[level.value - 1], level, this.client);
     }
 }
-
-export default Skill;
 
 export class LeveledSkill extends Skill {
     readonly level: SkillLevel;

@@ -1,6 +1,6 @@
 import { JsonObject, JsonReader } from "config_file.js";
-import StarRail from "../../client/StarRail";
-import AssetsNotFoundError from "../../errors/AssetsNotFoundError";
+import { StarRail } from "../../client/StarRail";
+import { AssetsNotFoundError } from "../../errors/AssetsNotFoundError";
 
 export interface RelicLevel {
     expType: number;
@@ -9,7 +9,7 @@ export interface RelicLevel {
     exp: number;
 }
 
-class RelicExpType {
+export class RelicExpType {
     readonly expType: number;
     readonly client: StarRail;
 
@@ -34,5 +34,3 @@ class RelicExpType {
         return this.levels[level];
     }
 }
-
-export default RelicExpType;

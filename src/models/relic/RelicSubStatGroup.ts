@@ -1,7 +1,7 @@
 import { JsonObject, JsonReader } from "config_file.js";
-import StarRail from "../../client/StarRail";
-import AssetsNotFoundError from "../../errors/AssetsNotFoundError";
-import StatProperty, { StatPropertyType } from "../StatProperty";
+import { StarRail } from "../../client/StarRail";
+import { AssetsNotFoundError } from "../../errors/AssetsNotFoundError";
+import { StatProperty, StatPropertyType } from "../StatProperty";
 
 export interface RelicSubStatData {
     id: number;
@@ -11,7 +11,7 @@ export interface RelicSubStatData {
     stepValue: number;
 }
 
-class RelicSubStatGroup {
+export class RelicSubStatGroup {
     readonly id: number;
     readonly client: StarRail;
 
@@ -40,5 +40,3 @@ class RelicSubStatGroup {
         });
     }
 }
-
-export default RelicSubStatGroup;

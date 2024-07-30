@@ -1,11 +1,11 @@
 import { separateByValue } from "config_file.js";
 import { OtherStatPropertyType, StatPropertyType, StatPropertyValue, isStatPropertyType, otherStatPropertyTypes, statPropertyTypes } from "../StatProperty";
-import Character from "./Character";
-import StarRail from "../../client/StarRail";
-import RelicSet from "../relic/RelicSet";
+import { Character } from "./Character";
+import { StarRail } from "../../client/StarRail";
+import { RelicSet } from "../relic/RelicSet";
 import { CombatTypeId } from "../CombatType";
 
-class CharacterStats {
+export class CharacterStats {
     readonly relicsStats: StatList;
     readonly relicSetsStats: StatList;
     readonly lightConeStats: StatList;
@@ -41,8 +41,6 @@ class CharacterStats {
         this.overallStats = new OverallStatList(overallStats, character.characterData.combatType.id, client);
     }
 }
-
-export default CharacterStats;
 
 export class StatList {
     readonly list: { [key: string]: StatPropertyValue };

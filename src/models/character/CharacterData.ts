@@ -1,17 +1,17 @@
 import { JsonObject, JsonReader } from "config_file.js";
-import StarRail from "../../client/StarRail";
-import AssetsNotFoundError from "../../errors/AssetsNotFoundError";
-import TextAssets from "../assets/TextAssets";
-import CombatType, { CombatTypeId } from "../CombatType";
-import Path, { PathId } from "../Path";
-import Skill from "./skill/Skill";
-import ImageAssets from "../assets/ImageAssets";
-import SkillTreeNode from "./skill/SkillTreeNode";
-import Eidolon from "./Eidolon";
+import { StarRail } from "../../client/StarRail";
+import { AssetsNotFoundError } from "../../errors/AssetsNotFoundError";
+import { TextAssets } from "../assets/TextAssets";
+import { CombatType, CombatTypeId } from "../CombatType";
+import { Path, PathId } from "../Path";
+import { Skill } from "./skill/Skill";
+import { ImageAssets } from "../assets/ImageAssets";
+import { SkillTreeNode } from "./skill/SkillTreeNode";
+import { Eidolon } from "./Eidolon";
 import { StatPropertyValue } from "../StatProperty";
 import { SimpleMap, SimpleObject, getKeysFromSimpleMap } from "../../utils/ts_utils";
 
-class CharacterData {
+export class CharacterData {
     readonly id: number;
     readonly client: StarRail;
 
@@ -169,9 +169,6 @@ class CharacterData {
         return ascensionJson.getAsNumber("BaseAggro", "Value");
     }
 }
-
-export default CharacterData;
-
 
 function getSkillTreeRoute(nodes: SkillTreeNode[], target: SkillTreeNode, route: SkillTreeNode[] = []): SkillTreeNode[] {
     const preNodeId = target.previousNodeId;

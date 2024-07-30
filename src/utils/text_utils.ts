@@ -1,4 +1,4 @@
-class TextUtils {
+export class TextUtils {
 
     static readonly rubyRegex = /{RUBY_B#(.+?)}(.+?){RUBY_E#}/g;
 
@@ -10,5 +10,3 @@ class TextUtils {
         return text.replace(this.rubyRegex, (match, base, ruby) => replacer(match, base, ruby));
     }
 }
-
-export default TextUtils;

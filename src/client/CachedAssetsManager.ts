@@ -4,8 +4,8 @@ import { Axios } from "axios";
 import unzip, { Entry } from "unzip-stream";
 import { ConfigFile, JsonArray, JsonElement, JsonObject, JsonReader, bindOptions, isJsonObject, move } from "config_file.js";
 import { fetchJSON } from "../utils/axios_utils";
-import ObjectKeysManager from "./ObjectKeysManager";
-import StarRail from "./StarRail";
+import { ObjectKeysManager } from "./ObjectKeysManager";
+import { StarRail } from "./StarRail";
 import { getStableHash } from "../utils/hash_utils";
 
 // Thanks @Dimbreath
@@ -68,7 +68,7 @@ const getGitRemoteAPIUrl = (useRawStarRailData: boolean, rawDate: Date, date: Da
     ? `https://api.github.com/repos/Dimbreath/StarRailData/commits?sha=master&since=${rawDate.toISOString()}`
     : `https://api.github.com/repos/yuko1101/starrail.js/commits?sha=main&path=cache.zip&since=${date.toISOString()}`;
 
-class CachedAssetsManager {
+export class CachedAssetsManager {
     /** The client that instantiated this */
     readonly client: StarRail;
 
@@ -641,8 +641,6 @@ class CachedAssetsManager {
         }
     }
 }
-
-export default CachedAssetsManager;
 
 
 export type IndexBy<T, Keys extends (string | number)[]> =

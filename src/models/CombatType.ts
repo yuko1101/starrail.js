@@ -1,8 +1,8 @@
 import { JsonObject, JsonReader } from "config_file.js";
-import StarRail from "../client/StarRail";
-import AssetsNotFoundError from "../errors/AssetsNotFoundError";
-import TextAssets from "./assets/TextAssets";
-import ImageAssets from "./assets/ImageAssets";
+import { StarRail } from "../client/StarRail";
+import { AssetsNotFoundError } from "../errors/AssetsNotFoundError";
+import { TextAssets } from "./assets/TextAssets";
+import { ImageAssets } from "./assets/ImageAssets";
 
 /**
  * CombatTypeId|In-game Name
@@ -17,7 +17,7 @@ import ImageAssets from "./assets/ImageAssets";
  */
 export type CombatTypeId = "Physical" | "Fire" | "Ice" | "Thunder" | "Wind" | "Quantum" | "Imaginary";
 
-class CombatType {
+export class CombatType {
     readonly id: CombatTypeId;
     readonly client: StarRail;
 
@@ -55,8 +55,6 @@ class CombatType {
 
     }
 }
-
-export default CombatType;
 
 export const combatTypeIconColors: { [key in CombatTypeId]: number } = {
     Physical: 0xCFCFCF,

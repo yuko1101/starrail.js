@@ -1,13 +1,13 @@
 import { JsonObject, JsonReader, separateByValue } from "config_file.js";
-import StarRail from "../../client/StarRail";
-import AssetsNotFoundError from "../../errors/AssetsNotFoundError";
-import TextAssets from "../assets/TextAssets";
-import ImageAssets from "../assets/ImageAssets";
-import RelicSetBonus from "./RelicSetBonus";
-import Relic from "./Relic";
-import RelicData from "./RelicData";
+import { StarRail } from "../../client/StarRail";
+import { AssetsNotFoundError } from "../../errors/AssetsNotFoundError";
+import { TextAssets } from "../assets/TextAssets";
+import { ImageAssets } from "../assets/ImageAssets";
+import { RelicSetBonus } from "./RelicSetBonus";
+import { Relic } from "./Relic";
+import { RelicData } from "./RelicData";
 
-class RelicSet {
+export class RelicSet {
     readonly id: number;
     readonly client: StarRail;
 
@@ -52,5 +52,3 @@ class RelicSet {
         }).sort((a, b) => b.count - a.count);
     }
 }
-
-export default RelicSet;

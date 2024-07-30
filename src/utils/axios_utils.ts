@@ -1,5 +1,5 @@
 import axios, { AxiosResponse, AxiosRequestConfig } from "axios";
-import StarRail from "../client/StarRail";
+import { StarRail } from "../client/StarRail";
 import { JsonObject } from "config_file.js";
 
 export async function fetchJSON(url: string, client: StarRail, enableTimeout = false): Promise<AxiosResponse> {

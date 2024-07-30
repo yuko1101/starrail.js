@@ -1,13 +1,13 @@
 import { JsonReader, JsonObject, bindOptions, renameKeys, generateUuid } from "config_file.js";
-import CachedAssetsManager, { LanguageCode } from "./CachedAssetsManager";
-import CharacterData from "../models/character/CharacterData";
+import { CachedAssetsManager, LanguageCode } from "./CachedAssetsManager";
+import { CharacterData } from "../models/character/CharacterData";
 import { CustomImageBaseUrl, ImageBaseUrl } from "../models/assets/ImageAssets";
-import LightConeData from "../models/light_cone/LightConeData";
-import RelicData from "../models/relic/RelicData";
+import { LightConeData } from "../models/light_cone/LightConeData";
+import { RelicData } from "../models/relic/RelicData";
 import { fetchJSON } from "../utils/axios_utils";
-import StarRailUser from "../models/StarRailUser";
+import { StarRailUser } from "../models/StarRailUser";
 import { EnkaLibrary, EnkaSystem, InvalidUidFormatError, EnkaNetworkError, UserNotFoundError, EnkaGameAccount } from "enka-system";
-import StarRailCharacterBuild from "../models/enka/StarRailCharacterBuild";
+import { StarRailCharacterBuild } from "../models/enka/StarRailCharacterBuild";
 import { Overwrite } from "../utils/ts_utils";
 
 const starRailResMap = {
@@ -158,7 +158,7 @@ export interface FetchOptions {
 
 const userCacheMap = new Map();
 
-class StarRail implements EnkaLibrary<StarRailUser, StarRailCharacterBuild> {
+export class StarRail implements EnkaLibrary<StarRailUser, StarRailCharacterBuild> {
     readonly hoyoType: 1;
     getUser(data: JsonObject): StarRailUser {
         const fixedData = renameKeys(data, { "player_info": "detailInfo" });
@@ -333,5 +333,3 @@ class StarRail implements EnkaLibrary<StarRailUser, StarRailCharacterBuild> {
         this._tasks.forEach(task => clearTimeout(task));
     }
 }
-
-export default StarRail;

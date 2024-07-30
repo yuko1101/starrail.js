@@ -99,7 +99,16 @@
         ],
         "no-unused-vars": "off",
         "@typescript-eslint/no-unused-vars": [
-            "error"
+            "error",
+            {
+                "args": "all",
+                "argsIgnorePattern": "^_",
+                "caughtErrors": "all",
+                "caughtErrorsIgnorePattern": "^_",
+                "destructuredArrayIgnorePattern": "^_",
+                "varsIgnorePattern": "^_",
+                "ignoreRestSiblings": true
+            }
         ],
         "no-var": "error",
         "object-curly-spacing": [
@@ -114,7 +123,8 @@
         "semi": "off",
         "@typescript-eslint/semi": "error",
         "space-before-blocks": "error",
-        "space-before-function-paren": [
+        "space-before-function-paren": "off",
+        "@typescript-eslint/space-before-function-paren": [
             "error",
             {
                 "anonymous": "never",

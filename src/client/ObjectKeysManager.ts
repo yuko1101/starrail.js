@@ -11,7 +11,7 @@ export class ObjectKeysManager {
         const setBonus = cachedAssetsManager.getExcelData("RelicSetSkillConfig", 101, 2);
         const setBonusPropertyList = new JsonReader(setBonus).get("PropertyList", 0);
 
-        this.relicSetBonusStatPropertyTypeKey = setBonusPropertyList.findObject((key, value) => value.getValue() === "HealRatioBase")?.[0] as string;
-        this.relicSetBonusStatPropertyValueKey = setBonusPropertyList.findObject((key, value) => typeof value.getValue("Value") === "number")?.[0] as string;
+        this.relicSetBonusStatPropertyTypeKey = setBonusPropertyList.findObject((_, value) => value.getValue() === "HealRatioBase")?.[0] as string;
+        this.relicSetBonusStatPropertyValueKey = setBonusPropertyList.findObject((_, value) => typeof value.getValue("Value") === "number")?.[0] as string;
     }
 }

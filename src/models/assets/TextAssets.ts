@@ -32,7 +32,7 @@ export class TextAssets {
     getNullable(lang?: LanguageCode): string | null {
         try {
             return this.get(lang);
-        } catch (e) {
+        } catch {
             return null;
         }
     }
@@ -56,7 +56,7 @@ export class TextAssets {
     getAsNullableFormattedText(lang?: LanguageCode): FormattedText | null {
         try {
             return this.getAsFormattedText(lang);
-        } catch (e) {
+        } catch {
             return null;
         }
     }

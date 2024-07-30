@@ -70,7 +70,7 @@ export class DynamicTextAssets extends TextAssets {
     getNullableReplacedData(replaceWith: (keyof DynamicData)[] = [], lang?: LanguageCode): { text: string, usedParamIndices: number[] } | null {
         try {
             return this.getReplacedData(replaceWith, lang);
-        } catch (e) {
+        } catch {
             return null;
         }
     }
@@ -88,7 +88,7 @@ export class DynamicTextAssets extends TextAssets {
     getNullableReplacedText(replaceWith: (keyof DynamicData)[] = [], lang?: LanguageCode): string | null {
         try {
             return this.getReplacedText(replaceWith, lang);
-        } catch (e) {
+        } catch {
             return null;
         }
     }

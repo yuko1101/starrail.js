@@ -1,3 +1,5 @@
+# 1.7.2
+- Fixed image urls for AvatarRoundIcon.
 # 1.7.1
 - Fixed structure errors with new excels (v2.4+).
 - Improved code quality.

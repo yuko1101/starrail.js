@@ -40,7 +40,7 @@ const defaultImageBaseUrls: (ImageBaseUrl | CustomImageBaseUrl)[] = [
             /^SpriteOutput\/SkillIcons\/\d+\/SkillIcon_\d+_(?!Ultra_on)/,
             /^SpriteOutput\/ItemIcon\/RelicIcons\/(.+)$/,
             /^SpriteOutput\/(AvatarDrawCard|LightConeFigures)\/(.+)$/,
-            /^SpriteOutput\/AvatarRoundIcon\/Avatar\/(.+)$/,
+            /^SpriteOutput\/AvatarRoundIcon\/(Avatar|Series)\/(.+)$/,
             /^SpriteOutput\/UI\/Avatar\/Icon\/(.+)$/,
         ],
         url: "https://enka.network/ui/hsr",

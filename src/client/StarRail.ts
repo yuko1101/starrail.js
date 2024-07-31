@@ -19,7 +19,7 @@ const starRailResMap = {
 
 const yattaMap = {
     "SpriteOutput/AvatarDrawCard": "avatar/large/{fileName}.sm",
-    "SpriteOutput/AvatarRoundIcon": "avatar/round/{fileName}",
+    "SpriteOutput/AvatarRoundIcon/Avatar": "avatar/round/{fileName}",
     // some shop icons are 2px height smaller than the original
     "SpriteOutput/AvatarShopIcon": "avatar/medium/{fileName}",
     "SpriteOutput/ProfessionIconSmall": "profession/{fileName}",
@@ -39,7 +39,8 @@ const defaultImageBaseUrls: (ImageBaseUrl | CustomImageBaseUrl)[] = [
         regexList: [
             /^SpriteOutput\/SkillIcons\/\d+\/SkillIcon_\d+_(?!Ultra_on)/,
             /^SpriteOutput\/ItemIcon\/RelicIcons\/(.+)$/,
-            /^SpriteOutput\/(AvatarRoundIcon|AvatarDrawCard|LightConeFigures)\/(.+)$/,
+            /^SpriteOutput\/(AvatarDrawCard|LightConeFigures)\/(.+)$/,
+            /^SpriteOutput\/AvatarRoundIcon\/Avatar\/(.+)$/,
             /^SpriteOutput\/UI\/Avatar\/Icon\/(.+)$/,
         ],
         url: "https://enka.network/ui/hsr",
@@ -107,7 +108,7 @@ const defaultImageBaseUrls: (ImageBaseUrl | CustomImageBaseUrl)[] = [
             /^UI\/UI3D\/Rank\/_dependencies\/Textures\/\d+\/\d+_Rank_[1-6]/,
         ],
         url: "https://api.hakush.in/hsr/UI",
-        customParser: (path: string) => path.replace(/^(spriteoutput|ui\/ui3d)\//, "").replace(/\.png$/, ".webp"),
+        customParser: (path: string) => path.replace(/^(spriteoutput|ui\/ui3d)\//, "").replace("avatarroundicon/avatar/", "avatarroundicon/").replace(/\.png$/, ".webp"),
     },
 ];
 

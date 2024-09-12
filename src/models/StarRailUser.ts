@@ -104,7 +104,7 @@ export class StarRailUser extends User {
 
         this.simulatedUniverse = recordInfo.getAsNumberWithDefault(0, "maxRogueChallengeScore");
 
-        this.isDisplayCharacter = detailInfo.getAsBoolean("isDisplayAvatar");
+        this.isDisplayCharacter = detailInfo.getAsBooleanWithDefault(detailInfo.has("assistAvatarList") && detailInfo.getAsJsonArray("assistAvatarList").length > 0, "isDisplayAvatar");
 
         const avatarDetailList = detailInfo.getAsJsonArrayWithDefault([], "avatarDetailList");
         this.starfaringCompanions = avatarDetailList.filter(c => !(c as JsonObject)["_assist"]).map(c => new Character(c as JsonObject, this.client));

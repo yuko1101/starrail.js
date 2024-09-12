@@ -29,7 +29,7 @@ export class ImageAssets {
 
         this.path = path;
 
-        this.imageBaseUrl = [...client.options.imageBaseUrls].filter(url => url.priority <= maxPriority).sort((a, b) => b.priority - a.priority).find(url => url.regexList.some(regex => regex.test(this.path))) ?? null;
+        this.imageBaseUrl = client.options.imageBaseUrls.filter(url => url.priority <= maxPriority).sort((a, b) => b.priority - a.priority).find(url => url.regexList.some(regex => regex.test(this.path))) ?? null;
 
         this.url = (() => {
             if (this.path === "" || this.imageBaseUrl == null) return "";
@@ -42,10 +42,10 @@ export class ImageAssets {
     }
 
     /**
-     * @returns a new instance of ImageAssets with the another imageBaseUrl, or this instance if the imageBaseUrl is null
+     * @returns a new instance of ImageAssets with the another imageBaseUrl
      */
-    nextSource(): ImageAssets {
-        if (this.imageBaseUrl == null) return this;
+    nextSource(): ImageAssets | null {
+        if (this.imageBaseUrl == null) return null;
         return new ImageAssets(this.path, this.client, this.imageBaseUrl.priority - 1);
     }
 }

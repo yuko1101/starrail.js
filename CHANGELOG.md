@@ -1,5 +1,6 @@
 # 1.7.2
 - Fixed image urls for AvatarRoundIcon.
+- Changed return type of ImageAssets#nextSource() to nullable.
 # 1.7.1
 - Fixed structure errors with new excels (v2.4+).
 - Improved code quality.

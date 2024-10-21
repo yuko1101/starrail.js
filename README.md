@@ -113,34 +113,10 @@ client.cachedAssetsManager.activateAutoCacheUpdater({
 // client.cachedAssetsManager.deactivateAutoCacheUpdater();
 ```
 
-# Where is the image file for ImageAssets?
-As far as I know, there are few cdns for starrail. So, this library cannot provide urls of some images and ImageAssets#url is often unavailable. But **you can extract image files from StarRail Game Data** with HoyoStudio or something else.
-
-If you would like ImageAssets#url to show the paths to your extracted images, you can use `imageBaseUrls` option.
-```js
-const { StarRail } = require("starrail.js");
-const client = new StarRail();
-
-client.options.imageBaseUrls.push(
-    {
-        regexList: [/.*/], // for all images
-        /*  
-          "LOWER_CASE" if the names of folders in your extracted directory are in lowercase. e.g. "spriteoutput/itemicon/relicicons/IconRelic_101_1.png"
-          "UPPER_CAMEL_CASE" if the names of folders in your extracted directory are in upper camel case. e.g. "SpriteOutput/ItemIcon/RelicIcons/IconRelic_101_1.png"
-          "NONE" if your extracted files are not grouped in folders. e.g. "IconRelic_101_1.png"
-        */
-        filePath: "LOWER_CASE",
-        priority: 10,
-        url: "Your directory path to assets/asbres", // path to directory of extracted files
-    }
-);
-
-```
-
 # How to use
 
 ## Fetching Player Data
-[StarRail#fetchUser](https://starrail.vercel.app/docs/api/StarRail#fetchUser)
+[StarRail#fetchUser](https://starrail.vercel.app/api/class/StarRail#fetchUser)
 ```js
 const { StarRail } = require("starrail.js");
 const client = new StarRail();
@@ -151,7 +127,7 @@ client.fetchUser(800069903).then(user => {
 ```
 
 ## Star Rail Character List
-[StarRail#getAllCharacters](https://starrail.vercel.app/docs/api/StarRail#getAllCharacters)
+[StarRail#getAllCharacters](https://starrail.vercel.app/api/class/StarRail#getAllCharacters)
 ```js
 const { StarRail } = require("starrail.js");
 const client = new StarRail();
@@ -162,7 +138,7 @@ console.log(characters.map(c => c.name.get("en")));
 ```
 
 ## Star Rail Light Cone List
-[StarRail#getAllLightCones](https://starrail.vercel.app/docs/api/StarRail#getAllLightCones)
+[StarRail#getAllLightCones](https://starrail.vercel.app/api/class/StarRail#getAllLightCones)
 ```js
 const { StarRail } = require("starrail.js");
 const client = new StarRail();
@@ -174,6 +150,6 @@ console.log(lightCones.map(w => w.name.get("jp")));
 
 More examples are available in [example](https://github.com/yuko1101/starrail.js/tree/main/example) folder.
 
-For more information, please check [Documentation](https://starrail.vercel.app/docs/api/StarRail).
+For more information, please check [Documentation](https://starrail.vercel.app/api/class/StarRail).
 
 You can see the changelog [here](https://github.com/yuko1101/starrail.js/blob/main/CHANGELOG.md).

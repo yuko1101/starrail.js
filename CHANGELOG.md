@@ -1,3 +1,5 @@
+# 1.7.3
+- Updated the repo for StarRailData.
 # 1.7.2
 - Fixed image urls for AvatarRoundIcon.
 - Changed return type of ImageAssets#nextSource() to nullable.

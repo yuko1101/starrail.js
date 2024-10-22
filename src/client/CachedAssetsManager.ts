@@ -9,7 +9,7 @@ import { StarRail } from "./StarRail";
 import { getStableHash } from "../utils/hash_utils";
 
 // Thanks @Dimbreath
-const excelBaseUrl = "https://raw.githubusercontent.com/Dimbreath/StarRailData/master";
+const excelBaseUrl = "https://gitlab.com/Dimbreath/turnbasedgamedata/-/raw/main";
 
 export type ExcelKey = string | [string, JsonElement];
 export const excelKeyMap = {
@@ -65,7 +65,7 @@ const textMapWhiteList: number[] = [
 ];
 
 const getGitRemoteAPIUrl = (useRawStarRailData: boolean, rawDate: Date, date: Date) => useRawStarRailData
-    ? `https://api.github.com/repos/Dimbreath/StarRailData/commits?sha=master&since=${rawDate.toISOString()}`
+    ? `https://gitlab.com/api/v4/projects/62701613/repository/commits?since=${rawDate.toISOString()}`
     : `https://api.github.com/repos/yuko1101/starrail.js/commits?sha=main&path=cache.zip&since=${date.toISOString()}`;
 
 export class CachedAssetsManager {
@@ -139,7 +139,7 @@ export class CachedAssetsManager {
     }
 
     /**
-     * @param useRawStarRailData Whether to fetch from github repo ({@link https://github.com/Dimbreath/StarRailData}) instead of downloading cache.zip
+     * @param useRawStarRailData Whether to fetch from gitlab repo ({@link https://gitlab.com/Dimbreath/turnbasedgamedata}) instead of downloading cache.zip
      * @returns Whether the game data update is available or not.
      */
     async checkForUpdates(useRawStarRailData = false): Promise<boolean> {
@@ -157,7 +157,7 @@ export class CachedAssetsManager {
     }
 
     /**
-     * @param options.useRawStarRailData Whether to fetch from github repo ({@link https://github.com/Dimbreath/StarRailData}) instead of downloading cache.zip
+     * @param options.useRawStarRailData Whether to fetch from gitlab repo ({@link https://gitlab.com/Dimbreath/turnbasedgamedata}) instead of downloading cache.zip
      * @param options.ghproxy Whether to use ghproxy.com
      */
     async fetchAllContents(options: { useRawStarRailData?: boolean, ghproxy?: boolean }): Promise<void> {
@@ -268,7 +268,7 @@ export class CachedAssetsManager {
     }
 
     /**
-     * @param options.useRawStarRailData Whether to fetch from github repo ({@link https://github.com/Dimbreath/StarRailData}) instead of downloading cache.zip
+     * @param options.useRawStarRailData Whether to fetch from gitlab repo ({@link https://gitlab.com/Dimbreath/turnbasedgamedata}) instead of downloading cache.zip
      * @param options.ghproxy Whether to use ghproxy.com
      * @returns true if there were any updates, false if there were no updates.
      */
@@ -298,7 +298,7 @@ export class CachedAssetsManager {
     }
 
     /**
-     * @param options.useRawStarRailData Whether to fetch from github repo ({@link https://github.com/Dimbreath/StarRailData}) instead of downloading cache.zip
+     * @param options.useRawStarRailData Whether to fetch from gitlab repo ({@link https://gitlab.com/Dimbreath/turnbasedgamedata}) instead of downloading cache.zip
      * @param options.ghproxy Whether to use ghproxy.com
      * @param options.timeout in milliseconds
      */

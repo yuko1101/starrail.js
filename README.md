@@ -28,7 +28,7 @@
 
 ## About
 
-A Node.js Enka.Network API wrapper for Honkai: Star Rail.
+A Node.js Enka.Network/MiHoMo API wrapper for Honkai: Star Rail.
 
 ### Features
 - User Data and Character Stats by UID with Enka.Network API (or with MiHoMo API).

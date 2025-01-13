@@ -25,6 +25,7 @@ export class Skill {
     readonly skillIcon: ImageAssets;
     /** Available only when [skillType](#skillType) is "Ultra" */
     readonly ultraSkillIcon: ImageAssets;
+    readonly isServant: boolean;
 
     readonly _skillsData: JsonObject[];
 
@@ -32,7 +33,12 @@ export class Skill {
         this.id = id;
         this.client = client;
 
-        const _data = client.cachedAssetsManager.getExcelData("AvatarSkillConfig", this.id);
+        let _data = client.cachedAssetsManager.getExcelData("AvatarSkillConfig", this.id);
+        this.isServant = false;
+        if (!_data) {
+            _data = client.cachedAssetsManager.getExcelData("AvatarServantSkillConfig", this.id);
+            this.isServant = true;
+        }
         if (!_data) throw new AssetsNotFoundError("Skill", this.id);
         this._skillsData = Object.values(_data) as JsonObject[];
 

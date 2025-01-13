@@ -1,3 +1,5 @@
+# 1.7.4
+- Fixed a parsing error with servant skills in HSR v3.0.
 # 1.7.3
 - Updated the repo for StarRailData.
 # 1.7.2

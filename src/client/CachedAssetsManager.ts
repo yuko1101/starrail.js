@@ -18,9 +18,11 @@ export const excelKeyMap = {
     "DamageType": ["ID"], // Combat Types
     "AvatarBaseType": [["ID", "Unknown"]], // Paths
     "AvatarSkillConfig": ["SkillID", "Level"], // Character Skills
+    "AvatarServantSkillConfig": ["SkillID", "Level"], // Character Servant Skills
     "AvatarSkillTreeConfig": ["PointID", "Level"], // Character Skill Trees
     "AvatarRankConfig": ["RankID"], // Character Eidolons
     "AvatarPromotionConfig": ["AvatarID", ["Promotion", 0]], // Character Promotions and Character Basic Stats.
+
     "EquipmentConfig": ["EquipmentID"], // Light Cones
     "ItemConfigEquipment": ["ID"], // Light Cones as Items
     "EquipmentExpType": ["ExpType", "Level"], // Light Cone Exp Types

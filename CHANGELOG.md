@@ -1,3 +1,5 @@
+# 1.7.5
+- Added Character#costume.
 # 1.7.4
 - Fixed a parsing error with servant skills in HSR v3.0.
 - Added Skill#isServant.

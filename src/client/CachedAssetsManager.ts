@@ -22,6 +22,7 @@ export const excelKeyMap = {
     "AvatarSkillTreeConfig": ["PointID", "Level"], // Character Skill Trees
     "AvatarRankConfig": ["RankID"], // Character Eidolons
     "AvatarPromotionConfig": ["AvatarID", ["Promotion", 0]], // Character Promotions and Character Basic Stats.
+    "AvatarSkin": ["ID"], // Costumes
 
     "EquipmentConfig": ["EquipmentID"], // Light Cones
     "ItemConfigEquipment": ["ID"], // Light Cones as Items
@@ -489,6 +490,13 @@ export class CachedAssetsManager {
             push(
                 getStableHash(json.getAsString("Name")),
                 getStableHash(json.getAsString("Desc")),
+            );
+        });
+
+        Object.values(data["AvatarSkin"]).forEach(s => {
+            const json = new JsonReader(s);
+            push(
+                json.getAsNumber("AvatarSkinName", "Hash"),
             );
         });
 

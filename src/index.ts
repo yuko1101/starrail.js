@@ -11,6 +11,7 @@ export * from "./models/character/skill/SkillTreeNode";
 export * from "./models/character/Character";
 export * from "./models/character/CharacterData";
 export * from "./models/character/CharacterStats";
+export * from "./models/character/Costume";
 export * from "./models/character/Eidolon";
 export * from "./models/enka/StarRailCharacterBuild";
 export * from "./models/light_cone/LightCone";

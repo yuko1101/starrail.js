@@ -9,6 +9,7 @@ import { CharacterStats } from "./CharacterStats";
 import { LeveledSkill } from "./skill/Skill";
 import { SkillLevel } from "./skill/SkillLevel";
 import { nonNullable } from "../../utils/ts_utils";
+import { Costume } from "./Costume";
 
 export class Character {
     readonly client: StarRail;
@@ -20,6 +21,7 @@ export class Character {
     readonly exp: number;
     readonly ascension: number;
     readonly eidolons: number;
+    readonly costume: Costume | null;
     readonly skillTreeNodes: LeveledSkillTreeNode[];
     readonly skills: LeveledSkill[];
     readonly basicStats: StatPropertyValue[];
@@ -42,6 +44,8 @@ export class Character {
         this.exp = json.getAsNumberWithDefault(0, "exp");
         this.ascension = json.getAsNumberWithDefault(0, "promotion");
         this.eidolons = json.getAsNumberWithDefault(0, "rank");
+
+        this.costume = json.has("dressedSkinId") ? new Costume(json.getAsNumber("dressedSkinId"), this.client) : null;
 
         const unlockedEidolons = this.characterData.eidolons.slice(0, this.eidolons);
 

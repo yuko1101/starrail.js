@@ -3,7 +3,7 @@ import { StarRail } from "../../client/StarRail";
 import { RelicData } from "./RelicData";
 import { RelicMainStatData } from "./RelicMainStatGroup";
 import { RelicSubStatData } from "./RelicSubStatGroup";
-import { StatPropertyValue } from "../StatProperty";
+import { StatPropertyType, StatPropertyValue } from "../StatProperty";
 
 export class Relic {
     readonly client: StarRail;
@@ -38,6 +38,57 @@ export class Relic {
             return new RelicSubStat(subStatData, count, steps);
         }) : [];
 
+    }
+
+    static builder(): RelicBuilder {
+        return new RelicBuilder();
+    }
+}
+
+export class RelicBuilder {
+    data = {
+        subAffixList: [] as JsonObject[],
+    } as JsonObject;
+
+    relicData: RelicData | null = null;
+
+    level(level: number): this {
+        this.data.level = level;
+        return this;
+    }
+
+    relic(relicData: RelicData): this {
+        this.data.tid = relicData.id;
+        this.relicData = relicData;
+        return this;
+    }
+
+    mainStat(type: StatPropertyType): this {
+        if (!this.relicData) throw new Error("RelicData is not set. Please call `relic` method first.");
+
+        const mainStatData = this.relicData.mainStatGroup.mainStats.find(stat => stat.statProperty.type === type);
+        if (!mainStatData) throw new Error(`MainStat with type ${type} is not found.`);
+
+        this.data.mainAffixId = mainStatData.id;
+        return this;
+    }
+
+    addSubStat(type: StatPropertyType, count: number, steps: number): this {
+        if (!this.relicData) throw new Error("RelicData is not set. Please call `relic` method first.");
+
+        const subStatData = this.relicData.subStatGroup.subStats.find(stat => stat.statProperty.type === type);
+        if (!subStatData) throw new Error(`SubStat with type ${type} is not found.`);
+
+        (this.data.subAffixList as JsonObject[]).push({
+            affixId: subStatData.id,
+            cnt: count,
+            step: steps,
+        });
+        return this;
+    }
+
+    build(client: StarRail): Relic {
+        return new Relic(this.data, client);
     }
 }
 

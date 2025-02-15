@@ -73,4 +73,74 @@ export class Character {
 
         this.stats = new CharacterStats(this);
     }
+
+    static builder() {
+        return new CharacterBuilder();
+    }
+}
+
+export class CharacterBuilder {
+    data = {
+        level: 1,
+        avatarId: null,
+        equipment: {},
+        relicList: [],
+        skillTreeList: null,
+    } as JsonObject;
+
+    lightCone(lightCone: LightCone): this {
+        this.data["equipment"] = lightCone._data;
+        return this;
+    }
+
+    addRelic(relic: Relic): this {
+        (this.data["relicList"] as JsonObject[]).push(relic._data);
+        return this;
+    }
+
+    level(level: number): this {
+        this.data["level"] = level;
+        return this;
+    }
+
+    ascension(ascension: number): this {
+        this.data["promotion"] = ascension;
+        return this;
+    }
+
+    eidolons(eidolons: number): this {
+        this.data["rank"] = eidolons;
+        return this;
+    }
+
+    character(characterData: CharacterData): this {
+        this.data["avatarId"] = characterData.id;
+        this.data["skillTreeList"] = characterData.skillTreeNodes.map(node => ({
+            pointId: node.id,
+            level: 1,
+        }));
+
+        return this;
+    }
+
+    setTraceLevel(nodeId: number, level: number): this {
+        if (this.data["skillTreeList"] === null) {
+            throw new Error("Character data is not provided. Please call `character` method first.");
+        }
+
+        const node = (this.data["skillTreeList"] as JsonObject[]).find(n => n["pointId"] === nodeId);
+        if (node === undefined) {
+            throw new Error(`Node with ID ${nodeId} is not found.`);
+        }
+
+        node["level"] = level;
+        return this;
+    }
+
+    build(client: StarRail): Character {
+        if (this.data["avatarId"] === null) {
+            throw new Error("Character ID is not set.");
+        }
+        return new Character(this.data, client);
+    }
 }

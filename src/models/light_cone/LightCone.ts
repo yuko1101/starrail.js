@@ -36,4 +36,38 @@ export class LightCone {
 
 
     }
+
+    static builder(): LightConeBuilder {
+        return new LightConeBuilder();
+    }
+}
+
+export class LightConeBuilder {
+    data = {} as JsonObject;
+
+    lightConeData: LightConeData | null = null;
+
+    level(level: number): this {
+        this.data.level = level;
+        return this;
+    }
+
+    ascension(ascension: number): this {
+        this.data.promotion = ascension;
+        return this;
+    }
+
+    superimposition(superimposition: number): this {
+        this.data.rank = superimposition;
+        return this;
+    }
+
+    lightCone(lightConeData: LightConeData): this {
+        this.data.tid = lightConeData.id;
+        return this;
+    }
+
+    build(client: StarRail): LightCone {
+        return new LightCone(this.data, client);
+    }
 }

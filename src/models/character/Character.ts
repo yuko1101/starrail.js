@@ -53,8 +53,9 @@ export class Character {
             const node = new SkillTreeNode(skill.getAsNumber("pointId"), this.client);
             const levelUpByEidolons = node.levelUpSkills.length > 0 ? unlockedEidolons.reduce<number>((levels, eidolon) => levels + (eidolon.skillsLevelUp[node.levelUpSkills[0].id]?.levelUp ?? 0), 0) : 0;
             const level = new SkillLevel(skill.getAsNumber("level"), levelUpByEidolons);
+            if (level.base < 1) return null;
             return node.getSkillTreeNodeByLevel(level);
-        });
+        }).filter(nonNullable);
 
         this.skills = this.characterData.skills.map(skill => {
             const skillNode = this.skillTreeNodes.find(node => node.levelUpSkills.some(s => s.id === skill.id));
@@ -113,11 +114,11 @@ export class CharacterBuilder {
         return this;
     }
 
-    character(characterData: CharacterData): this {
+    character(characterData: CharacterData, unlockAllTraces: boolean): this {
         this.data["avatarId"] = characterData.id;
         this.data["skillTreeList"] = characterData.skillTreeNodes.map(node => ({
             pointId: node.id,
-            level: 1,
+            level: unlockAllTraces ? node.maxLevel : 0,
         }));
 
         return this;

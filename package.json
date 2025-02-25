@@ -1,6 +1,6 @@
 {
   "name": "starrail.js",
-  "version": "1.7.5",
+  "version": "1.8.0",
   "description": "A Node.js Enka.Network API wrapper for Honkai: Star Rail.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

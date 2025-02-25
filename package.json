@@ -45,6 +45,7 @@
     "typescript": "^5.5.3"
   },
   "dependencies": {
+    "@node-rs/xxhash": "^1.7.6",
     "axios": "^1.7.2",
     "config_file.js": "^1.4.0",
     "enka-system": "^0.3.5",

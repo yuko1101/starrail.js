@@ -1,3 +1,8 @@
+# 1.8.0
+- Support bigint text map hash for HSR v3.1.
+- Changed type of LeveledSkill#simpleDescription to nullable.
+- Changed type of StatProperty#nameSkillTree to nullable.
+- Updated getStableHash() for HSR v3.1.
 # 1.7.5
 - Added Character#costume.
 - Added CharacterBuilder.

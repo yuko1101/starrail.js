@@ -6,6 +6,7 @@ import { ImageAssets } from "../assets/ImageAssets";
 import { RelicSetBonus } from "./RelicSetBonus";
 import { Relic } from "./Relic";
 import { RelicData } from "./RelicData";
+import { excelJsonOptions } from "../../client/CachedAssetsManager";
 
 export class RelicSet {
     readonly id: number;
@@ -26,9 +27,9 @@ export class RelicSet {
         if (!_data) throw new AssetsNotFoundError("RelicSet", this.id);
         this._data = _data;
 
-        const json = new JsonReader(this._data);
+        const json = new JsonReader(excelJsonOptions, this._data);
 
-        this.name = new TextAssets(json.getAsNumber("SetName", "Hash"), this.client);
+        this.name = new TextAssets(json.getAsNumberOrBigint("SetName", "Hash"), this.client);
 
         this.icon = new ImageAssets(json.getAsString("SetIconPath"), this.client);
         this.figureIcon = new ImageAssets(json.getAsString("SetIconFigurePath"), this.client);

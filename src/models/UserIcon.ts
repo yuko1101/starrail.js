@@ -4,6 +4,7 @@ import { AssetsNotFoundError } from "../errors/AssetsNotFoundError";
 import { ImageAssets } from "./assets/ImageAssets";
 import { TextAssets } from "./assets/TextAssets";
 import { CharacterData } from "./character/CharacterData";
+import { excelJsonOptions } from "../client/CachedAssetsManager";
 
 export class UserIcon {
     /** This can be found in PlayerIcon.json, ItemPlayerCard.json, AvatarPlayerIcon.json, or ItemConfigAvatarPlayerIcon.json */
@@ -34,15 +35,15 @@ export class UserIcon {
 
         if (!playerIconItem) throw new AssetsNotFoundError("UserIcon-Item", this.id);
 
-        const itemJson = new JsonReader(playerIconItem);
+        const itemJson = new JsonReader(excelJsonOptions, playerIconItem);
         this._itemData = playerIconItem;
 
         const playerIcon = this.client.cachedAssetsManager.getExcelData(isCharacterIcon ? "AvatarPlayerIcon" : "PlayerIcon", this.id);
         if (!playerIcon) throw new AssetsNotFoundError("UserIcon-Icon", this.id);
-        const iconJson = new JsonReader(playerIcon);
+        const iconJson = new JsonReader(excelJsonOptions, playerIcon);
         this._iconData = playerIcon;
 
-        this.name = new TextAssets(itemJson.getAsNumber("ItemName", "Hash"), this.client);
+        this.name = new TextAssets(itemJson.getAsNumberOrBigint("ItemName", "Hash"), this.client);
 
         this.icon = new ImageAssets(iconJson.getAsString("ImagePath"), this.client);
         this.itemIcon = new ImageAssets(itemJson.getAsString("ItemIconPath"), this.client);

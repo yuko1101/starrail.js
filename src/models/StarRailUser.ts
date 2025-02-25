@@ -1,4 +1,4 @@
-import { JsonObject, JsonReader } from "config_file.js";
+import { defaultJsonOptions, JsonObject, JsonReader } from "config_file.js";
 import { EnkaProfile, User } from "enka-system";
 import { StarRail } from "../client/StarRail";
 import { Character } from "./character/Character";
@@ -61,7 +61,7 @@ export class StarRailUser extends User {
     readonly enkaUserHash: string | null;
 
     constructor(data: JsonObject, client: StarRail) {
-        const json = new JsonReader(data);
+        const json = new JsonReader(defaultJsonOptions, data);
         super(json);
 
         this.client = client;

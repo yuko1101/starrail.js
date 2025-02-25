@@ -10,6 +10,7 @@ import { SkillTreeNode } from "./skill/SkillTreeNode";
 import { Eidolon } from "./Eidolon";
 import { StatPropertyValue } from "../StatProperty";
 import { SimpleMap, SimpleObject, getKeysFromSimpleMap } from "../../utils/ts_utils";
+import { excelJsonOptions } from "../../client/CachedAssetsManager";
 
 export class CharacterData {
     readonly id: number;
@@ -50,11 +51,11 @@ export class CharacterData {
         if (!_itemData) throw new AssetsNotFoundError("Character Item", this.id);
         this._itemData = _itemData;
 
-        const json = new JsonReader(this._data);
-        const itemJson = new JsonReader(this._itemData);
+        const json = new JsonReader(excelJsonOptions, this._data);
+        const itemJson = new JsonReader(excelJsonOptions, this._itemData);
 
-        this.name = new TextAssets(json.getAsNumber("AvatarName", "Hash"), this.client);
-        this.description = new TextAssets(itemJson.getAsNumber("ItemBGDesc", "Hash"), this.client);
+        this.name = new TextAssets(json.getAsNumberOrBigint("AvatarName", "Hash"), this.client);
+        this.description = new TextAssets(itemJson.getAsNumberOrBigint("ItemBGDesc", "Hash"), this.client);
 
         this.stars = Number(json.getAsString("Rarity").slice(-1));
 
@@ -67,11 +68,11 @@ export class CharacterData {
         this.skills = json.get("SkillList").mapArray((_, skillId) => new Skill(skillId.getAsNumber(), this.client));
 
         const skillTreeData = this.client.cachedAssetsManager._getExcelData("AvatarSkillTreeConfig");
-        const skillTreeJson = new JsonReader(skillTreeData);
+        const skillTreeJson = new JsonReader(excelJsonOptions, skillTreeData);
         this.skillTreeNodes = skillTreeJson.filterObject((_, node) => node.getAsNumber("1", "AvatarID") === this.id).map(([nodeId]) => new SkillTreeNode(Number(nodeId), this.client));
 
         const eidolonsData = this.client.cachedAssetsManager._getExcelData("AvatarRankConfig");
-        const eidolonsJson = new JsonReader(eidolonsData);
+        const eidolonsJson = new JsonReader(excelJsonOptions, eidolonsData);
         this.eidolons = eidolonsJson.filterObject((eidolonId) => Math.floor(Number(eidolonId) / 100) === this.id).map(([eidolonId]) => new Eidolon(Number(eidolonId), this.client));
 
         this.icon = new ImageAssets(json.getAsString("DefaultAvatarHeadIconPath"), this.client);
@@ -87,7 +88,7 @@ export class CharacterData {
 
     getStatsByLevel(ascension: number, level: number): StatPropertyValue[] {
         const ascensionData = this.client.cachedAssetsManager._getExcelData("AvatarPromotionConfig")[this.id][ascension];
-        const ascensionJson = new JsonReader(ascensionData);
+        const ascensionJson = new JsonReader(excelJsonOptions, ascensionData);
 
         return [
             new StatPropertyValue("BaseAttack", ascensionJson.getAsNumber("AttackBase", "Value") + ascensionJson.getAsNumber("AttackAdd", "Value") * (level - 1), this.client),
@@ -164,7 +165,7 @@ export class CharacterData {
 
     getBaseAggro(ascension: number): number {
         const ascensionData = this.client.cachedAssetsManager._getExcelData("AvatarPromotionConfig")[this.id][ascension];
-        const ascensionJson = new JsonReader(ascensionData);
+        const ascensionJson = new JsonReader(excelJsonOptions, ascensionData);
 
         return ascensionJson.getAsNumber("BaseAggro", "Value");
     }

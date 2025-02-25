@@ -1,4 +1,4 @@
-import { JsonObject, JsonReader } from "config_file.js";
+import { defaultJsonOptions, JsonObject, JsonReader } from "config_file.js";
 import { StarRail } from "../../client/StarRail";
 import { RelicData } from "./RelicData";
 import { RelicMainStatData } from "./RelicMainStatGroup";
@@ -19,7 +19,7 @@ export class Relic {
         this.client = client;
         this._data = data;
 
-        const json = new JsonReader(this._data);
+        const json = new JsonReader(defaultJsonOptions, this._data);
 
         this.relicData = new RelicData(json.getAsNumber("tid"), this.client);
 

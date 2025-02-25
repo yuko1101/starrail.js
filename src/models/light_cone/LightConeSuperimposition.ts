@@ -4,6 +4,7 @@ import { AssetsNotFoundError } from "../../errors/AssetsNotFoundError";
 import { TextAssets } from "../assets/TextAssets";
 import { StatProperty, StatPropertyType, StatPropertyValue } from "../StatProperty";
 import { DynamicTextAssets } from "../assets/DynamicTextAssets";
+import { excelJsonOptions } from "../../client/CachedAssetsManager";
 
 export class LightConeSuperimposition {
     readonly id: number;
@@ -26,12 +27,12 @@ export class LightConeSuperimposition {
         if (!_data) throw new AssetsNotFoundError("LightConeSuperimposition", this.id);
         this._data = _data;
 
-        const json = new JsonReader(this._data);
+        const json = new JsonReader(excelJsonOptions, this._data);
 
         this.paramList = json.get("ParamList").mapArray((_, v) => v.getAsNumber("Value"));
 
-        this.name = new TextAssets(json.getAsNumber("SkillName", "Hash"), this.client);
-        this.description = new DynamicTextAssets(json.getAsNumber("SkillDesc", "Hash"), { paramList: this.paramList }, this.client);
+        this.name = new TextAssets(json.getAsNumberOrBigint("SkillName", "Hash"), this.client);
+        this.description = new DynamicTextAssets(json.getAsNumberOrBigint("SkillDesc", "Hash"), { paramList: this.paramList }, this.client);
 
         this.stats = json.get("AbilityProperty").mapArray((_, prop) => {
             if (prop.getAsString("PropertyType") === "AllDamageTypeAddedRatio") {

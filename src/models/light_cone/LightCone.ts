@@ -1,4 +1,4 @@
-import { JsonObject, JsonReader } from "config_file.js";
+import { defaultJsonOptions, JsonObject, JsonReader } from "config_file.js";
 import { StarRail } from "../../client/StarRail";
 import { LightConeData } from "./LightConeData";
 import { LightConeSuperimposition } from "./LightConeSuperimposition";
@@ -22,7 +22,7 @@ export class LightCone {
         this.client = client;
         this._data = data;
 
-        const json = new JsonReader(this._data);
+        const json = new JsonReader(defaultJsonOptions, this._data);
 
         this.lightConeData = new LightConeData(json.getAsNumber("tid"), this.client);
 

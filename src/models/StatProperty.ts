@@ -4,13 +4,14 @@ import { AssetsNotFoundError } from "../errors/AssetsNotFoundError";
 import { ImageAssets } from "./assets/ImageAssets";
 import { TextAssets } from "./assets/TextAssets";
 import { DynamicTextAssets } from "./assets/DynamicTextAssets";
+import { excelJsonOptions } from "../client/CachedAssetsManager";
 
 export class StatProperty {
     readonly type: StatPropertyType;
     readonly client: StarRail;
 
     readonly name: TextAssets;
-    readonly nameSkillTree: TextAssets;
+    readonly nameSkillTree: TextAssets | null;
     readonly nameRelic: TextAssets;
     readonly nameFilter: TextAssets;
     readonly isDisplay: boolean;
@@ -30,12 +31,13 @@ export class StatProperty {
         if (!_data) throw new AssetsNotFoundError("StatProperty", this.type);
         this._data = _data;
 
-        const json = new JsonReader(this._data);
+        const json = new JsonReader(excelJsonOptions, this._data);
 
-        this.name = new TextAssets(json.getAsNumber("PropertyName", "Hash"), this.client);
-        this.nameSkillTree = new TextAssets(json.getAsNumber("PropertyNameSkillTree", "Hash"), this.client);
-        this.nameRelic = new TextAssets(json.getAsNumber("PropertyNameRelic", "Hash"), this.client);
-        this.nameFilter = new TextAssets(json.getAsNumber("PropertyNameFilter", "Hash"), this.client);
+        this.name = new TextAssets(json.getAsNumberOrBigint("PropertyName", "Hash"), this.client);
+        const nameSkillTreeHash = json.getAsNumberOrBigintWithDefault(null, "PropertyNameSkillTree", "Hash");
+        this.nameSkillTree = nameSkillTreeHash !== null ? new TextAssets(nameSkillTreeHash, this.client) : null;
+        this.nameRelic = new TextAssets(json.getAsNumberOrBigint("PropertyNameRelic", "Hash"), this.client);
+        this.nameFilter = new TextAssets(json.getAsNumberOrBigint("PropertyNameFilter", "Hash"), this.client);
 
         this.isDisplay = json.getAsBooleanWithDefault(false, "IsDisplay");
         this.isBattleDisplay = json.getAsBooleanWithDefault(false, "isBattleDisplay");
@@ -57,7 +59,7 @@ export class StatPropertyValue {
     readonly statProperty: StatProperty | null;
     readonly isPercent: boolean;
     readonly value: number;
-    /** This will be null if [statProperty](#statProperty) is null. */
+    /** This will be null if [statProperty](#statProperty) or [statProperty.nameSkillTree]({@apilink StatProperty#nameSkillTree}) is null. */
     readonly nameSkillTree: DynamicTextAssets | null;
 
     constructor(type: StatPropertyType | OtherStatPropertyType, value: number, client: StarRail) {
@@ -67,7 +69,7 @@ export class StatPropertyValue {
         this.isPercent = isStatPropertyType(type) ? statPropertyTypes[type].isPercent : otherStatPropertyTypes[type].isPercent;
         this.value = value;
 
-        this.nameSkillTree = this.statProperty ? new DynamicTextAssets(this.statProperty.nameSkillTree.id, { paramList: [value] }, this.client) : null;
+        this.nameSkillTree = this.statProperty && this.statProperty.nameSkillTree ? new DynamicTextAssets(this.statProperty.nameSkillTree.id, { paramList: [value] }, this.client) : null;
     }
 
     public get valueText(): string {

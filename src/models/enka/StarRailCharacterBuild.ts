@@ -1,4 +1,4 @@
-import { JsonObject, JsonReader } from "config_file.js";
+import { defaultJsonOptions, JsonObject, JsonReader } from "config_file.js";
 import { CharacterBuild, HoyoType } from "enka-system";
 import { StarRail } from "../../client/StarRail";
 import { Character } from "../character/Character";
@@ -28,7 +28,7 @@ export class StarRailCharacterBuild extends CharacterBuild {
 
         this.enkaUserInfo = { username: username, hash: hash };
 
-        const json = new JsonReader(this._data);
+        const json = new JsonReader(defaultJsonOptions, this._data);
 
         this.id = json.getAsNumber("id");
         this.name = json.getAsString("name");

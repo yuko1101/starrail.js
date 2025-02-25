@@ -2,16 +2,26 @@ import fs from "fs";
 import path from "path";
 import { Axios } from "axios";
 import unzip, { Entry } from "unzip-stream";
-import { ConfigFile, JsonArray, JsonElement, JsonObject, JsonReader, bindOptions, isJsonObject, move } from "config_file.js";
+import { ConfigFile, FlexJsonArray, FlexJsonElement, FlexJsonObject, JsonObject, JsonOptions, JsonReader, bindOptions, isFlexJsonObject, move } from "config_file.js";
 import { fetchJSON } from "../utils/axios_utils";
 import { ObjectKeysManager } from "./ObjectKeysManager";
 import { StarRail } from "./StarRail";
 import { getStableHash } from "../utils/hash_utils";
+import jsonBigint from "json-bigint";
+const JSONBig = jsonBigint({ useNativeBigInt: true });
+
+export const excelJsonOptions = {
+    allowBigint: true,
+} satisfies JsonOptions;
+
+export type ExcelJsonElement = FlexJsonElement<typeof excelJsonOptions>;
+export type ExcelJsonObject<T extends ExcelJsonElement = ExcelJsonElement> = FlexJsonObject<typeof excelJsonOptions, T>;
+export type ExcelJsonArray<T extends ExcelJsonElement = ExcelJsonElement> = FlexJsonArray<typeof excelJsonOptions, T>;
 
 // Thanks @Dimbreath
 const excelBaseUrl = "https://gitlab.com/Dimbreath/turnbasedgamedata/-/raw/main";
 
-export type ExcelKey = string | [string, JsonElement];
+export type ExcelKey = string | [string, ExcelJsonElement];
 export const excelKeyMap = {
     "AvatarConfig": ["AvatarID"], // Characters
     "ItemConfigAvatar": ["ID"], // Characters as Items
@@ -85,7 +95,7 @@ export class CachedAssetsManager {
     cacheDirectoryPath: string;
 
     _cacheUpdater: NodeJS.Timeout | null;
-    _githubCache: ConfigFile | null;
+    _githubCache: ConfigFile<{ allowBigint: false }> | null;
     _isFetching: boolean;
 
     constructor(client: StarRail) {
@@ -126,7 +136,7 @@ export class CachedAssetsManager {
 
         const githubCachePath = path.resolve(this.cacheDirectoryPath, "github", "starrail_data.json");
         if (!fs.existsSync(githubCachePath) || !this._githubCache) {
-            this._githubCache = await new ConfigFile(githubCachePath, {
+            this._githubCache = await new ConfigFile(githubCachePath, { allowBigint: false }, {
                 "lastUpdate": 0,
                 "rawLastUpdate": 0,
             }).load();
@@ -134,7 +144,7 @@ export class CachedAssetsManager {
     }
 
     /** Obtains a text map for a specific language. */
-    async fetchLanguageData(lang: LanguageCode): Promise<{ [key: string]: string }> {
+    async fetchLanguageData(lang: LanguageCode): Promise<JsonObject<string>> {
         await this.cacheDirectorySetup();
         const url = `${excelBaseUrl}/TextMap/TextMap${lang.toUpperCase()}.json`;
         const json = (await fetchJSON(url, this.client)).data;
@@ -191,12 +201,12 @@ export class CachedAssetsManager {
             }
 
             const promises: Promise<void>[] = [];
-            const excelOutputData: JsonObject = { ...initialExcelDataMemory };
+            const excelOutputData: ExcelJsonObject = { ...initialExcelDataMemory };
             for (const excel of excels) {
                 const fileName = `${excel}.json`;
                 const url = `${excelBaseUrl}/ExcelOutput/${fileName}`;
                 promises.push((async () => {
-                    const json = (await fetchJSON(url, this.client)).data as JsonObject[];
+                    const json = (await fetchJSON(url, this.client, false, true)).data as ExcelJsonObject[];
                     if (this.client.options.showFetchCacheLog) {
                         console.info(`Downloaded data/${fileName}`);
                     }
@@ -242,7 +252,7 @@ export class CachedAssetsManager {
             }
 
             for (const excel of Object.keys(excelOutputData) as ExcelType[]) {
-                fs.writeFileSync(path.resolve(this.cacheDirectoryPath, "data", `${excel}.json`), JSON.stringify(excelOutputData[excel]));
+                fs.writeFileSync(path.resolve(this.cacheDirectoryPath, "data", `${excel}.json`), JSONBig.stringify(excelOutputData[excel]));
             }
 
             await this._githubCache?.set("rawLastUpdate", Date.now()).save();
@@ -353,7 +363,7 @@ export class CachedAssetsManager {
      * @param excel without extensions (.json)
      */
     _getExcelData<T extends ExcelType>(excel: T): SingleBy<typeof excelKeyMap[T]> {
-        excelDataMemory[excel] ??= JSON.parse(fs.readFileSync(this.getJSONDataPath(excel), "utf-8"));
+        excelDataMemory[excel] ??= JSONBig.parse(fs.readFileSync(this.getJSONDataPath(excel), "utf-8"));
         const excelData = excelDataMemory[excel];
         if (!excelData) throw new Error(`Failed to load ${excel} excel.`);
         return excelData;
@@ -371,7 +381,7 @@ export class CachedAssetsManager {
     /**
      * @returns text map for a specific language
      */
-    getLanguageData(lang: LanguageCode): { [key: string]: string } {
+    getLanguageData(lang: LanguageCode): JsonObject<string> {
         langDataMemory[lang] ??= JSON.parse(fs.readFileSync(this.getLanguageDataPath(lang), "utf-8"));
         const langData = langDataMemory[lang];
         if (!langData) throw new Error(`Failed to load ${lang} language data.`);
@@ -411,7 +421,7 @@ export class CachedAssetsManager {
         }
     }
 
-    formatExcel<T extends ExcelType>(excel: T, data: JsonObject[]): SingleBy<typeof excelKeyMap[T]> {
+    formatExcel<T extends ExcelType>(excel: T, data: ExcelJsonObject[]): SingleBy<typeof excelKeyMap[T]> {
         const keys = excelKeyMap[excel];
         return singleBy(data, ...keys);
     }
@@ -420,64 +430,66 @@ export class CachedAssetsManager {
      * Remove all unused text map entries
      */
     removeUnusedTextData(data: LoadedExcelDataMap, langsData: LoadedLanguageMap, showLog = true): LoadedLanguageMap {
-        const required: number[] = [];
+        const requiredKeys: Set<string> = new Set();
 
-        function push(...keys: number[]) {
+        function push(...keys: (number | bigint | null)[]) {
             const len = keys.length;
             for (let i = 0; i < len; i++) {
                 const key = keys[i];
-                if (!required.includes(key)) required.push(key);
+                if (key === null) continue;
+                const keyStr = key.toString();
+                if (!requiredKeys.has(keyStr)) requiredKeys.add(keyStr);
             }
         }
 
         push(...textMapWhiteList);
 
         Object.values(data["AvatarConfig"]).forEach(c => {
-            const json = new JsonReader(c);
+            const json = new JsonReader(excelJsonOptions, c);
             push(
-                json.getAsNumber("AvatarName", "Hash"),
+                json.getAsNumberOrBigint("AvatarName", "Hash"),
             );
         });
 
         Object.values(data["ItemConfigAvatar"]).forEach(c => {
-            const json = new JsonReader(c);
+            const json = new JsonReader(excelJsonOptions, c);
             push(
-                json.getAsNumber("ItemBGDesc", "Hash"),
+                json.getAsNumberOrBigint("ItemBGDesc", "Hash"),
             );
         });
 
         Object.values(data["DamageType"]).forEach(d => {
-            const json = new JsonReader(d);
+            const json = new JsonReader(excelJsonOptions, d);
             push(
-                json.getAsNumber("DamageTypeName", "Hash"),
-                json.getAsNumber("DamageTypeIntro", "Hash"),
+                json.getAsNumberOrBigint("DamageTypeName", "Hash"),
+                json.getAsNumberOrBigint("DamageTypeIntro", "Hash"),
             );
         });
 
         Object.values(data["AvatarBaseType"]).forEach(p => {
-            const json = new JsonReader(p);
+            const json = new JsonReader(excelJsonOptions, p);
             push(
-                json.getAsNumber("BaseTypeText", "Hash"),
-                json.getAsNumber("BaseTypeDesc", "Hash"),
+                json.getAsNumberOrBigint("BaseTypeText", "Hash"),
+                json.getAsNumberOrBigint("BaseTypeDesc", "Hash"),
             );
         });
 
         Object.values(data["AvatarSkillConfig"]).forEach(s => {
             Object.values(s).forEach(l => {
-                const json = new JsonReader(l);
+                const json = new JsonReader(excelJsonOptions, l);
                 push(
-                    json.getAsNumber("SkillName", "Hash"),
-                    json.getAsNumber("SkillTag", "Hash"),
-                    json.getAsNumber("SkillTypeDesc", "Hash"),
-                    json.getAsNumber("SkillDesc", "Hash"),
-                    json.getAsNumber("SimpleSkillDesc", "Hash"),
+                    json.getAsNumberOrBigint("SkillName", "Hash"),
+                    json.getAsNumberOrBigint("SkillTag", "Hash"),
+                    json.getAsNumberOrBigint("SkillTypeDesc", "Hash"),
+                    json.getAsNumberOrBigintWithDefault(null, "SkillDesc", "Hash"),
+                    json.getAsNumberOrBigintWithDefault(null, "SimpleSkillDesc", "Hash"),
                 );
             });
         });
 
         Object.values(data["AvatarSkillTreeConfig"]).forEach(s => {
             Object.values(s).forEach(l => {
-                const json = new JsonReader(l);
+                const json = new JsonReader(excelJsonOptions, l);
                 const name = json.getAsString("PointName");
                 if (name !== "") push(getStableHash(name));
                 const description = json.getAsString("PointDesc");
@@ -486,7 +498,7 @@ export class CachedAssetsManager {
         });
 
         Object.values(data["AvatarRankConfig"]).forEach(e => {
-            const json = new JsonReader(e);
+            const json = new JsonReader(excelJsonOptions, e);
             push(
                 getStableHash(json.getAsString("Name")),
                 getStableHash(json.getAsString("Desc")),
@@ -494,56 +506,56 @@ export class CachedAssetsManager {
         });
 
         Object.values(data["AvatarSkin"]).forEach(s => {
-            const json = new JsonReader(s);
+            const json = new JsonReader(excelJsonOptions, s);
             push(
-                json.getAsNumber("AvatarSkinName", "Hash"),
+                json.getAsNumberOrBigint("AvatarSkinName", "Hash"),
             );
         });
 
         Object.values(data["EquipmentConfig"]).forEach(l => {
-            const json = new JsonReader(l);
+            const json = new JsonReader(excelJsonOptions, l);
             push(
-                json.getAsNumber("EquipmentName", "Hash"),
-                json.getAsNumber("EquipmentDesc", "Hash"),
+                json.getAsNumberOrBigint("EquipmentName", "Hash"),
+                json.getAsNumberOrBigintWithDefault(null, "EquipmentDesc", "Hash"),
             );
         });
 
         Object.values(data["ItemConfigEquipment"]).forEach(l => {
-            const json = new JsonReader(l);
+            const json = new JsonReader(excelJsonOptions, l);
             push(
-                json.getAsNumber("ItemBGDesc", "Hash"),
-                json.getAsNumber("ItemDesc", "Hash"),
+                json.getAsNumberOrBigint("ItemBGDesc", "Hash"),
+                json.getAsNumberOrBigint("ItemDesc", "Hash"),
             );
         });
 
         Object.values(data["EquipmentSkillConfig"]).forEach(s => {
             Object.values(s).forEach(l => {
-                const json = new JsonReader(l);
+                const json = new JsonReader(excelJsonOptions, l);
                 push(
-                    json.getAsNumber("SkillName", "Hash"),
-                    json.getAsNumber("SkillDesc", "Hash"),
+                    json.getAsNumberOrBigint("SkillName", "Hash"),
+                    json.getAsNumberOrBigint("SkillDesc", "Hash"),
                 );
             });
         });
 
         Object.values(data["ItemConfigRelic"]).forEach(r => {
-            const json = new JsonReader(r);
+            const json = new JsonReader(excelJsonOptions, r);
             push(
-                json.getAsNumber("ItemName", "Hash"),
-                json.getAsNumber("ItemBGDesc", "Hash"),
+                json.getAsNumberOrBigint("ItemName", "Hash"),
+                json.getAsNumberOrBigint("ItemBGDesc", "Hash"),
             );
         });
 
         Object.values(data["RelicSetConfig"]).forEach(s => {
-            const json = new JsonReader(s);
+            const json = new JsonReader(excelJsonOptions, s);
             push(
-                json.getAsNumber("SetName", "Hash"),
+                json.getAsNumberOrBigint("SetName", "Hash"),
             );
         });
 
         Object.values(data["RelicSetSkillConfig"]).forEach(s => {
             Object.values(s).forEach(b => {
-                const json = new JsonReader(b);
+                const json = new JsonReader(excelJsonOptions, b);
                 push(
                     getStableHash(json.getAsString("SkillDesc")),
                 );
@@ -551,44 +563,40 @@ export class CachedAssetsManager {
         });
 
         Object.values(data["RelicBaseType"]).forEach(t => {
-            const json = new JsonReader(t);
+            const json = new JsonReader(excelJsonOptions, t);
             push(
-                json.getAsNumber("BaseTypeText", "Hash"),
+                json.getAsNumberOrBigintWithDefault(null, "BaseTypeText", "Hash"),
             );
         });
 
         Object.values(data["AvatarPropertyConfig"]).forEach(s => {
-            const json = new JsonReader(s);
+            const json = new JsonReader(excelJsonOptions, s);
             push(
-                json.getAsNumber("PropertyName", "Hash"),
-                json.getAsNumber("PropertyNameSkillTree", "Hash"),
-                json.getAsNumber("PropertyNameRelic", "Hash"),
-                json.getAsNumber("PropertyNameFilter", "Hash"),
+                json.getAsNumberOrBigint("PropertyName", "Hash"),
+                json.getAsNumberOrBigintWithDefault(null, "PropertyNameSkillTree", "Hash"),
+                json.getAsNumberOrBigint("PropertyNameRelic", "Hash"),
+                json.getAsNumberOrBigint("PropertyNameFilter", "Hash"),
             );
         });
 
         [...Object.values(data["ItemConfigAvatarPlayerIcon"]), ...Object.values(data["ItemPlayerCard"])].forEach(i => {
-            const json = new JsonReader(i);
+            const json = new JsonReader(excelJsonOptions, i);
             push(
-                json.getAsNumber("ItemName", "Hash"),
+                json.getAsNumberOrBigint("ItemName", "Hash"),
             );
         });
 
-        const requiredStringKeys = required.filter(key => key).map(key => key.toString());
-
-        if (showLog) console.info(`Required keys have been loaded (${requiredStringKeys.length.toLocaleString()} keys)`);
+        if (showLog) console.info(`Required keys have been loaded (${requiredKeys.size.toLocaleString()} keys)`);
 
         const clearLangsData: LanguageMap = { ...initialLangDataMemory };
 
-        const keyCount = requiredStringKeys.length;
         for (const lang of Object.keys(langsData) as LanguageCode[]) {
             if (showLog) console.info(`Modifying language "${lang}"...`);
             clearLangsData[lang] = {};
-            for (let i = 0; i < keyCount; i++) {
-                const key = requiredStringKeys[i];
+            for (const key of requiredKeys) {
                 const text = langsData[lang][key];
                 if (text) {
-                    (clearLangsData[lang] as JsonObject)[key] = text;
+                    (clearLangsData[lang] as ExcelJsonObject)[key] = text;
                 } else {
                     // console.warn(`Required key ${key} was not found in language ${lang}.`);
                 }
@@ -656,27 +664,27 @@ export class CachedAssetsManager {
 export type IndexBy<T, Keys extends (string | number)[]> =
     Keys extends [string | number, ...infer U]
     ? U extends (string | number)[]
-    ? T extends JsonObject<infer V>
+    ? T extends ExcelJsonObject<infer V>
     ? IndexBy<V, U> | undefined
     : unknown
-    : T extends JsonObject<infer V>
+    : T extends ExcelJsonObject<infer V>
     ? V | undefined
     : unknown
     : T;
-export function indexBy<T extends JsonObject, U extends (string | number)[]>(data: T, ...keys: U): IndexBy<T, U> {
+export function indexBy<T extends ExcelJsonObject, U extends (string | number)[]>(data: T, ...keys: U): IndexBy<T, U> {
     if (keys.length === 0) return data as IndexBy<T, U>;
     const v = data[keys[0]];
-    if (!isJsonObject(v)) return undefined as IndexBy<T, U>;
+    if (!isFlexJsonObject(excelJsonOptions, v)) return undefined as IndexBy<T, U>;
     return indexBy(v, ...keys.slice(1)) as IndexBy<T, U>;
 }
 
-export type SingleBy<Keys extends ExcelKey[]> = Keys extends [ExcelKey, ...infer T] ? T extends ExcelKey[] ? JsonObject<SingleBy<T>> : never : JsonObject;
-export function singleBy<T extends ExcelKey[]>(array: JsonArray<JsonObject>, ...keys: T): SingleBy<T> {
+export type SingleBy<Keys extends ExcelKey[]> = Keys extends [ExcelKey, ...infer T] ? T extends ExcelKey[] ? ExcelJsonObject<SingleBy<T>> : never : ExcelJsonObject;
+export function singleBy<T extends ExcelKey[]>(array: ExcelJsonArray<ExcelJsonObject>, ...keys: T): SingleBy<T> {
     if (keys.length === 0) {
         if (array.length > 1) throw Error("Cannot have multiple elements");
         return array[0] as SingleBy<T>;
     }
-    const grouped: JsonObject<JsonObject[]> = {};
+    const grouped: ExcelJsonObject<ExcelJsonObject[]> = {};
     for (const e of array) {
         const key = Array.isArray(keys[0]) ? keys[0][0] : keys[0];
         if (!(key in e) && Array.isArray(keys[0])) e[key] = keys[0][1];
@@ -686,7 +694,7 @@ export function singleBy<T extends ExcelKey[]>(array: JsonArray<JsonObject>, ...
         grouped[id].push(e);
     }
 
-    const recursiveGrouped: JsonObject = {};
+    const recursiveGrouped: ExcelJsonObject = {};
     for (const key in grouped) {
         const arr = grouped[key];
         recursiveGrouped[key] = singleBy(arr, ...keys.slice(1));

@@ -8,6 +8,7 @@ import { ImageAssets } from "../../assets/ImageAssets";
 import { StatPropertyType, StatPropertyValue } from "../../StatProperty";
 import { SkillLevel } from "./SkillLevel";
 import { DynamicTextAssets } from "../../assets/DynamicTextAssets";
+import { excelJsonOptions } from "../../../client/CachedAssetsManager";
 
 export class SkillTreeNode {
     readonly id: number;
@@ -31,7 +32,7 @@ export class SkillTreeNode {
         if (!_data) throw new AssetsNotFoundError("SkillTreeNode", this.id);
         this._nodesData = Object.values(_data) as JsonObject[];
 
-        const json = new JsonReader(this._nodesData[nodeIndexToUse]);
+        const json = new JsonReader(excelJsonOptions, this._nodesData[nodeIndexToUse]);
 
         this.characterId = json.getAsNumber("AvatarID");
 
@@ -59,7 +60,7 @@ export class SkillTreeNode {
 
     getNextNodes(): SkillTreeNode[] {
         const nodesData = this.client.cachedAssetsManager._getExcelData("AvatarSkillTreeConfig");
-        const json = new JsonReader(nodesData);
+        const json = new JsonReader(excelJsonOptions, nodesData);
         const nextNodes = json.filterObject((_, node) => node.getAsNumberWithDefault(null, "PrePoint", 0) === this.id);
         return nextNodes.map(([nodeId]) => new SkillTreeNode(Number(nodeId), this.client));
     }
@@ -75,7 +76,7 @@ export class LeveledSkillTreeNode extends SkillTreeNode {
 
     constructor(data: JsonObject, level: SkillLevel, client: StarRail) {
         // skill tree node data with base level
-        const json = new JsonReader(data);
+        const json = new JsonReader(excelJsonOptions, data);
         const id = json.getAsNumber("PointID");
         super(id, client, level.base - 1);
         this._data = data;

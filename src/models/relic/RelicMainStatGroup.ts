@@ -2,6 +2,7 @@ import { JsonObject, JsonReader } from "config_file.js";
 import { StarRail } from "../../client/StarRail";
 import { AssetsNotFoundError } from "../../errors/AssetsNotFoundError";
 import { StatProperty, StatPropertyType } from "../StatProperty";
+import { excelJsonOptions } from "../../client/CachedAssetsManager";
 
 export interface RelicMainStatData {
     id: number;
@@ -27,7 +28,7 @@ export class RelicMainStatGroup {
         if (!_data) throw new AssetsNotFoundError("RelicMainStatGroup", this.id);
         this._data = _data;
 
-        const json = new JsonReader(this._data);
+        const json = new JsonReader(excelJsonOptions, this._data);
 
         this.mainStats = json.mapObject((_, v) => {
             return {

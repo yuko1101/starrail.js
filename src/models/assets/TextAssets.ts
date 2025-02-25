@@ -3,12 +3,12 @@ import { StarRail } from "../../client/StarRail";
 import { AssetsNotFoundError } from "../../errors/AssetsNotFoundError";
 
 export class TextAssets {
-    readonly id: number;
+    readonly id: number | bigint;
     readonly client: StarRail;
 
     // readonly _test: string | null;
 
-    constructor(id: number, client: StarRail) {
+    constructor(id: number | bigint, client: StarRail) {
         this.id = id;
 
         this.client = client;
@@ -21,8 +21,8 @@ export class TextAssets {
      */
     get(lang?: LanguageCode): string {
         lang ??= this.client.options.defaultLanguage;
-        const text = this.client.cachedAssetsManager.getLanguageData(lang)[this.id];
-        if (!text) throw new AssetsNotFoundError("Text Assets", this.id);
+        const text = this.client.cachedAssetsManager.getLanguageData(lang)[this.id.toString()];
+        if (!text) throw new AssetsNotFoundError("Text Assets", this.id.toString());
         return text;
     }
 

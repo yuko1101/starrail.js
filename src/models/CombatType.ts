@@ -3,6 +3,7 @@ import { StarRail } from "../client/StarRail";
 import { AssetsNotFoundError } from "../errors/AssetsNotFoundError";
 import { TextAssets } from "./assets/TextAssets";
 import { ImageAssets } from "./assets/ImageAssets";
+import { excelJsonOptions } from "../client/CachedAssetsManager";
 
 /**
  * CombatTypeId|In-game Name
@@ -40,10 +41,10 @@ export class CombatType {
         if (!_data) throw new AssetsNotFoundError("CombatType", this.id);
         this._data = _data;
 
-        const json = new JsonReader(this._data);
+        const json = new JsonReader(excelJsonOptions, this._data);
 
-        this.name = new TextAssets(json.getAsNumber("DamageTypeName", "Hash"), this.client);
-        this.description = new TextAssets(json.getAsNumber("DamageTypeIntro", "Hash"), this.client);
+        this.name = new TextAssets(json.getAsNumberOrBigint("DamageTypeName", "Hash"), this.client);
+        this.description = new TextAssets(json.getAsNumberOrBigint("DamageTypeIntro", "Hash"), this.client);
 
         this.color = parseInt(json.getAsString("Color").replace(/^#/, ""), 16);
 

@@ -3,6 +3,7 @@ import { StarRail } from "../client/StarRail";
 import { TextAssets } from "./assets/TextAssets";
 import { AssetsNotFoundError } from "../errors/AssetsNotFoundError";
 import { ImageAssets } from "./assets/ImageAssets";
+import { excelJsonOptions } from "../client/CachedAssetsManager";
 
 /**
  * PathId|In-game Name
@@ -48,10 +49,10 @@ export class Path {
         if (!_data) throw new AssetsNotFoundError("Path", this.id);
         this._data = _data;
 
-        const json = new JsonReader(this._data);
+        const json = new JsonReader(excelJsonOptions, this._data);
 
-        this.name = new TextAssets(json.getAsNumber("BaseTypeText", "Hash"), this.client);
-        this.description = new TextAssets(json.getAsNumber("BaseTypeDesc", "Hash"), this.client);
+        this.name = new TextAssets(json.getAsNumberOrBigint("BaseTypeText", "Hash"), this.client);
+        this.description = new TextAssets(json.getAsNumberOrBigint("BaseTypeDesc", "Hash"), this.client);
         this.icon = new ImageAssets(json.getAsString("BaseTypeIcon"), this.client);
         this.smallIcon = new ImageAssets(json.getAsString("BaseTypeIconSmall"), this.client);
     }

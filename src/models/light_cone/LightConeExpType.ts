@@ -1,6 +1,7 @@
 import { JsonObject, JsonReader } from "config_file.js";
 import { StarRail } from "../../client/StarRail";
 import { AssetsNotFoundError } from "../../errors/AssetsNotFoundError";
+import { excelJsonOptions } from "../../client/CachedAssetsManager";
 
 export interface LightConeLevel {
     expType: number;
@@ -25,7 +26,7 @@ export class LightConeExpType {
         if (!_data) throw new AssetsNotFoundError("LightConeExpType", this.expType);
         this._data = _data;
 
-        const json = new JsonReader(this._data);
+        const json = new JsonReader(excelJsonOptions, this._data);
 
         this.levels = json.mapObject((_, v) => { return { expType: v.getAsNumber("ExpType"), level: v.getAsNumber("Level"), exp: v.getAsNumberWithDefault(0, "Exp") }; });
     }

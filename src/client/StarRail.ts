@@ -1,5 +1,5 @@
 import { JsonReader, JsonObject, bindOptions, renameKeys, generateUuid } from "config_file.js";
-import { CachedAssetsManager, LanguageCode } from "./CachedAssetsManager";
+import { CachedAssetsManager, excelJsonOptions, LanguageCode } from "./CachedAssetsManager";
 import { CharacterData } from "../models/character/CharacterData";
 import { CustomImageBaseUrl, ImageBaseUrl } from "../models/assets/ImageAssets";
 import { LightConeData } from "../models/light_cone/LightConeData";
@@ -310,21 +310,21 @@ export class StarRail implements EnkaLibrary<StarRailUser, StarRailCharacterBuil
      * @returns all character data
      */
     getAllCharacters(playableOnly = true): CharacterData[] {
-        return new JsonReader(this.cachedAssetsManager._getExcelData("AvatarConfig")).filterObject((_, c) => (playableOnly && c.getAsNumber("AdventurePlayerID") === c.getAsNumber("AvatarID")) || !playableOnly).map(([, c]) => new CharacterData(c.getAsNumber("AvatarID"), this));
+        return new JsonReader(excelJsonOptions, this.cachedAssetsManager._getExcelData("AvatarConfig")).filterObject((_, c) => (playableOnly && c.getAsNumber("AdventurePlayerID") === c.getAsNumber("AvatarID")) || !playableOnly).map(([, c]) => new CharacterData(c.getAsNumber("AvatarID"), this));
     }
 
     /**
      * @returns all light cone data
      */
     getAllLightCones(excludeTestLightCones = true): LightConeData[] {
-        return new JsonReader(this.cachedAssetsManager._getExcelData("EquipmentConfig")).filterObject((_, lc) => (excludeTestLightCones && lc.has("AvatarBaseType")) || !excludeTestLightCones).map(([, lc]) => new LightConeData(lc.getAsNumber("EquipmentID"), this));
+        return new JsonReader(excelJsonOptions, this.cachedAssetsManager._getExcelData("EquipmentConfig")).filterObject((_, lc) => (excludeTestLightCones && lc.has("AvatarBaseType")) || !excludeTestLightCones).map(([, lc]) => new LightConeData(lc.getAsNumber("EquipmentID"), this));
     }
 
     /**
      * @returns all relic data
      */
     getAllRelics(): RelicData[] {
-        return new JsonReader(this.cachedAssetsManager._getExcelData("RelicConfig")).mapObject((_, relic) => new RelicData(relic.getAsNumber("ID"), this));
+        return new JsonReader(excelJsonOptions, this.cachedAssetsManager._getExcelData("RelicConfig")).mapObject((_, relic) => new RelicData(relic.getAsNumber("ID"), this));
     }
 
     /**

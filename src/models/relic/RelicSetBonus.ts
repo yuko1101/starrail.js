@@ -4,6 +4,7 @@ import { AssetsNotFoundError } from "../../errors/AssetsNotFoundError";
 import { TextAssets } from "../assets/TextAssets";
 import { getStableHash } from "../../utils/hash_utils";
 import { StatPropertyType, StatPropertyValue } from "../StatProperty";
+import { excelJsonOptions } from "../../client/CachedAssetsManager";
 
 export class RelicSetBonus {
     readonly setId: number;
@@ -24,7 +25,7 @@ export class RelicSetBonus {
         if (!_data) throw new AssetsNotFoundError("RelicSetBonus", `${this.setId}-${this.needCount}`);
         this._data = _data;
 
-        const json = new JsonReader(this._data);
+        const json = new JsonReader(excelJsonOptions, this._data);
 
         this.description = new TextAssets(getStableHash(json.getAsString("SkillDesc")), this.client);
 

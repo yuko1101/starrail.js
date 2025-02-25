@@ -3,6 +3,7 @@ import { StarRail } from "../../client/StarRail";
 import { AssetsNotFoundError } from "../../errors/AssetsNotFoundError";
 import { TextAssets } from "../assets/TextAssets";
 import { ImageAssets } from "../assets/ImageAssets";
+import { excelJsonOptions } from "../../client/CachedAssetsManager";
 
 /**
  * RelicTypeId|In-game Name
@@ -33,9 +34,9 @@ export class RelicType {
         if (!_data) throw new AssetsNotFoundError("RelicType", this.id);
         this._data = _data;
 
-        const json = new JsonReader(this._data);
+        const json = new JsonReader(excelJsonOptions, this._data);
 
-        this.name = new TextAssets(json.getAsNumber("BaseTypeText", "Hash"), this.client);
+        this.name = new TextAssets(json.getAsNumberOrBigint("BaseTypeText", "Hash"), this.client);
         this.icon = new ImageAssets(json.getAsString("BaseTypeIconPath"), this.client);
     }
 }

@@ -8,6 +8,7 @@ import { RelicSet } from "./RelicSet";
 import { TextAssets } from "../assets/TextAssets";
 import { ImageAssets } from "../assets/ImageAssets";
 import { RelicType, RelicTypeId } from "./RelicType";
+import { excelJsonOptions } from "../../client/CachedAssetsManager";
 
 export class RelicData {
     readonly id: number;
@@ -44,11 +45,11 @@ export class RelicData {
         if (!_itemData) throw new AssetsNotFoundError("Relic Item", this.id);
         this._itemData = _itemData;
 
-        const json = new JsonReader(this._data);
-        const itemJson = new JsonReader(this._itemData);
+        const json = new JsonReader(excelJsonOptions, this._data);
+        const itemJson = new JsonReader(excelJsonOptions, this._itemData);
 
-        this.name = new TextAssets(itemJson.getAsNumber("ItemName", "Hash"), this.client);
-        this.description = new TextAssets(itemJson.getAsNumber("ItemBGDesc", "Hash"), this.client);
+        this.name = new TextAssets(itemJson.getAsNumberOrBigint("ItemName", "Hash"), this.client);
+        this.description = new TextAssets(itemJson.getAsNumberOrBigint("ItemBGDesc", "Hash"), this.client);
 
         this.type = new RelicType(json.getAsString("Type") as RelicTypeId, this.client);
 

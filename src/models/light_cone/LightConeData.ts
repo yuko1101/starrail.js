@@ -7,6 +7,7 @@ import { LightConeExpType } from "./LightConeExpType";
 import { ImageAssets } from "../assets/ImageAssets";
 import { LightConeSuperimposition } from "./LightConeSuperimposition";
 import { StatPropertyValue } from "../StatProperty";
+import { excelJsonOptions } from "../../client/CachedAssetsManager";
 
 export class LightConeData {
     readonly id: number;
@@ -43,12 +44,12 @@ export class LightConeData {
         if (!_itemData) throw new AssetsNotFoundError("LightCone Item", this.id);
         this._itemData = _itemData;
 
-        const json = new JsonReader(this._data);
-        const itemJson = new JsonReader(this._itemData);
+        const json = new JsonReader(excelJsonOptions, this._data);
+        const itemJson = new JsonReader(excelJsonOptions, this._itemData);
 
-        this.name = new TextAssets(json.getAsNumber("EquipmentName", "Hash"), this.client);
-        this.description = new TextAssets(itemJson.getAsNumber("ItemBGDesc", "Hash"), this.client);
-        this.itemDescription = new TextAssets(itemJson.getAsNumber("ItemDesc", "Hash"), this.client);
+        this.name = new TextAssets(json.getAsNumberOrBigint("EquipmentName", "Hash"), this.client);
+        this.description = new TextAssets(itemJson.getAsNumberOrBigint("ItemBGDesc", "Hash"), this.client);
+        this.itemDescription = new TextAssets(itemJson.getAsNumberOrBigint("ItemDesc", "Hash"), this.client);
 
         this.stars = Number(json.getAsString("Rarity").slice(-1));
 
@@ -76,7 +77,7 @@ export class LightConeData {
     getStatsByLevel(ascension: number, level: number): StatPropertyValue[] {
         const ascensionData = this.client.cachedAssetsManager.getExcelData("EquipmentPromotionConfig", this.id, ascension);
         if (!ascensionData) throw new AssetsNotFoundError("LightCone Ascension", `${this.id}-${ascension}`);
-        const ascensionJson = new JsonReader(ascensionData);
+        const ascensionJson = new JsonReader(excelJsonOptions, ascensionData);
 
         return [
             new StatPropertyValue("BaseHP", ascensionJson.getAsNumber("BaseHP", "Value") + ascensionJson.getAsNumber("BaseHPAdd", "Value") * (level - 1), this.client),

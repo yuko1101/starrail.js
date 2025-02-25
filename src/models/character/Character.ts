@@ -1,4 +1,4 @@
-import { JsonObject, JsonReader } from "config_file.js";
+import { defaultJsonOptions, JsonObject, JsonReader } from "config_file.js";
 import { StarRail } from "../../client/StarRail";
 import { CharacterData } from "./CharacterData";
 import { LightCone } from "../light_cone/LightCone";
@@ -33,7 +33,7 @@ export class Character {
         this.client = client;
         this._data = data;
 
-        const json = new JsonReader(this._data);
+        const json = new JsonReader(defaultJsonOptions, this._data);
 
         this.characterData = new CharacterData(json.getAsNumber("avatarId"), this.client);
 

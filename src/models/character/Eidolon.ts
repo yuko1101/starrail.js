@@ -5,6 +5,7 @@ import { ImageAssets } from "../assets/ImageAssets";
 import { TextAssets } from "../assets/TextAssets";
 import { getStableHash } from "../../utils/hash_utils";
 import { Skill } from "./skill/Skill";
+import { excelJsonOptions } from "../../client/CachedAssetsManager";
 
 export class Eidolon {
     readonly id: number;
@@ -26,7 +27,7 @@ export class Eidolon {
         if (!_data) throw new AssetsNotFoundError("Eidolon", this.id);
         this._data = _data;
 
-        const json = new JsonReader(this._data);
+        const json = new JsonReader(excelJsonOptions, this._data);
 
         this.rank = json.getAsNumber("Rank");
 

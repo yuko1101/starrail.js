@@ -38,6 +38,7 @@
     "@types/json-bigint": "^1.0.4",
     "@types/node": "^22.0.0",
     "@types/unzip-stream": "^0.3.4",
+    "@types/xxhashjs": "^0.2.4",
     "@typescript-eslint/eslint-plugin": "^7.18.0",
     "@typescript-eslint/parser": "^7.18.0",
     "eslint": "^8.57.0",
@@ -45,11 +46,11 @@
     "typescript": "^5.5.3"
   },
   "dependencies": {
-    "@node-rs/xxhash": "^1.7.6",
     "axios": "^1.7.2",
     "config_file.js": "^1.4.0",
     "enka-system": "^0.3.5",
     "json-bigint": "^1.0.0",
-    "unzip-stream": "^0.3.4"
+    "unzip-stream": "^0.3.4",
+    "xxhashjs": "^0.2.2"
   }
 }

@@ -1,6 +1,6 @@
 import { bindOptions } from "config_file.js";
 import { StarRail } from "../../client/StarRail";
-import { TextAssets } from "./TextAssets";
+import { HashKey, TextAssets } from "./TextAssets";
 import { LanguageCode } from "../../client/CachedAssetsManager";
 
 export interface DynamicData {
@@ -19,7 +19,7 @@ export class DynamicTextAssets extends TextAssets {
 
     // readonly _dynamicTest: string | null;
 
-    constructor(id: number | bigint, data: Partial<DynamicData>, client: StarRail) {
+    constructor(id: HashKey, data: Partial<DynamicData>, client: StarRail) {
         super(id, client);
 
         this.dynamicData = bindOptions(defaultDynamicData as unknown as { [s: string]: unknown }, data) as unknown as DynamicData;

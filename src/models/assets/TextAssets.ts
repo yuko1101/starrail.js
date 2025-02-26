@@ -2,13 +2,15 @@ import { LanguageCode } from "../../client/CachedAssetsManager";
 import { StarRail } from "../../client/StarRail";
 import { AssetsNotFoundError } from "../../errors/AssetsNotFoundError";
 
+export type HashKey = number | bigint | `${bigint}`;
+
 export class TextAssets {
-    readonly id: number | bigint;
+    readonly id: HashKey;
     readonly client: StarRail;
 
     // readonly _test: string | null;
 
-    constructor(id: number | bigint, client: StarRail) {
+    constructor(id: HashKey, client: StarRail) {
         this.id = id;
 
         this.client = client;

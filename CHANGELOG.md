@@ -1,3 +1,5 @@
+# 1.9.1
+- Changed hashing library (@node-rs/xxhash -> xxhashjs).
 # 1.9.0
 - Changed type of LeveledSkill#description to nullable. (Fixes #221)
 - Changed values of LeveledSkillTreeNode#description. Now it is a node-specific description and can be invalid. (For obtaining the in-game description, use LeveledSkillTreeNode#getFullDescription() instead.)

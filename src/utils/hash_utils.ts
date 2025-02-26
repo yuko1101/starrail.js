@@ -1,5 +1,5 @@
-import { xxh64 } from "@node-rs/xxhash";
+import { h64 } from "xxhashjs";
 
-export function getStableHash(str: string) {
-    return xxh64(str, 0n);
+export function getStableHash(str: string): `${bigint}` {
+    return h64(0).update(str).digest().toString() as `${bigint}`;
 }

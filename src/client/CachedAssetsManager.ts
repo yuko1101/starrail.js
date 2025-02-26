@@ -8,6 +8,7 @@ import { ObjectKeysManager } from "./ObjectKeysManager";
 import { StarRail } from "./StarRail";
 import { getStableHash } from "../utils/hash_utils";
 import jsonBigint from "json-bigint";
+import { HashKey } from "../models/assets/TextAssets";
 const JSONBig = jsonBigint({ useNativeBigInt: true });
 
 export const excelJsonOptions = {
@@ -432,7 +433,7 @@ export class CachedAssetsManager {
     removeUnusedTextData(data: LoadedExcelDataMap, langsData: LoadedLanguageMap, showLog = true): LoadedLanguageMap {
         const requiredKeys: Set<string> = new Set();
 
-        function push(...keys: (number | bigint | null)[]) {
+        function push(...keys: (HashKey | null)[]) {
             const len = keys.length;
             for (let i = 0; i < len; i++) {
                 const key = keys[i];

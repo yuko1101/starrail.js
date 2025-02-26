@@ -72,7 +72,7 @@ export class LeveledSkill extends Skill {
     readonly level: SkillLevel;
     readonly paramList: number[];
     readonly simpleParamList: number[];
-    readonly description: DynamicTextAssets;
+    readonly description: DynamicTextAssets | null;
     readonly simpleDescription: DynamicTextAssets | null;
 
     readonly _data: JsonObject;
@@ -92,7 +92,8 @@ export class LeveledSkill extends Skill {
         this.paramList = json.get("ParamList").mapArray((_, v) => v.getAsNumber("Value"));
         this.simpleParamList = json.get("SimpleParamList").mapArray((_, v) => v.getAsNumber("Value"));
 
-        this.description = new DynamicTextAssets(json.getAsNumberOrBigint("SkillDesc", "Hash"), { paramList: this.paramList }, this.client);
+        const descriptionHash = json.getAsNumberOrBigintWithDefault(null, "SkillDesc", "Hash");
+        this.description = descriptionHash !== null ? new DynamicTextAssets(descriptionHash, { paramList: this.paramList }, this.client) : null;
         const simpleDescriptionHash = json.getAsNumberOrBigintWithDefault(null, "SimpleSkillDesc", "Hash");
         this.simpleDescription = simpleDescriptionHash !== null ? new DynamicTextAssets(simpleDescriptionHash, { paramList: this.simpleParamList }, this.client) : null;
     }

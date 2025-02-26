@@ -1,7 +1,7 @@
 import { JsonObject, JsonReader } from "config_file.js";
 import { StarRail } from "../../../client/StarRail";
 import { AssetsNotFoundError } from "../../../errors/AssetsNotFoundError";
-import { Skill } from "./Skill";
+import { LeveledSkill, Skill } from "./Skill";
 import { TextAssets } from "../../assets/TextAssets";
 import { getStableHash } from "../../../utils/hash_utils";
 import { ImageAssets } from "../../assets/ImageAssets";
@@ -9,6 +9,7 @@ import { StatPropertyType, StatPropertyValue } from "../../StatProperty";
 import { SkillLevel } from "./SkillLevel";
 import { DynamicTextAssets } from "../../assets/DynamicTextAssets";
 import { excelJsonOptions } from "../../../client/CachedAssetsManager";
+import { nonNullable } from "../../../utils/ts_utils";
 
 export class SkillTreeNode {
     readonly id: number;
@@ -70,6 +71,7 @@ export class LeveledSkillTreeNode extends SkillTreeNode {
     readonly level: SkillLevel;
     readonly stats: StatPropertyValue[];
     readonly paramList: number[];
+    /** This text assets can be invalid which throws AssetsNotFoundError in its `get` method. For full description use {@apilink LeveledSkillTreeNode#getFullDescription} method instead. */
     readonly description: DynamicTextAssets;
 
     readonly _data: JsonObject;
@@ -88,7 +90,32 @@ export class LeveledSkillTreeNode extends SkillTreeNode {
 
         this.paramList = this.paramList = json.get("ParamList").mapArray((_, v) => v.getAsNumber("Value"));
 
-        this.description = this.levelUpSkills.length > 0 ? this.levelUpSkills[0].getSkillByLevel(level).description
-            : this.stats[0]?.nameSkillTree ?? new DynamicTextAssets(getStableHash(json.getAsString("PointDesc")), { paramList: this.paramList }, this.client);
+        this.description = new DynamicTextAssets(getStableHash(json.getAsString("PointDesc")), { paramList: this.paramList }, this.client);
+    }
+
+    hasSimpleDescription(): boolean {
+        return this.levelUpSkills.length > 0 && this.levelUpSkills.some(s => s.getSkillByLevel(this.level).simpleDescription);
+    }
+
+    getFullDescription(simple: boolean): { desc: DynamicTextAssets, ref: LeveledSkill | StatPropertyValue | null, simple: boolean }[] {
+        if (this.levelUpSkills.length > 0) {
+            const leveledSkills = this.levelUpSkills.map(s => s.getSkillByLevel(this.level));
+            const skillDescriptions = leveledSkills.map(s => {
+                const fallback = s.description ?? s.simpleDescription;
+                const desc = (simple ? s.simpleDescription : s.description) ?? fallback;
+                if (!desc) return null;
+                return { desc, ref: s, simple: desc === s.simpleDescription };
+            }).filter(nonNullable);
+            if (skillDescriptions.length > 0) return skillDescriptions;
+        }
+        if (this.stats.length > 0) {
+            const statDescriptions = this.stats.map(s => {
+                const desc = s.nameSkillTree;
+                if (!desc) return null;
+                return { desc, ref: s, simple: false };
+            }).filter(nonNullable);
+            if (statDescriptions.length > 0) return statDescriptions;
+        }
+        return [{ desc: this.description, ref: null, simple: false }];
     }
 }

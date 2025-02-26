@@ -1,3 +1,7 @@
+# 1.9.0
+- Changed type of LeveledSkill#description to nullable. (Fixes #221)
+- Changed values of LeveledSkillTreeNode#description. Now it is a node-specific description and can be invalid. (For obtaining the in-game description, use LeveledSkillTreeNode#getFullDescription() instead.)
+- Added LeveledSkillTreeNode#getFullDescription() and LeveledSkillTreeNode#hasSimpleDescription().
 # 1.8.0
 - Support bigint text map hash for HSR v3.1.
 - Changed type of LeveledSkill#simpleDescription to nullable.

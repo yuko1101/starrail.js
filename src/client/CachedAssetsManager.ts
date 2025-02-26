@@ -487,6 +487,19 @@ export class CachedAssetsManager {
             });
         });
 
+        Object.values(data["AvatarServantSkillConfig"]).forEach(s => {
+            Object.values(s).forEach(l => {
+                const json = new JsonReader(excelJsonOptions, l);
+                push(
+                    json.getAsNumberOrBigint("SkillName", "Hash"),
+                    json.getAsNumberOrBigint("SkillTag", "Hash"),
+                    json.getAsNumberOrBigint("SkillTypeDesc", "Hash"),
+                    json.getAsNumberOrBigintWithDefault(null, "SkillDesc", "Hash"),
+                    json.getAsNumberOrBigintWithDefault(null, "SimpleSkillDesc", "Hash"),
+                );
+            });
+        });
+
         Object.values(data["AvatarSkillTreeConfig"]).forEach(s => {
             Object.values(s).forEach(l => {
                 const json = new JsonReader(excelJsonOptions, l);

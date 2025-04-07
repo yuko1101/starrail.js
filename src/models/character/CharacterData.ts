@@ -19,7 +19,7 @@ export class CharacterData {
     readonly name: TextAssets;
     readonly description: TextAssets;
     readonly stars: number;
-    readonly maxEnergy: number;
+    readonly maxEnergy: number | null;
     readonly combatType: CombatType;
     readonly path: Path;
     readonly skills: Skill[];
@@ -59,7 +59,7 @@ export class CharacterData {
 
         this.stars = Number(json.getAsString("Rarity").slice(-1));
 
-        this.maxEnergy = json.getAsNumber("SPNeed", "Value");
+        this.maxEnergy = json.getAsNumberWithDefault(null, "SPNeed", "Value");
 
         this.combatType = new CombatType(json.getAsString("DamageType") as CombatTypeId, this.client);
 

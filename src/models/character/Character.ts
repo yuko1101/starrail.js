@@ -69,8 +69,10 @@ export class Character {
         this.basicStats = [
             ...this.characterData.getStatsByLevel(this.ascension, this.level),
             new StatPropertyValue("SPRatioBase", 1, this.client),
-            new StatPropertyValue("MaxSP", this.characterData.maxEnergy, this.client),
         ];
+        if (this.characterData.maxEnergy !== null) {
+            this.basicStats.push(new StatPropertyValue("MaxSP", this.characterData.maxEnergy, this.client));
+        }
 
         this.stats = new CharacterStats(this);
     }

@@ -1,5 +1,6 @@
 # 1.9.2
 - Renamed CachedAssetsManager#getJSONDataPath to _getExcelDataPath.
+- Changed type of CharacterData#maxEnergy to nullable. (e.g. Castorice has null maxEnergy.)
 # 1.9.1
 - Changed hashing library (@node-rs/xxhash -> xxhashjs).
 # 1.9.0

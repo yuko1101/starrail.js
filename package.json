@@ -11,8 +11,8 @@
   },
   "scripts": {
     "install": "node scripts/install.js",
-    "lint": "npx eslint . --config .eslintrc.json --ext .js,.jsx,.cjs,.mjs,.ts,.tsx --ignore-path .eslintignore",
-    "lint:fix": "npx eslint . --config .eslintrc.json --ext .js,.jsx,.cjs,.mjs,.ts,.tsx --ignore-path .eslintignore --fix",
+    "lint": "npx eslint . --config eslint.config.mjs",
+    "lint:fix": "npx eslint . --config eslint.config.mjs --fix",
     "build": "node scripts/clean.js && npx tsc",
     "build:debug": "node scripts/clean.js && npx tsc --sourceMap",
     "prepublishOnly": "npm run build"
@@ -35,15 +35,16 @@
   "homepage": "https://starrail.vercel.app",
   "license": "MIT",
   "devDependencies": {
+    "@eslint/js": "^9.24.0",
+    "@stylistic/eslint-plugin-ts": "^4.2.0",
     "@types/json-bigint": "^1.0.4",
     "@types/node": "^22.0.0",
     "@types/unzip-stream": "^0.3.4",
     "@types/xxhashjs": "^0.2.4",
-    "@typescript-eslint/eslint-plugin": "^7.18.0",
-    "@typescript-eslint/parser": "^7.18.0",
-    "eslint": "^9.22.0",
+    "eslint": "^9.24.0",
     "ts-node": "^10.9.2",
-    "typescript": "^5.5.3"
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.29.0"
   },
   "dependencies": {
     "axios": "^1.7.2",

@@ -302,7 +302,7 @@ export class StarRail implements EnkaLibrary<StarRailUser, StarRailCharacterBuil
      * @param hash EnkaGameAccount hash
      * @returns the starrail character builds including saved builds in Enka.Network account
      */
-    async fetchEnkaStarRailBuilds(username: string, hash: string): Promise<{ [characterId: string]: StarRailCharacterBuild[] }> {
+    async fetchEnkaStarRailBuilds(username: string, hash: string): Promise<Record<string, StarRailCharacterBuild[]>> {
         return await this.options.enkaSystem.fetchEnkaCharacterBuilds<StarRail>(username, hash);
     }
 

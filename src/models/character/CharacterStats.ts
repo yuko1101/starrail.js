@@ -43,11 +43,11 @@ export class CharacterStats {
 }
 
 export class StatList {
-    readonly list: { [key: string]: StatPropertyValue };
+    readonly list: Record<string, StatPropertyValue>;
     readonly combatTypeId: CombatTypeId;
     readonly client: StarRail;
 
-    constructor(list: { [key: string]: StatPropertyValue }, combatTypeId: CombatTypeId, client: StarRail) {
+    constructor(list: Record<string, StatPropertyValue>, combatTypeId: CombatTypeId, client: StarRail) {
         this.list = list;
         this.combatTypeId = combatTypeId;
         this.client = client;
@@ -153,10 +153,6 @@ export class StatList {
 }
 
 export class OverallStatList extends StatList {
-    constructor(list: { [key: string]: StatPropertyValue }, combatTypeId: CombatTypeId, client: StarRail) {
-        super(list, combatTypeId, client);
-    }
-
     // Base Stats
     public get maxHP(): StatPropertyValue {
         return new StatPropertyValue("MaxHP", this.getByType("BaseHP").value * (1 + this.getByType("HPAddedRatio").value) + this.getByType("HPDelta").value, this.client);
@@ -176,7 +172,7 @@ export class OverallStatList extends StatList {
 
 }
 
-export function sumStats(stats: StatPropertyValue[], client: StarRail): { [key: string]: StatPropertyValue } {
+export function sumStats(stats: StatPropertyValue[], client: StarRail): Record<string, StatPropertyValue> {
     return Object.fromEntries(
         Object.entries(separateByValue(stats, stat => stat.type))
             .map(([type, list]) => [type, list.reduce((a, b) => new StatPropertyValue(a.type, a.value + b.value, client))]),

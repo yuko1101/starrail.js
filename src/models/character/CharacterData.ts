@@ -130,8 +130,7 @@ export class CharacterData {
 
         for (const route of routes) {
             let map = skillTreeMap;
-            for (let i = 0; i < route.length; i++) {
-                const key = route[i];
+            for (const key of route) {
                 if (!map.has(key)) {
                     map.set(key, new Map());
                 }

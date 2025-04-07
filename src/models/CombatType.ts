@@ -57,7 +57,7 @@ export class CombatType {
     }
 }
 
-export const combatTypeIconColors: { [key in CombatTypeId]: number } = {
+export const combatTypeIconColors: Record<CombatTypeId, number> = {
     Physical: 0xCFCFCF,
     Fire: 0xEE4639,
     Ice: 0x4CABDE,

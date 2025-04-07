@@ -11,7 +11,7 @@ export interface Birthday {
 
 export type Platform = "PC" | "ANDROID" | "IOS" | "PS5";
 
-export const platformMap: { [key: number]: Platform } = {
+export const platformMap: Record<number, Platform> = {
     1: "IOS",
     2: "ANDROID",
     3: "PC",

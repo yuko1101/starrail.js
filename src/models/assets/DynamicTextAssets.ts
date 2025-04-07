@@ -22,7 +22,7 @@ export class DynamicTextAssets extends TextAssets {
     constructor(id: HashKey, data: Partial<DynamicData>, client: StarRail) {
         super(id, client);
 
-        this.dynamicData = bindOptions(defaultDynamicData as unknown as { [s: string]: unknown }, data) as unknown as DynamicData;
+        this.dynamicData = bindOptions(defaultDynamicData as unknown as Record<string, unknown>, data) as unknown as DynamicData;
 
         // this._dynamicTest = this.getNullableReplacedText();
     }

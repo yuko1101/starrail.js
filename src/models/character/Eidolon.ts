@@ -15,7 +15,7 @@ export class Eidolon {
     readonly picture: ImageAssets;
     readonly name: TextAssets;
     readonly description: TextAssets;
-    readonly skillsLevelUp: { [skillId: string]: { skill: Skill, levelUp: number } };
+    readonly skillsLevelUp: Record<string, { skill: Skill, levelUp: number }>;
 
     readonly _data: JsonObject;
 

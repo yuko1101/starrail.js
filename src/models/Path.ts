@@ -27,7 +27,7 @@ export const pathMap = {
     Knight: "Preservation",
     Priest: "Abundance",
     Unknown: "General",
-} as const satisfies { [path in PathId]: string };
+} as const satisfies Record<PathId, string>;
 
 export class Path {
     readonly id: PathId;

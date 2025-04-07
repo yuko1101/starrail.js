@@ -57,7 +57,7 @@ export const excelKeyMap = {
     // Other Icon for a player
     "ItemPlayerCard": ["ID"],
     "PlayerIcon": ["ID"],
-} as const satisfies { [excel: string]: ExcelKey[] };
+} as const satisfies Record<string, ExcelKey[]>;
 export type ExcelType = keyof typeof excelKeyMap;
 export const excels = Object.keys(excelKeyMap) as ExcelType[];
 export type LoadedExcelDataMap = { [excel in keyof typeof excelKeyMap]: SingleBy<typeof excelKeyMap[excel]> };
@@ -67,7 +67,7 @@ let excelDataMemory: ExcelDataMap = { ...initialExcelDataMemory };
 
 const languages = ["chs", "cht", "de", "en", "es", "fr", "id", "jp", "kr", "pt", "ru", "th", "vi"] as const;
 export type LanguageCode = typeof languages[number];
-export type LoadedLanguageMap = { [key in LanguageCode]: { [key: string]: string } };
+export type LoadedLanguageMap = Record<LanguageCode, Record<string, string>>;
 export type LanguageMap = { [key in LanguageCode]: LoadedLanguageMap[key] | null };
 const initialLangDataMemory: LanguageMap = Object.fromEntries(languages.map(lang => [lang, null])) as LanguageMap;
 let langDataMemory: LanguageMap = { ...initialLangDataMemory };
@@ -421,7 +421,7 @@ export class CachedAssetsManager {
      * Remove all unused text map entries
      */
     removeUnusedTextData(data: LoadedExcelDataMap, langsData: LoadedLanguageMap, showLog = true): LoadedLanguageMap {
-        const requiredKeys: Set<string> = new Set();
+        const requiredKeys = new Set<string>();
 
         function push(...keys: (HashKey | null)[]) {
             const len = keys.length;

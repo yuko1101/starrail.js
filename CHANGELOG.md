@@ -1,3 +1,5 @@
+# 1.9.2
+- Renamed CachedAssetsManager#getJSONDataPath to _getExcelDataPath.
 # 1.9.1
 - Changed hashing library (@node-rs/xxhash -> xxhashjs).
 # 1.9.0

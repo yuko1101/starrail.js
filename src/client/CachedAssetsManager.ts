@@ -352,27 +352,17 @@ export class CachedAssetsManager {
         return path.resolve(this.cacheDirectoryPath, "langs", `${lang}.json`);
     }
 
-    /**
-     * @param name without extensions (.json)
-     * @returns excel bin file path
-     */
-    getJSONDataPath(name: string): string {
-        return path.resolve(this.cacheDirectoryPath, "data", `${name}.json`);
+    _getExcelDataPath(excel: ExcelType): string {
+        return path.resolve(this.cacheDirectoryPath, "data", `${excel}.json`);
     }
 
-    /**
-     * @param excel without extensions (.json)
-     */
     _getExcelData<T extends ExcelType>(excel: T): SingleBy<typeof excelKeyMap[T]> {
-        excelDataMemory[excel] ??= JSONBig.parse(fs.readFileSync(this.getJSONDataPath(excel), "utf-8"));
+        excelDataMemory[excel] ??= JSONBig.parse(fs.readFileSync(this._getExcelDataPath(excel), "utf-8"));
         const excelData = excelDataMemory[excel];
         if (!excelData) throw new Error(`Failed to load ${excel} excel.`);
         return excelData;
     }
 
-    /**
-     * @param excel without extension (.json)
-     */
     getExcelData<T extends ExcelType, U extends (string | number)[]>(excel: T, ...keys: U): IndexBy<SingleBy<typeof excelKeyMap[T]>, U> {
         const excelData = this._getExcelData(excel);
 

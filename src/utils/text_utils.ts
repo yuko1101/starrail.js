@@ -6,5 +6,5 @@ export function removeRuby(text: string): string {
 }
 
 export function replaceRuby(text: string, replacer: (match: string, base: string, ruby: string) => string): string {
-    return text.replace(rubyRegex, (match, base, ruby) => replacer(match, base, ruby));
+    return text.replace(rubyRegex, (match, ruby, base) => replacer(match, base, ruby));
 }

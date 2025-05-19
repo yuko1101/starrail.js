@@ -41,6 +41,7 @@
     "@types/node": "^22.0.0",
     "@types/unzip-stream": "^0.3.4",
     "@types/xxhashjs": "^0.2.4",
+    "@types/yauzl": "^2.10.3",
     "eslint": "^9.24.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.3",
@@ -52,6 +53,7 @@
     "enka-system": "^0.3.7",
     "json-bigint": "^1.0.0",
     "unzip-stream": "^0.3.4",
-    "xxhashjs": "^0.2.2"
+    "xxhashjs": "^0.2.2",
+    "yauzl": "^3.2.0"
   }
 }

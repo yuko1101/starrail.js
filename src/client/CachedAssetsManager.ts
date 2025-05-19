@@ -1,7 +1,8 @@
 import fs from "fs";
 import path from "path";
 import { Axios } from "axios";
-import unzip, { Entry } from "unzip-stream";
+import unzip from "unzip-stream";
+import yauzl from "yauzl";
 import { ConfigFile, FlexJsonArray, FlexJsonElement, FlexJsonObject, JsonObject, JsonOptions, JsonReader, bindOptions, isFlexJsonObject, move } from "config_file.js";
 import { fetchJSON } from "../utils/axios_utils";
 import { ObjectKeysManager } from "./ObjectKeysManager";
@@ -618,49 +619,128 @@ export class CachedAssetsManager {
      * Download the zip file, which contains StarRail cache data, from {@link https://raw.githubusercontent.com/yuko1101/starrail.js/main/cache.zip}
      * @param options.ghproxy Whether to use ghproxy.com
      */
-    async _downloadCacheZip(options: { ghproxy?: boolean } = {}): Promise<void> {
-        options = bindOptions({
+    async _downloadCacheZip(options: { ghproxy?: boolean, stream?: boolean } = {}): Promise<void> {
+        const opt = bindOptions({
             ghproxy: false,
+            stream: false,
         }, options);
 
         const axios = new Axios({});
 
-        const url = (options.ghproxy ? "https://ghproxy.com/" : "") + "https://raw.githubusercontent.com/yuko1101/starrail.js/main/cache.zip";
+        const url = (opt.ghproxy ? "https://ghproxy.com/" : "") + "https://raw.githubusercontent.com/yuko1101/starrail.js/main/cache.zip";
 
         const res = await axios.get(url, {
             responseType: "stream",
         }).catch(e => {
             throw new Error(`Failed to download StarRail data from ${url} with an error: ${e}`);
         });
+
+        const stream = res.data as NodeJS.ReadableStream;
+
         if (res.status == 200) {
-            await new Promise<void>(resolve => {
-                res.data
-                    .pipe(unzip.Parse())
-                    .on("entry", (entry: Entry) => {
-                        const entryPath = entry.path.replace(/^cache\/?/, "");
-                        const extractPath = path.resolve(this.cacheDirectoryPath, entryPath);
-
-                        if (entry.type === "Directory") {
-                            if (!fs.existsSync(extractPath)) fs.mkdirSync(extractPath, { recursive: true });
-                            entry.autodrain();
-                        } else if (entryPath.startsWith("github/")) {
-                            if (fs.existsSync(extractPath)) {
-                                entry.autodrain();
-                                return;
-                            }
-                            entry.pipe(fs.createWriteStream(extractPath));
-                        } else {
-                            entry.pipe(fs.createWriteStream(extractPath));
-                        }
+            if (opt.stream) {
+                await this._unzipStream(stream);
+            } else {
+                const filePath = path.resolve(this.cacheDirectoryPath, "cache.zip");
+                const writer = fs.createWriteStream(filePath);
+                await new Promise<void>((resolve, reject) => {
+                    stream.pipe(writer);
+                    writer.on("finish", () => {
+                        resolve();
                     });
-                res.data.on("close", () => {
-                    resolve();
+                    writer.on("error", (e) => {
+                        reject(e);
+                    });
                 });
-            });
-
+                await this._unzipFile(filePath);
+            }
         } else {
             throw new Error(`Failed to download StarRail data from ${url} with status ${res.status} - ${res.statusText}`);
         }
+    }
+
+    _unzipStream(stream: NodeJS.ReadableStream): Promise<void> {
+        const cacheDir = path.resolve(this.cacheDirectoryPath);
+        return new Promise<void>(resolve => {
+            stream
+                .pipe(unzip.Parse())
+                .on("entry", (entry: unzip.Entry) => {
+                    const entryPath = entry.path.replace(/^cache\/?/, "");
+                    const extractPath = path.resolve(cacheDir, entryPath);
+                    if (!extractPath.startsWith(cacheDir)) {
+                        console.warn(`Skipping potentially unsafe entry path: ${entryPath}`);
+                        entry.autodrain();
+                        return;
+                    }
+
+                    if (this.client.options.showFetchCacheLog) console.info(`- Downloading ${entryPath}`);
+
+                    if (entry.type === "Directory") {
+                        if (!fs.existsSync(extractPath)) fs.mkdirSync(extractPath, { recursive: true });
+                        entry.autodrain();
+                    } else if (entryPath.startsWith("github/")) {
+                        if (fs.existsSync(extractPath)) {
+                            entry.autodrain();
+                            return;
+                        }
+                        entry.pipe(fs.createWriteStream(extractPath));
+                    } else {
+                        entry.pipe(fs.createWriteStream(extractPath));
+                    }
+                });
+            stream.on("close", () => {
+                resolve();
+            });
+        });
+    }
+
+    _unzipFile(filePath: string): Promise<void> {
+        const cacheDir = path.resolve(this.cacheDirectoryPath);
+        return new Promise<void>(resolve => {
+            yauzl.open(filePath, { lazyEntries: true }, (err, zipfile) => {
+                if (err) throw err;
+                zipfile.readEntry();
+                zipfile.on("entry", (entry: yauzl.Entry) => {
+                    const entryPath = entry.fileName.replace(/^cache\/?/, "");
+                    const extractPath = path.resolve(cacheDir, entryPath);
+                    if (!extractPath.startsWith(cacheDir)) {
+                        console.warn(`Skipping potentially unsafe entry path: ${entryPath}`);
+                        zipfile.readEntry();
+                        return;
+                    }
+
+                    if (this.client.options.showFetchCacheLog) console.info(`- Extracting ${entryPath}`);
+
+                    if (entry.fileName.endsWith("/")) {
+                        if (!fs.existsSync(extractPath)) fs.mkdirSync(extractPath, { recursive: true });
+                        zipfile.readEntry();
+                    } else if (entryPath.startsWith("github/")) {
+                        if (fs.existsSync(extractPath)) {
+                            zipfile.readEntry();
+                            return;
+                        }
+                        zipfile.openReadStream(entry, (err, stream) => {
+                            if (err) throw err;
+                            stream.pipe(fs.createWriteStream(extractPath));
+                            stream.on("end", () => {
+                                zipfile.readEntry();
+                            });
+                        });
+                    } else {
+                        zipfile.openReadStream(entry, (err, stream) => {
+                            if (err) throw err;
+                            stream.pipe(fs.createWriteStream(extractPath));
+                            stream.on("end", () => {
+                                zipfile.readEntry();
+                            });
+                        });
+                    }
+                });
+                zipfile.on("close", () => {
+                    resolve();
+                });
+            });
+        });
     }
 }
 

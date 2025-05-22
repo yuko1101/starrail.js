@@ -177,7 +177,7 @@ export class StarRail implements EnkaLibrary<StarRailUser, StarRailCharacterBuil
 
     private _tasks: NodeJS.Timeout[] = [];
 
-    constructor(options: Partial<ClientOptions>) {
+    constructor(options: Partial<ClientOptions> = {}) {
         this.hoyoType = 1;
 
         const mergedOptions = bindOptions(defaultClientOption, options);

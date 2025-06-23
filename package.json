@@ -39,7 +39,7 @@
     "@eslint/js": "^9.24.0",
     "@stylistic/eslint-plugin-ts": "^4.2.0",
     "@types/json-bigint": "^1.0.4",
-    "@types/node": "^22.0.0",
+    "@types/node": "^24.0.3",
     "@types/unzip-stream": "^0.3.4",
     "@types/xxhashjs": "^0.2.4",
     "@types/yauzl": "^2.10.3",

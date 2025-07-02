@@ -1,3 +1,5 @@
+# 1.9.3
+- Fixed install error with downloading cache.zip.
 # 1.9.2
 - Renamed CachedAssetsManager#getJSONDataPath to _getExcelDataPath.
 - Changed type of CharacterData#maxEnergy to nullable. (e.g. Castorice has null maxEnergy.)

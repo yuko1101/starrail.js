@@ -18,6 +18,7 @@ export class SkillTreeNode {
     readonly characterId: number;
     readonly maxLevel: number;
     readonly isUnlockedByDefault: boolean;
+    readonly enhancedId: number;
     readonly levelUpSkills: Skill[];
     readonly name: TextAssets;
     readonly icon: ImageAssets;
@@ -39,6 +40,7 @@ export class SkillTreeNode {
 
         this.maxLevel = json.getAsNumber("MaxLevel");
         this.isUnlockedByDefault = json.getAsBooleanWithDefault(false, "DefaultUnlock");
+        this.enhancedId = json.getAsNumberWithDefault(0, "EnhancedID");
 
         this.levelUpSkills = json.get("LevelUpSkillID").mapArray((_, skillId) => new Skill(skillId.getAsNumber(), this.client));
 

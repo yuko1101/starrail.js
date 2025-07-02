@@ -35,7 +35,7 @@ export class Character {
 
         const json = new JsonReader(defaultJsonOptions, this._data);
 
-        this.characterData = new CharacterData(json.getAsNumber("avatarId"), this.client);
+        this.characterData = new CharacterData(json.getAsNumber("avatarId"), this.client, json.getAsNumberWithDefault(0, "enhancedId"));
 
         this.lightCone = json.has("equipment", "tid") ? new LightCone(json.getAsJsonObject("equipment"), this.client) : null;
         this.relics = json.getAsJsonArrayWithDefault([], "relicList").map(relic => new Relic(relic as JsonObject, this.client));

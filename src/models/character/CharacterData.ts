@@ -14,6 +14,7 @@ import { excelJsonOptions } from "../../client/CachedAssetsManager";
 
 export class CharacterData {
     readonly id: number;
+    readonly enhancedId: number;
     readonly client: StarRail;
 
     readonly name: TextAssets;
@@ -38,8 +39,9 @@ export class CharacterData {
     readonly _data: JsonObject;
     readonly _itemData: JsonObject;
 
-    constructor(id: number, client: StarRail) {
+    constructor(id: number, client: StarRail, enhancedId = 0) {
         this.id = id;
+        this.enhancedId = enhancedId;
 
         this.client = client;
 
@@ -69,7 +71,7 @@ export class CharacterData {
 
         const skillTreeData = this.client.cachedAssetsManager._getExcelData("AvatarSkillTreeConfig");
         const skillTreeJson = new JsonReader(excelJsonOptions, skillTreeData);
-        this.skillTreeNodes = skillTreeJson.filterObject((_, node) => node.getAsNumber("1", "AvatarID") === this.id).map(([nodeId]) => new SkillTreeNode(Number(nodeId), this.client));
+        this.skillTreeNodes = skillTreeJson.filterObject((_, node) => node.getAsNumber("1", "AvatarID") === this.id && node.getAsNumberWithDefault(0, "1", "EnhancedID") === this.enhancedId).map(([nodeId]) => new SkillTreeNode(Number(nodeId), this.client));
 
         const eidolonsData = this.client.cachedAssetsManager._getExcelData("AvatarRankConfig");
         const eidolonsJson = new JsonReader(excelJsonOptions, eidolonsData);
@@ -167,6 +169,11 @@ export class CharacterData {
         const ascensionJson = new JsonReader(excelJsonOptions, ascensionData);
 
         return ascensionJson.getAsNumber("BaseAggro", "Value");
+    }
+
+    getEnhanced(enhancedId: number): CharacterData {
+        if (this.enhancedId === enhancedId) return this;
+        return new CharacterData(this.id, this.client, enhancedId);
     }
 }
 

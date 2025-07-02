@@ -60,6 +60,15 @@ export const excelKeyMap = {
     "PlayerIcon": ["ID"],
 } as const satisfies Record<string, ExcelKey[]>;
 export type ExcelType = keyof typeof excelKeyMap;
+export const excelExtraVariants = {
+    ...(Object.fromEntries(Object.keys(excelKeyMap).map(key => [key, [] as string[]])) as Record<ExcelType, string[]>),
+    "AvatarConfig": ["AvatarConfigLD"],
+    "AvatarRankConfig": ["AvatarRankConfigLD"],
+    "AvatarPromotionConfig": ["AvatarPromotionConfigLD"],
+    "AvatarSkillConfig": ["AvatarSkillConfigLD"],
+    "AvatarSkillTreeConfig": ["AvatarSkillTreeConfigLD"],
+    "ItemConfigAvatar": ["ItemConfigAvatarLD"],
+} as const satisfies Record<ExcelType, string[]>;
 export const excels = Object.keys(excelKeyMap) as ExcelType[];
 export type LoadedExcelDataMap = { [excel in keyof typeof excelKeyMap]: SingleBy<typeof excelKeyMap[excel]> };
 export type ExcelDataMap = { [excel in keyof typeof excelKeyMap]: LoadedExcelDataMap[excel] | null };
@@ -206,12 +215,16 @@ export class CachedAssetsManager {
             const excelOutputData: ExcelJsonObject = { ...initialExcelDataMemory };
             for (const excel of excels) {
                 const fileName = `${excel}.json`;
-                const url = `${excelBaseUrl}/ExcelOutput/${fileName}`;
                 promises.push((async () => {
-                    const json = (await fetchJSON(url, this.client, false, true)).data as ExcelJsonObject[];
+                    const variants = [excel, ...excelExtraVariants[excel]];
+                    const jsonResponses = await Promise.all(variants.map(variant => {
+                        const variantUrl = `${excelBaseUrl}/ExcelOutput/${variant}.json`;
+                        return fetchJSON(variantUrl, this.client, false, true);
+                    }));
                     if (this.client.options.showFetchCacheLog) {
                         console.info(`Downloaded data/${fileName}`);
                     }
+                    const json = jsonResponses.flatMap(response => response.data);
                     excelOutputData[excel] = this.formatExcel(excel, json);
                 })());
             }

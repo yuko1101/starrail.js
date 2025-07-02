@@ -1,3 +1,6 @@
+# 1.9.4
+- Constructor of CharacterData now takes a enhancedId parameter (optional).
+- Added CharacterData#enhancedId and SkillTreeNode#enhancedId.
 # 1.9.3
 - Fixed install error with downloading cache.zip.
 # 1.9.2

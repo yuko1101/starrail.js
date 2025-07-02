@@ -161,7 +161,10 @@ export class CharacterData {
             groupedSkillTreeNodes.push(group);
         });
 
-        return [otherNodes, ...groupedSkillTreeNodes];
+        if (otherNodes.length > 0) {
+            groupedSkillTreeNodes.unshift(otherNodes);
+        }
+        return groupedSkillTreeNodes;
     }
 
     getBaseAggro(ascension: number): number {

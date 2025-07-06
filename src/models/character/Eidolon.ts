@@ -11,6 +11,8 @@ export class Eidolon {
     readonly id: number;
     readonly client: StarRail;
     readonly rank: number;
+    readonly characterId: number;
+    readonly enhancedId: number;
     readonly icon: ImageAssets;
     readonly picture: ImageAssets;
     readonly name: TextAssets;
@@ -31,11 +33,14 @@ export class Eidolon {
 
         this.rank = json.getAsNumber("Rank");
 
-        this.icon = new ImageAssets(json.getAsString("IconPath"), this.client);
 
-        // TODO: better way to get characterId
-        const characterId = Math.floor(this.id / 100);
-        this.picture = new ImageAssets(`UI/UI3D/Rank/_dependencies/Textures/${characterId}/${characterId}_Rank_${this.rank}.png`, this.client);
+        // TODO: better way to get characterId and enhancedId
+        const groupId = Math.floor(this.id / 100);
+        this.enhancedId = Math.floor(groupId / 10000);
+        this.characterId = groupId % 10000;
+
+        this.icon = new ImageAssets(json.getAsString("IconPath"), this.client);
+        this.picture = new ImageAssets(`UI/UI3D/Rank/_dependencies/Textures/${this.characterId}/${this.characterId}_Rank_${this.rank}.png`, this.client);
 
         this.name = new TextAssets(getStableHash(json.getAsString("Name")), this.client);
         // TODO: replace placeholders with numbers in Param

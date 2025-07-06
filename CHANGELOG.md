@@ -1,3 +1,6 @@
+# 1.9.5
+- Added Eidolon#enhancedId and Eidolon#characterId.
+- Fixed CharacterData#eidolons to use enhancedId.
 # 1.9.4
 - Constructor of CharacterData now takes a enhancedId parameter (optional).
 - Added CharacterData#enhancedId and SkillTreeNode#enhancedId.

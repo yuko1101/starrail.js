@@ -75,7 +75,13 @@ export class CharacterData {
 
         const eidolonsData = this.client.cachedAssetsManager._getExcelData("AvatarRankConfig");
         const eidolonsJson = new JsonReader(excelJsonOptions, eidolonsData);
-        this.eidolons = eidolonsJson.filterObject((eidolonId) => Math.floor(Number(eidolonId) / 100) === this.id).map(([eidolonId]) => new Eidolon(Number(eidolonId), this.client));
+        this.eidolons = eidolonsJson.filterObject((eidolonId) => {
+            // TODO: better workaround to get characterId and enhancedId
+            const groupId = Math.floor(Number(eidolonId) / 100);
+            const enhanced = Math.floor(groupId / 10000);
+            const characterId = groupId % 10000;
+            return enhanced === this.enhancedId && characterId === this.id;
+        }).map(([eidolonId]) => new Eidolon(Number(eidolonId), this.client));
 
         this.icon = new ImageAssets(json.getAsString("DefaultAvatarHeadIconPath"), this.client);
         this.sideIcon = new ImageAssets(json.getAsString("AvatarSideIconPath"), this.client);

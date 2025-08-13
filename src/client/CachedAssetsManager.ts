@@ -427,8 +427,9 @@ export class CachedAssetsManager {
     }
 
     formatExcel<T extends ExcelType>(excel: T, data: ExcelJsonObject[]): SingleBy<typeof excelKeyMap[T]> {
+        const filteredData = data.filter(item => Object.keys(item).length > 0);
         const keys = excelKeyMap[excel];
-        return singleBy(data, ...keys);
+        return singleBy(filteredData, ...keys);
     }
 
     /**

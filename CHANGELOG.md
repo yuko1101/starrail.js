@@ -1,3 +1,5 @@
+# 1.9.6
+- Ignores empty objects in excel on transforming excel data.
 # 1.9.5
 - Added Eidolon#enhancedId and Eidolon#characterId.
 - Fixed CharacterData#eidolons to use enhancedId.

@@ -1,3 +1,5 @@
+# 1.9.7
+- Added new stat property ElationDamageAddedRatioBase.
 # 1.9.6
 - Ignores empty objects in excel on transforming excel data.
 # 1.9.5

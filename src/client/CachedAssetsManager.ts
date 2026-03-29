@@ -88,6 +88,8 @@ const textMapWhiteList: number[] = [
 
 ];
 
+const splitLanguages = { "kr": 2, "ru": 2, "th": 2 } as const satisfies Partial<Record<LanguageCode, number>>;
+
 const getGitRemoteAPIUrl = (useRawStarRailData: boolean, rawDate: Date, date: Date) => useRawStarRailData
     ? `https://gitlab.com/api/v4/projects/62701613/repository/commits?since=${rawDate.toISOString()}`
     : `https://api.github.com/repos/yuko1101/starrail.js/commits?sha=main&path=cache.zip&since=${date.toISOString()}`;
@@ -157,9 +159,18 @@ export class CachedAssetsManager {
     /** Obtains a text map for a specific language. */
     async fetchLanguageData(lang: LanguageCode): Promise<JsonObject<string>> {
         await this.cacheDirectorySetup();
-        const url = `${excelBaseUrl}/TextMap/TextMap${lang.toUpperCase()}.json`;
-        const json = (await fetchJSON(url, this.client)).data;
-        return json;
+        const urls = [];
+        if (lang in splitLanguages) {
+            const partNum = splitLanguages[lang as keyof typeof splitLanguages];
+            for (let i = 0; i < partNum; i++) {
+                urls.push(`${excelBaseUrl}/TextMap/TextMap${lang.toUpperCase()}_${i}.json`);
+            }
+        } else {
+            urls.push(`${excelBaseUrl}/TextMap/TextMap${lang.toUpperCase()}.json`);
+        }
+        const promises = urls.map(async url => (await fetchJSON(url, this.client)).data);
+        const jsons = await Promise.all(promises) as JsonObject<string>[];
+        return Object.assign({}, ...jsons);
     }
 
     /**

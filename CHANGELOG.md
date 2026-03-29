@@ -1,6 +1,7 @@
 # 1.9.8
 - Changed image format for FortOfFans/HSR to webp.
 - Removed hakush.in from defaultImageBaseUrls.
+- Support split text map for KR, RU, and TH.
 # 1.9.7
 - Added new stat property ElationDamageAddedRatioBase.
 # 1.9.6

@@ -1,4 +1,5 @@
 # 1.9.8
+- Changed image format for FortOfFans/HSR to webp.
 - Removed hakush.in from defaultImageBaseUrls.
 # 1.9.7
 - Added new stat property ElationDamageAddedRatioBase.

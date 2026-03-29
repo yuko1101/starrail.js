@@ -93,7 +93,7 @@ const defaultImageBaseUrls: (ImageBaseUrl | CustomImageBaseUrl)[] = [
     {
         filePath: "LOWER_CASE",
         priority: 2,
-        format: "PNG",
+        format: "WEBP",
         regexList: [
             /^SpriteOutput\/(.+)/,
         ],

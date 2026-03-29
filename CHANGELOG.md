@@ -1,3 +1,5 @@
+# 1.9.8
+- Removed hakush.in from defaultImageBaseUrls.
 # 1.9.7
 - Added new stat property ElationDamageAddedRatioBase.
 # 1.9.6

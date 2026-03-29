@@ -99,17 +99,6 @@ const defaultImageBaseUrls: (ImageBaseUrl | CustomImageBaseUrl)[] = [
         ],
         url: "https://raw.githubusercontent.com/FortOfFans/HSR/main",
     },
-    {
-        filePath: "LOWER_CASE",
-        priority: 1,
-        format: "WEBP",
-        regexList: [
-            /^SpriteOutput\/(AvatarShopIcon|AvatarRoundIcon|AvatarDrawCard|RelicFigures|ItemFigures|LightConeMaxFigures|LightConeMediumIcon)\/(.+)/,
-            /^UI\/UI3D\/Rank\/_dependencies\/Textures\/\d+\/\d+_Rank_[1-6]/,
-        ],
-        url: "https://api.hakush.in/hsr/UI",
-        customParser: (path: string) => path.replace(/^(spriteoutput|ui\/ui3d)\//, "").replace("avatarroundicon/avatar/", "avatarroundicon/").replace(/\.png$/, ".webp"),
-    },
 ];
 
 export interface UserCacheOptions {

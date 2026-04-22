@@ -12,6 +12,7 @@ export class Costume {
     readonly characterId: number;
 
     readonly _data: JsonObject;
+    readonly _itemData: JsonObject;
 
     constructor(id: number, client: StarRail) {
         this.id = id;
@@ -20,10 +21,14 @@ export class Costume {
         const _data = client.cachedAssetsManager.getExcelData("AvatarSkin", this.id);
         if (!_data) throw new AssetsNotFoundError("Costume", this.id);
         this._data = _data;
+        const _itemData = client.cachedAssetsManager.getExcelData("ItemConfigAvatarSkin", this.id);
+        if (!_itemData) throw new AssetsNotFoundError("Costume ItemConfig", this.id);
+        this._itemData = _itemData;
 
         const json = new JsonReader(excelJsonOptions, this._data);
+        const itemJson = new JsonReader(excelJsonOptions, this._itemData);
 
-        this.name = new TextAssets(json.getAsNumberOrBigint("AvatarSkinName", "Hash"), this.client);
+        this.name = new TextAssets(itemJson.getAsNumberOrBigint("ItemName", "Hash"), this.client);
         this.characterId = json.getAsNumber("AvatarID");
 
     }

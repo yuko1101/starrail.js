@@ -35,6 +35,7 @@ export const excelKeyMap = {
     "AvatarRankConfig": ["RankID"], // Character Eidolons
     "AvatarPromotionConfig": ["AvatarID", ["Promotion", 0]], // Character Promotions and Character Basic Stats.
     "AvatarSkin": ["ID"], // Costumes
+    "ItemConfigAvatarSkin": ["ID"], // Costumes as Items
 
     "EquipmentConfig": ["EquipmentID"], // Light Cones
     "ItemConfigEquipment": ["ID"], // Light Cones as Items
@@ -535,10 +536,10 @@ export class CachedAssetsManager {
             );
         });
 
-        Object.values(data["AvatarSkin"]).forEach(s => {
+        Object.values(data["ItemConfigAvatarSkin"]).forEach(s => {
             const json = new JsonReader(excelJsonOptions, s);
             push(
-                json.getAsNumberOrBigint("AvatarSkinName", "Hash"),
+                json.getAsNumberOrBigint("ItemName", "Hash"),
             );
         });
 

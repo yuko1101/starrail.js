@@ -1,3 +1,5 @@
+# 1.9.9
+- Fixed skin names were missing since HSR v4.2.
 # 1.9.8
 - Changed image format for FortOfFans/HSR to webp.
 - Removed hakush.in from defaultImageBaseUrls.

@@ -139,6 +139,7 @@ export const statPropertyTypes = {
     "QuantumResistanceDelta": { "isPercent": false, "defaultValue": 0, "comment": "unknown, not used, likely flat" },
     "ImaginaryResistanceDelta": { "isPercent": false, "defaultValue": 0, "comment": "unknown, not used, likely flat" },
     "SpeedDelta": { "isPercent": false, "defaultValue": 0 },
+    "ElationDamageAddedRatio": { "isPercent": true, "defaultValue": 0, "comment": "added in v4.0" },
     "ElationDamageAddedRatioBase": { "isPercent": true, "defaultValue": 1, "comment": "added in v4.0" },
 } as const satisfies Record<string, { isPercent: boolean, defaultValue: number, comment?: string }>;
 

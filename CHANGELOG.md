@@ -1,3 +1,7 @@
+# 1.9.10
+- Better default value handling for stat properties.
+- Added StatList#elation.
+- Added CharacterStats#defaultStats.
 # 1.9.9
 - Fixed skin names were missing since HSR v4.2.
 - Fixed missing stat property ElationDamageAddedRatio.

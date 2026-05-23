@@ -66,10 +66,7 @@ export class Character {
             return skill.getSkillByLevel(level);
         }).filter(nonNullable);
 
-        this.basicStats = [
-            ...this.characterData.getStatsByLevel(this.ascension, this.level),
-            new StatPropertyValue("SPRatioBase", 1, this.client),
-        ];
+        this.basicStats = this.characterData.getStatsByLevel(this.ascension, this.level);
         if (this.characterData.maxEnergy !== null) {
             this.basicStats.push(new StatPropertyValue("MaxSP", this.characterData.maxEnergy, this.client));
         }

@@ -140,7 +140,7 @@ export const statPropertyTypes = {
     "ImaginaryResistanceDelta": { "isPercent": false, "defaultValue": 0, "comment": "unknown, not used, likely flat" },
     "SpeedDelta": { "isPercent": false, "defaultValue": 0 },
     "ElationDamageAddedRatio": { "isPercent": true, "defaultValue": 0, "comment": "added in v4.0" },
-    "ElationDamageAddedRatioBase": { "isPercent": true, "defaultValue": 1, "comment": "added in v4.0" },
+    "ElationDamageAddedRatioBase": { "isPercent": true, "defaultValue": 0, "comment": "added in v4.0" },
 } as const satisfies Record<string, { isPercent: boolean, defaultValue: number, comment?: string }>;
 
 /**
@@ -199,7 +199,8 @@ export const statPropertyTypes = {
  * QuantumResistanceDelta|false|0|unknown, not used, likely flat
  * ImaginaryResistanceDelta|false|0|unknown, not used, likely flat
  * SpeedDelta|false|0|
- * ElationDamageAddedRatioBase|true|1|added in v4.0
+ * ElationDamageAddedRatio|true|0|added in v4.0
+ * ElationDamageAddedRatioBase|true|0|added in v4.0
  */
 export type StatPropertyType = keyof typeof statPropertyTypes;
 

@@ -1,11 +1,12 @@
 import { separateByValue } from "config_file.js";
-import { OtherStatPropertyType, StatPropertyType, StatPropertyValue, isStatPropertyType, otherStatPropertyTypes, statPropertyTypes } from "../StatProperty";
+import { OtherStatPropertyType, StatPropertyType, StatPropertyValue, otherStatPropertyTypes, statPropertyTypes } from "../StatProperty";
 import { Character } from "./Character";
 import { StarRail } from "../../client/StarRail";
 import { RelicSet } from "../relic/RelicSet";
 import { CombatTypeId } from "../CombatType";
 
 export class CharacterStats {
+    readonly defaultStats: StatList;
     readonly relicsStats: StatList;
     readonly relicSetsStats: StatList;
     readonly lightConeStats: StatList;
@@ -16,11 +17,15 @@ export class CharacterStats {
     constructor(character: Character) {
         const client = character.client;
 
+        const defaultStatProperties = Object.entries({ ...statPropertyTypes, ...otherStatPropertyTypes }).map(([type, p]) => new StatPropertyValue(type as StatPropertyType | OtherStatPropertyType, p.defaultValue, client));
         const relicsStatProperties: StatPropertyValue[] = character.relics.flatMap(r => [new StatPropertyValue(r.mainStat.mainStatData.statProperty.type, r.mainStat.value, client), ...r.subStats.map(s => new StatPropertyValue(s.subStatData.statProperty.type, s.value, client))]);
         const relicSetsStatProperties: StatPropertyValue[] = RelicSet.getActiveSetBonus(character.relics).flatMap(set => set.activeBonus).flatMap(bonus => bonus.stats);
         const lightConeStatProperties: StatPropertyValue[] = [...(character.lightCone?.basicStats ?? []), ...(character.characterData.path.id === character.lightCone?.lightConeData.path.id ? character.lightCone?.extraStats ?? [] : [])];
         const characterStatProperties: StatPropertyValue[] = character.basicStats;
         const skillTreeNodesStatProperties: StatPropertyValue[] = character.skillTreeNodes.flatMap(node => node.stats);
+
+        const defaultStats = sumStats(defaultStatProperties, client);
+        this.defaultStats = new StatList(defaultStats, character.characterData.combatType.id, client);
 
         const relicsStats = sumStats(relicsStatProperties, client);
         this.relicsStats = new StatList(relicsStats, character.characterData.combatType.id, client);
@@ -37,7 +42,7 @@ export class CharacterStats {
         const skillTreeNodesStats = sumStats(skillTreeNodesStatProperties, client);
         this.skillTreeNodesStats = new StatList(skillTreeNodesStats, character.characterData.combatType.id, client);
 
-        const overallStats = sumStats([relicsStatProperties, relicSetsStatProperties, lightConeStatProperties, characterStatProperties, skillTreeNodesStatProperties].flat(), client);
+        const overallStats = sumStats([defaultStatProperties, relicsStatProperties, relicSetsStatProperties, lightConeStatProperties, characterStatProperties, skillTreeNodesStatProperties].flat(), client);
         this.overallStats = new OverallStatList(overallStats, character.characterData.combatType.id, client);
     }
 }
@@ -77,6 +82,9 @@ export class StatList {
     }
     public get effectResistance(): StatPropertyValue {
         return this.getByType("StatusResistanceBase");
+    }
+    public get elation(): StatPropertyValue {
+        return this.getByType("ElationDamageAddedRatioBase");
     }
 
     // DMG Type
@@ -124,8 +132,7 @@ export class StatList {
     }
 
     getByType(type: StatPropertyType | OtherStatPropertyType): StatPropertyValue {
-        const defaultValue = isStatPropertyType(type) ? statPropertyTypes[type].defaultValue : otherStatPropertyTypes[type].defaultValue;
-        return this.list[type] ?? new StatPropertyValue(type, defaultValue, this.client);
+        return this.list[type] ?? new StatPropertyValue(type, 0, this.client);
     }
 
     getAll(): StatPropertyValue[] {

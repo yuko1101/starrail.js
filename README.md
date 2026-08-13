@@ -1,3 +1,5 @@
+
+
 # StarRail.js
 
 ![StarRail.js](https://github.com/yuko1101/starrail.js/blob/main/docs/static/img/starrail-social-card.png?raw=true)
@@ -44,6 +46,7 @@ Install starrail.js including Star Rail cache data.
 ```sh-session
 npm install starrail.js@latest
 ```
+*(Note: The cache data is automatically downloaded during installation via the package's `install` script.)*
 <details>
     <summary>Install using ghproxy.com</summary>
     
